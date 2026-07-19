@@ -12,6 +12,7 @@ from routes.product import router as product_router
 from routes.admin import router as admin_router
 from routes.product_request import router as product_request_router
 from routes.payment import router as payment_router
+from routes.trade_in import router as trade_in_router
 
 # Import necessary for admin creation
 from sqlalchemy.orm import Session
@@ -21,8 +22,8 @@ from auth import get_password_hash  # ensure get_password_hash exists in auth.py
 
 # --- Configuration for the bootstrap admin ---
 # Read defaults from environment or use sane local defaults for development
-DEFAULT_ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
-DEFAULT_ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")  # change for production
+DEFAULT_ADMIN_USERNAME = os.getenv("ADMIN_USERNAME",)
+DEFAULT_ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD",)  # change for production
 # -------------------------------------------
 
 # ✅ Lifespan setup (runs once at startup)
@@ -61,10 +62,7 @@ app = FastAPI(lifespan=lifespan) # Make sure to pass the lifespan here
 app.add_middleware(
     CORSMiddleware,
     # Keep deployed origin(s) explicit and allow any localhost/127.0.0.1 port for local testing
-    allow_origins=[
-        "https://s-and-s-collection-32bh.onrender.com",
-        "https://s-and-s-collection.onrender.com",
-    ],
+    allow_origins=[],
     allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
@@ -89,6 +87,7 @@ async def custom_404_handler(request, exc):
 app.include_router(product_router, prefix="/api", tags=["Products"])
 app.include_router(admin_router, prefix="/api", tags=["Admin"])
 app.include_router(product_request_router, prefix="/api", tags=["Product Requests"])
+app.include_router(trade_in_router, prefix="/api", tags=["Trade-In"])
 app.include_router(payment_router, prefix="/api", tags=["Payments"])
 
 # ✅ Static files

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Trade-In — SmanAppleComms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; min-height: 100vh; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+    nav { position: sticky; top: 0; z-index: 100; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,10,0.98); border-bottom: 1px solid rgba(201,168,76,0.12); }
+    .nav-logo { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
+    .nav-links a { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-whatsapp { background: #25D366; color: white !important; padding: 7px 14px; border-radius: 20px; font-size: 12px !important; }
+
+    /* Hero */
+    .hero { background: linear-gradient(135deg, var(--black-3), var(--black-2)); border-bottom: 1px solid rgba(201,168,76,0.1); padding: 60px 24px 48px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; }
+    .hero-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+    .hero-title { font-family: var(--font-display); font-size: clamp(28px, 5vw, 44px); font-weight: 700; color: var(--white); margin-bottom: 14px; }
+    .hero-title span { color: var(--gold); }
+    .hero-subtitle { font-size: 14px; color: var(--white-dim); max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+    /* How it works */
+    .how-it-works { max-width: 900px; margin: 0 auto; padding: 60px 24px 0; }
+    .section-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 500; }
+    .section-title { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: var(--white); margin-bottom: 28px; }
+    .gold-line { width: 36px; height: 2px; background: var(--gold); margin: 12px 0 28px; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+    .step { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; padding: 22px 18px; }
+    .step-num { font-family: var(--font-display); font-size: 32px; color: rgba(201,168,76,0.25); font-weight: 700; line-height: 1; margin-bottom: 10px; }
+    .step-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 6px; }
+    .step-desc { font-size: 12px; color: var(--white-dim); line-height: 1.5; }
+
+    /* Form */
+    .form-wrap { max-width: 680px; margin: 48px auto 0; padding: 0 24px 80px; }
+    .form-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.12); border-radius: 12px; padding: 28px 24px; margin-bottom: 16px; }
+    .form-card-title { font-family: var(--font-display); font-size: 16px; color: var(--white); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .form-card-title span { font-size: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 12px 14px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--gold); }
+    .form-input::placeholder { color: rgba(170,170,170,0.4); }
+    select.form-input option { background: var(--black-3); }
+    textarea.form-input { resize: vertical; min-height: 90px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .battery-group { display: none; }
+    .battery-group.show { display: block; }
+
+    /* Condition pills */
+    .condition-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .condition-pill { display: none; }
+    .condition-pill + label { background: var(--black-4); border: 1px solid rgba(201,168,76,0.15); color: var(--white-dim); padding: 8px 16px; border-radius: 4px; font-size: 13px; cursor: pointer; transition: all 0.2s; user-select: none; }
+    .condition-pill:checked + label { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+
+    /* Submit */
+    .submit-section { margin-top: 8px; }
+    .btn-submit { width: 100%; background: #25D366; color: white; border: none; padding: 16px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-save { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 14px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-body); margin-top: 10px; transition: background 0.2s; }
+    .btn-save:hover { background: var(--gold-light); }
+    .note { text-align: center; font-size: 11px; color: var(--white-dim); margin-top: 12px; line-height: 1.5; }
+
+    #statusMsg { text-align: center; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-top: 12px; display: none; }
+    #statusMsg.success { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.2); display: block; }
+    #statusMsg.error { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); display: block; }
+    #statusMsg.loading { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); display: block; }
+
+    .float-wa { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: #25D366; color: white; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 20px rgba(37,211,102,0.35); text-decoration: none; transition: transform 0.2s; }
+    .float-wa:hover { transform: scale(1.1); }
+
+    @media (max-width: 500px) {
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">SmanAppleComms</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Phones</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://wa.me/2348065739757" target="_blank" class="nav-whatsapp">💬 WhatsApp</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <p class="hero-eyebrow">Swap · Trade · Upgrade</p>
+    <h1 class="hero-title">Trade In Your <span>Old Phone</span></h1>
+    <p class="hero-subtitle">Get a fair value for your current device and put it towards your next upgrade. We accept iPhones, Samsungs, and more.</p>
+  </div>
+
+  <!-- How it works -->
+  <div class="how-it-works">
+    <p class="section-eyebrow">Simple Process</p>
+    <h2 class="section-title">How Trade-In Works</h2>
+    <div class="gold-line"></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Fill the form</div>
+        <div class="step-desc">Tell us about your current phone — model, condition, storage, any issues.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">We review it</div>
+        <div class="step-desc">We'll contact you within 24 hours with a fair trade-in value offer.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Agree & swap</div>
+        <div class="step-desc">If you accept, bring your phone and walk out with your new device.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Pay the difference</div>
+        <div class="step-desc">Only pay the difference between your trade-in value and your new phone.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-wrap">
+
+    <!-- Your phone -->
+    <div class="form-card">
+      <div class="form-card-title"><span>📱</span> Your Current Phone</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Brand</label>
+          <select class="form-input" id="phoneBrand" required>
+            <option value="">Select brand</option>
+            <option>Apple (iPhone)</option>
+            <option>Samsung</option>
+            <option>Google (Pixel)</option>
+            <option>Tecno</option>
+            <option>Infinix</option>
+            <option>Xiaomi</option>
+            <option>OnePlus</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Model</label>
+          <input class="form-input" type="text" id="phoneModel" placeholder="e.g. iPhone 13, Galaxy S22" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Storage</label>
+          <select class="form-input" id="phoneStorage">
+            <option value="">Not sure</option>
+            <option>64GB</option>
+            <option>128GB</option>
+            <option>256GB</option>
+            <option>512GB</option>
+            <option>1TB</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <input class="form-input" type="text" id="phoneColor" placeholder="e.g. Black, Space Gray" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Condition</label>
+        <div class="condition-pills">
+          <input type="radio" name="condition" id="cond-excellent" value="Excellent" class="condition-pill" onchange="handleCondition(this)">
+          <label for="cond-excellent">✨ Excellent</label>
+          <input type="radio" name="condition" id="cond-good" value="Good" class="condition-pill" onchange="handleCondition(this)">
+          <label for="cond-good">👍 Good</label>
+          <input type="radio" name="condition" id="cond-fair" value="Fair" class="condition-pill" onchange="handleCondition(this)">
+          <label for="cond-fair">⚠️ Fair</label>
+          <input type="radio" name="condition" id="cond-poor" value="Poor" class="condition-pill" onchange="handleCondition(this)">
+          <label for="cond-poor">🔧 Poor</label>
+        </div>
+      </div>
+
+      <div class="form-group battery-group" id="batteryGroup">
+        <label class="form-label">Battery Health (%)</label>
+        <input class="form-input" type="number" id="batteryHealth" placeholder="e.g. 85" min="1" max="100" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Known Issues (optional)</label>
+        <textarea class="form-input" id="issues" placeholder="e.g. cracked screen, battery drains fast, charging port loose..."></textarea>
+      </div>
+    </div>
+
+    <!-- Desired phone -->
+    <div class="form-card">
+      <div class="form-card-title"><span>🎯</span> What Do You Want?</div>
+      <div class="form-group">
+        <label class="form-label">Phone You're Interested In (optional)</label>
+        <input class="form-input" type="text" id="desiredPhone" placeholder="e.g. iPhone 15 Pro, Samsung S24 — or leave blank if you're not sure" />
+      </div>
+    </div>
+
+    <!-- Your details -->
+    <div class="form-card">
+      <div class="form-card-title"><span>👤</span> Your Details</div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" type="text" id="custName" placeholder="Your full name" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input class="form-input" type="tel" id="custPhone" placeholder="+234 800 000 0000" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email (optional)</label>
+          <input class="form-input" type="email" id="custEmail" placeholder="you@example.com" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-section">
+      <button class="btn-submit" id="submitBtn" onclick="submitTradeIn()">
+        💬 Send Trade-In Request on WhatsApp
+      </button>
+      <button class="btn-save" id="saveBtn" onclick="saveToServer()">
+        📋 Submit Request (Save to System)
+      </button>
+      <p class="note">We'll review your request and get back to you within 24 hours with a fair offer.</p>
+      <div id="statusMsg"></div>
+    </div>
+
+  </div>
+
+  <a href="https://wa.me/2348065739757" target="_blank" class="float-wa">💬</a>
+
+  <script>
+    const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    const WHATSAPP = "2348065739757";
+
+    function handleCondition(radio) {
+      const batteryGroup = document.getElementById('batteryGroup');
+      batteryGroup.classList.toggle('show', true); // always show once condition selected
+    }
+
+    function getFormData() {
+      return {
+        phone_brand: document.getElementById('phoneBrand').value,
+        phone_model: document.getElementById('phoneModel').value.trim(),
+        phone_storage: document.getElementById('phoneStorage').value,
+        phone_condition: document.querySelector('input[name="condition"]:checked')?.value || '',
+        battery_health: parseInt(document.getElementById('batteryHealth').value) || null,
+        issues: document.getElementById('issues').value.trim(),
+        desired_phone: document.getElementById('desiredPhone').value.trim(),
+        customer_name: document.getElementById('custName').value.trim(),
+        customer_phone: document.getElementById('custPhone').value.trim(),
+        customer_email: document.getElementById('custEmail').value.trim(),
+      };
+    }
+
+    function validate(data) {
+      if (!data.phone_brand) { showMsg('Please select your phone brand.', 'error'); return false; }
+      if (!data.phone_model) { showMsg('Please enter your phone model.', 'error'); return false; }
+      if (!data.phone_condition) { showMsg('Please select your phone condition.', 'error'); return false; }
+      if (!data.customer_name) { showMsg('Please enter your name.', 'error'); return false; }
+      if (!data.customer_phone) { showMsg('Please enter your phone number.', 'error'); return false; }
+      return true;
+    }
+
+    function showMsg(text, type) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = text;
+      el.className = type;
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function submitTradeIn() {
+      const data = getFormData();
+      if (!validate(data)) return;
+
+      const msg = encodeURIComponent(
+        `Hello SmanAppleComms! 👋 I'd like to request a trade-in.\n\n` +
+        `*My Phone:*\n` +
+        `Brand: ${data.phone_brand}\n` +
+        `Model: ${data.phone_model}\n` +
+        `${data.phone_storage ? `Storage: ${data.phone_storage}\n` : ''}` +
+        `Condition: ${data.phone_condition}\n` +
+        `${data.battery_health ? `Battery Health: ${data.battery_health}%\n` : ''}` +
+        `${data.issues ? `Issues: ${data.issues}\n` : ''}` +
+        `\n*I'm interested in:* ${data.desired_phone || 'Not sure yet'}\n\n` +
+        `*My Details:*\n` +
+        `Name: ${data.customer_name}\n` +
+        `Phone: ${data.customer_phone}\n` +
+        `${data.customer_email ? `Email: ${data.customer_email}\n` : ''}` +
+        `\nPlease let me know the trade-in value. Thank you!`
+      );
+
+      window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
+      showMsg('✅ WhatsApp opened! Complete the conversation with the seller.', 'success');
+    }
+
+    async function saveToServer() {
+      const data = getFormData();
+      if (!validate(data)) return;
+
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      showMsg('Submitting your request...', 'loading');
+
+      try {
+        const res = await fetch(`${baseUrl}/trade-in`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          showMsg('✅ Request submitted! We\'ll contact you within 24 hours.', 'success');
+          // Also open WhatsApp
+          submitTradeIn();
+        } else {
+          const err = await res.json().catch(() => ({}));
+          showMsg(err.detail || 'Submission failed. Please try WhatsApp instead.', 'error');
+        }
+      } catch {
+        showMsg('Network error. Please try the WhatsApp button instead.', 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

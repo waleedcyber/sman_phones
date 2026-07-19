@@ -3,268 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Order Confirmed - S&S Collection</title>
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Order Confirmed — SmanAppleComms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #fff5f5 0%, #fff0f6 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 30px 20px;
-    }
+    .card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 16px; max-width: 480px; width: 100%; padding: 40px 28px; text-align: center; animation: popIn 0.5s ease; position: relative; overflow: hidden; }
+    .card::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%); pointer-events: none; }
 
-    .card {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-      padding: 40px 30px;
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-      animation: popIn 0.5s ease;
-    }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.92) translateY(16px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
-      to   { opacity: 1; transform: scale(1)   translateY(0); }
-    }
+    /* Checkmark */
+    .check-ring { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 36px; box-shadow: 0 8px 24px rgba(201,168,76,0.3); animation: bounce 0.6s 0.3s ease both; }
+    @keyframes bounce { 0% { transform: scale(0); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-    .checkmark {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #ff6b6b, #ff4b4b);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      font-size: 36px;
-      box-shadow: 0 8px 20px rgba(255, 75, 75, 0.35);
-      animation: bounce 0.6s 0.3s ease both;
-    }
+    .eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-weight: 500; }
+    .title { font-family: var(--font-display); font-size: clamp(22px, 4vw, 30px); color: var(--white); margin-bottom: 12px; }
+    .subtitle { font-size: 14px; color: var(--white-dim); line-height: 1.7; margin-bottom: 24px; }
 
-    @keyframes bounce {
-      0%   { transform: scale(0); }
-      60%  { transform: scale(1.15); }
-      100% { transform: scale(1); }
-    }
+    /* Order ref */
+    .ref-box { background: var(--black-4); border: 1px dashed rgba(201,168,76,0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 24px; }
+    .ref-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--white-dim); margin-bottom: 6px; }
+    .ref-value { font-family: var(--font-display); font-size: 18px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
 
-    h1 {
-      font-size: 1.6em;
-      color: #222;
-      margin-bottom: 10px;
-    }
+    /* Method badge */
+    .method-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+    .method-wa { background: rgba(37,211,102,0.12); color: #25D366; border: 1px solid rgba(37,211,102,0.2); }
+    .method-pay { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
 
-    .subtitle {
-      color: #777;
-      font-size: 0.95em;
-      margin-bottom: 25px;
-      line-height: 1.6;
-    }
+    /* Next steps */
+    .next-steps { background: var(--black-4); border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: left; }
+    .next-steps-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-weight: 500; }
+    .step { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; color: var(--white-dim); line-height: 1.5; }
+    .step:last-child { margin-bottom: 0; }
+    .step-dot { width: 20px; height: 20px; border-radius: 50%; background: rgba(201,168,76,0.15); color: var(--gold); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
 
-    .order-ref {
-      background: #fff5f5;
-      border: 1px dashed #ffb3b3;
-      border-radius: 10px;
-      padding: 14px 20px;
-      margin-bottom: 25px;
-      font-size: 0.9em;
-      color: #555;
-    }
+    /* Buttons */
+    .btn-group { display: flex; flex-direction: column; gap: 10px; }
+    .btn-primary { display: block; background: var(--gold); color: var(--black); padding: 14px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+    .btn-primary:hover { background: var(--gold-light); }
+    .btn-secondary { display: block; background: transparent; color: var(--white-dim); border: 1px solid rgba(255,255,255,0.1); padding: 13px; border-radius: 4px; font-size: 14px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
 
-    .order-ref span {
-      display: block;
-      font-weight: 700;
-      font-size: 1.1em;
-      color: #ff4b4b;
-      margin-top: 4px;
-      letter-spacing: 1px;
-    }
-
-    .perks {
-      display: flex;
-      justify-content: space-around;
-      gap: 10px;
-      margin-bottom: 28px;
-    }
-
-    .perk {
-      flex: 1;
-      background: #fafafa;
-      border-radius: 12px;
-      padding: 14px 8px;
-      font-size: 0.78em;
-      color: #555;
-      line-height: 1.5;
-    }
-
-    .perk .icon {
-      font-size: 1.6em;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid #f0f0f0;
-      margin: 0 0 24px;
-    }
-
-    .promo-box {
-      background: linear-gradient(135deg, #ff6b6b, #ff4b4b);
-      border-radius: 12px;
-      padding: 18px 20px;
-      color: white;
-      margin-bottom: 25px;
-    }
-
-    .promo-box p {
-      font-size: 0.88em;
-      opacity: 0.9;
-      margin-bottom: 6px;
-    }
-
-    .promo-box strong {
-      font-size: 1.05em;
-      display: block;
-    }
-
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .btn {
-      display: block;
-      padding: 13px 20px;
-      border-radius: 10px;
-      font-size: 0.95em;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #ff6b6b, #ff4b4b);
-      color: white;
-      border: none;
-    }
-
-    .btn-outline {
-      background: white;
-      color: #ff4b4b;
-      border: 2px solid #ff4b4b;
-    }
-
-    .footer-note {
-      margin-top: 24px;
-      font-size: 0.78em;
-      color: #aaa;
-      line-height: 1.6;
-    }
-
-    .footer-note a {
-      color: #ff6b6b;
-      text-decoration: none;
-    }
+    .footer-note { margin-top: 20px; font-size: 11px; color: rgba(170,170,170,0.4); line-height: 1.6; }
+    .footer-note a { color: rgba(201,168,76,0.5); text-decoration: none; }
+    .footer-note a:hover { color: var(--gold); }
   </style>
 </head>
 <body>
 
   <div class="card">
+    <div class="check-ring">✓</div>
 
-    <div class="checkmark">✓</div>
+    <p class="eyebrow" id="eyebrow">Order Confirmed</p>
+    <h1 class="title">Thank You! 🎉</h1>
+    <p class="subtitle" id="subtitle">Your order has been received. The seller will be in touch with you shortly to confirm delivery details.</p>
 
-    <h1>Order Confirmed! 🎉</h1>
-    <p class="subtitle">
-      Thank you for shopping with <strong>S&S Collection</strong>.<br>
-      Your payment was received and your order is being prepared.
-    </p>
-
-    <div class="order-ref">
-      Your Order Reference
-      <span id="orderRef">—</span>
+    <div class="ref-box" id="refBox" style="display:none;">
+      <div class="ref-label">Order Reference</div>
+      <div class="ref-value" id="refValue">—</div>
     </div>
 
-    <div class="perks">
-      <div class="perk">
-        <span class="icon">🚚</span>
-        Fast Delivery to your door
-      </div>
-      <div class="perk">
-        <span class="icon">🔒</span>
-        Secure & Trusted checkout
-      </div>
-      <div class="perk">
-        <span class="icon">💬</span>
-        Support always available
-      </div>
-    </div>
+    <div class="method-badge method-wa" id="methodBadge">💬 Order sent via WhatsApp</div>
 
-    <hr class="divider" />
-
-    <div class="promo-box">
-      <p>Come back and shop more — new arrivals weekly!</p>
-      <strong>Explore our latest collections 👇</strong>
+    <div class="next-steps">
+      <div class="next-steps-title">What Happens Next</div>
+      <div class="step" id="step1"><div class="step-dot">1</div><span>The seller will confirm your order and check availability.</span></div>
+      <div class="step" id="step2"><div class="step-dot">2</div><span>You'll agree on payment method and delivery or pickup.</span></div>
+      <div class="step" id="step3"><div class="step-dot">3</div><span>Your phone gets delivered or you collect it at the agreed location.</span></div>
     </div>
 
     <div class="btn-group">
-      <a href="products.html" class="btn btn-primary">🛍️ Continue Shopping</a>
-      <a href="index.html" class="btn btn-outline">🏠 Back to Home</a>
+      <a href="products.html" class="btn-primary">🛍️ Continue Shopping</a>
+      <a href="https://wa.me/2348065739757" target="_blank" class="btn-secondary">💬 Message the Seller</a>
+      <a href="index.html" class="btn-secondary">🏠 Back to Home</a>
     </div>
 
     <p class="footer-note">
-      Questions about your order? <a href="contact.html">Contact us</a> and we'll sort it out.<br>
-      We appreciate your trust in us. 💛
+      Questions? <a href="contact.html">Contact us</a> anytime.<br>
+      Thank you for choosing SmanAppleComms. 💛
     </p>
-
   </div>
 
   <script>
-    // Pull order reference from URL e.g. /order_success.html?ref=TRX_ABC123
+    // Read URL params
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('reference') || params.get('ref') || params.get('trxref');
-    if (ref) {
-      document.getElementById('orderRef').textContent = ref;
-    } else {
-      document.getElementById('orderRef').textContent = 'Processing...';
+    const method = params.get('method');
+
+    // Show order reference
+    if (ref && ref !== 'N/A') {
+      document.getElementById('refBox').style.display = 'block';
+      document.getElementById('refValue').textContent = ref;
     }
 
-    // Clear cart after successful order
+    // Customize for payment method
+    if (method === 'paystack') {
+      document.getElementById('eyebrow').textContent = 'Payment Confirmed';
+      document.getElementById('subtitle').textContent = 'Your payment was successful and your order is confirmed. The seller will contact you to arrange delivery.';
+      document.getElementById('methodBadge').className = 'method-badge method-pay';
+      document.getElementById('methodBadge').textContent = '💳 Payment confirmed via Paystack';
+      document.getElementById('step1').querySelector('span').textContent = 'Your payment has been received and confirmed.';
+      document.getElementById('step2').querySelector('span').textContent = 'The seller will contact you to arrange delivery or pickup.';
+    }
+
+    // Clear cart
     localStorage.removeItem('cart');
   </script>
-  
-  <!-- Unified footer (added) -->
-  <footer style="background:#111827;color:#f3f4f6;padding:24px 12px;margin-top:24px;text-align:center;">
-    <div style="max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;">
-      <div style="flex:1;min-width:200px;text-align:left;color:#e5e7eb;">
-        <strong>S&S Collection</strong>
-        <div style="font-size:14px;color:#9ca3af;margin-top:6px;">Quality products at friendly prices — serving customers across Nigeria.</div>
-      </div>
-      <div style="flex:1;min-width:200px;text-align:center;color:#e5e7eb;">
-        <a href="/about.html" style="color:#9ca3af;text-decoration:none;margin-right:12px;">About</a>
-        <a href="/contact.html" style="color:#9ca3af;text-decoration:none;margin-right:12px;">Contact</a>
-  <a href="/Privacy.html" style="color:#9ca3af;text-decoration:none;">Privacy</a>
-      </div>
-      <div style="flex:1;min-width:200px;text-align:right;color:#9ca3af;">
-        © 2026 S&S Collection
-      </div>
-    </div>
-  </footer>
 
 </body>
 </html>

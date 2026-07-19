@@ -1,115 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
-    <title>About Us - S&S Collection</title>
-    <style>
-        body {
-            background-color: #f8f8f8;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .about-container {
-            max-width: 700px;
-            margin: 40px auto;
-            background: #fff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-            .about-header{
-                display:flex;
-                align-items:center;
-                gap:16px;
-                justify-content:center;
-            }
-            .about-logo{
-                width:96px;
-                height:96px;
-                object-fit:contain;
-                border-radius:8px;
-                background:white;
-                padding:6px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-            }
-        h1 {
-            color: #ff6b6b;
-            text-align: center;
-        }
-        h2 {
-            color: #333;
-            margin-top: 30px;
-        }
-        p {
-            color: #444;
-            line-height: 1.7;
-        }
-        .contact-info {
-            margin-top: 30px;
-            background: #f0f0f0;
-            padding: 18px 20px;
-            border-radius: 8px;
-        }
-        .developer {
-            margin-top: 30px;
-            font-size: 0.98em;
-            color: #555;
-            background: #eaf7ff;
-            padding: 14px 18px;
-            border-radius: 8px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>About — SmanAppleComms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+    nav { position: sticky; top: 0; z-index: 100; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,10,0.98); border-bottom: 1px solid rgba(201,168,76,0.12); }
+    .nav-logo { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
+    .nav-links a { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-whatsapp { background: #25D366; color: white !important; padding: 7px 14px; border-radius: 20px; font-size: 12px !important; }
+
+    /* Hero */
+    .hero { padding: 80px 24px 60px; text-align: center; max-width: 700px; margin: 0 auto; }
+    .eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+    .hero-title { font-family: var(--font-display); font-size: clamp(30px, 5vw, 48px); font-weight: 700; color: var(--white); margin-bottom: 20px; line-height: 1.2; }
+    .hero-title span { color: var(--gold); }
+    .hero-text { font-size: 15px; color: var(--white-dim); line-height: 1.8; }
+    .gold-line { width: 36px; height: 2px; background: var(--gold); margin: 20px auto; }
+
+    /* Story */
+    .story { max-width: 800px; margin: 0 auto; padding: 0 24px 60px; }
+    .story-block { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-bottom: 60px; }
+    .story-block.reverse { direction: rtl; }
+    .story-block.reverse > * { direction: ltr; }
+    .story-text h2 { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: var(--white); margin-bottom: 14px; }
+    .story-text p { font-size: 14px; color: var(--white-dim); line-height: 1.8; margin-bottom: 12px; }
+    .story-visual { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 12px; padding: 40px 24px; text-align: center; }
+    .story-icon { font-size: 48px; margin-bottom: 14px; display: block; }
+    .story-visual-title { font-family: var(--font-display); font-size: 18px; color: var(--white); margin-bottom: 8px; }
+    .story-visual-text { font-size: 12px; color: var(--white-dim); line-height: 1.6; }
+
+    /* Values */
+    .values-section { background: var(--black-2); border-top: 1px solid rgba(201,168,76,0.08); border-bottom: 1px solid rgba(201,168,76,0.08); padding: 60px 24px; }
+    .values-inner { max-width: 900px; margin: 0 auto; }
+    .section-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 500; }
+    .section-title { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); color: var(--white); margin-bottom: 36px; }
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+    .value-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; padding: 24px 18px; }
+    .value-icon { font-size: 26px; margin-bottom: 12px; display: block; }
+    .value-title { font-family: var(--font-display); font-size: 14px; color: var(--white); margin-bottom: 6px; }
+    .value-desc { font-size: 12px; color: var(--white-dim); line-height: 1.6; }
+
+    /* Stats */
+    .stats-section { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+    .stat-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 10px; padding: 28px 20px; text-align: center; }
+    .stat-number { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white-dim); }
+
+    /* CTA */
+    .cta { max-width: 680px; margin: 0 auto; padding: 0 24px 80px; text-align: center; }
+    .cta-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; padding: 48px 28px; }
+    .cta-card h2 { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: var(--white); margin-bottom: 12px; }
+    .cta-card p { font-size: 14px; color: var(--white-dim); margin-bottom: 28px; }
+    .btn-wa { display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white; padding: 14px 28px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+    .btn-wa:hover { opacity: 0.9; }
+    .btn-browse { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--black); padding: 14px 28px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; margin-left: 12px; transition: background 0.2s; }
+    .btn-browse:hover { background: var(--gold-light); }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    footer { background: var(--black-2); border-top: 1px solid rgba(201,168,76,0.1); padding: 32px 24px; text-align: center; }
+    .footer-logo { font-family: var(--font-display); font-size: 18px; color: var(--gold); margin-bottom: 12px; }
+    .footer-copy { font-size: 12px; color: rgba(170,170,170,0.4); }
+
+    .float-wa { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: #25D366; color: white; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 20px rgba(37,211,102,0.35); text-decoration: none; transition: transform 0.2s; }
+    .float-wa:hover { transform: scale(1.1); }
+
+    @media (max-width: 600px) {
+      .story-block { grid-template-columns: 1fr; }
+      .story-block.reverse { direction: ltr; }
+      .nav-links { display: none; }
+      .btn-browse { margin-left: 0; }
+    }
+  </style>
 </head>
 <body>
-    <div class="about-container">
-    <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
-        <div class="about-header">
-           <img class="about-logo" src="/logo/s%20and%20s%20collection%20logo.png" alt="S&S logo">
-           <h1>About S&S Collection</h1>
-        </div>
-        <p>
-            Welcome to <strong>S&S Collection</strong>, your trusted destination for a wide variety of quality products at affordable prices. From stylish watches and elegant handbags to handy rice cookers and more, we are committed to making your shopping experience easy and enjoyable.
-        </p>
-        <h2>Our Inspiration</h2>
-        <p>
-            S&S Collection was founded with a simple vision: to make everyday life easier for people in Nigeria by providing access to essential and trendy products without the hassle. We believe everyone deserves convenience and value, and that's what drives us every day.
-        </p>
-        <h2>Why Shop With Us?</h2>
-        <ul>
-            <li>Affordable prices on all products</li>
-            <li>Fast delivery within Nigeria</li>
-            <li>Wide selection: watches, handbags, kitchen appliances, and more</li>
-            <li>Local presence in Potiskum and Abuja</li>
-            <li>Customer-focused service</li>
-        </ul>
-        <h2>Where We Operate</h2>
-        <p>
-            We are proudly based in Potiskum Local Government and Abuja, serving customers across Nigeria. Our local presence means faster delivery and a better understanding of your needs.
-        </p>
-        <h2>Contact Us</h2>
-        <div class="contact-info">
-            <p>
-                Have questions or need support? Reach out to us on <a href="https://s-and-s-collection-32bh.onrender.com/api"> our site </a> https://s-and-s-collection.onrender.com/apis anytime!
-                <br>
-                <strong>Email:</strong> <a href="mailto:your@email.com">your@email.com</a><br>
-                <strong>Phone:</strong> <a href="tel:+234703562530">+234703562530</a>
-            </p>
-        </div>
-        <div class="developer">
-            <strong>Website developed by Ibrahim Yahaya Abdullahi</strong><br>
-            Need a website for your business? <a href="mailto:ibrahimyahayaabdullahi1@gmail.com?subject=Website%20Inquiry&body=Hello%20Ibrahim,">Contact me</a> or visit my <a href="https://www.linkedin.com/in/ibrahim-yahaya-abdullahi-5b4b621b6/" target="_blank">LinkedIn</a>
-             for web development services, You can also <a href="https://wa.me/+234703562530" target="_blank">Chat with me on WhatsApp</a>
-!
-        </div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">SmanAppleComms</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Phones</a></li>
+      <li><a href="trade_in.html">Trade-In</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://wa.me/2348065739757" target="_blank" class="nav-whatsapp">💬 WhatsApp</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <p class="eyebrow">Our Story</p>
+    <h1 class="hero-title">Phones You Can <span>Trust.</span></h1>
+    <div class="gold-line"></div>
+    <p class="hero-text">SmanAppleComms was built on one simple idea — everyone deserves a great phone at a fair price, with zero stress. We started on WhatsApp and grew into a trusted name for verified phones across Nigeria.</p>
+  </div>
+
+  <div class="story">
+    <div class="story-block">
+      <div class="story-text">
+        <h2>Where We Started</h2>
+        <p>It began with a few phones, a WhatsApp number, and a commitment to honesty. No inflated prices, no hidden faults, no runaround — just straightforward deals between real people.</p>
+        <p>Word spread fast. Customers came back, and they brought their friends. That trust became the foundation everything else is built on.</p>
+      </div>
+      <div class="story-visual">
+        <span class="story-icon">📱</span>
+        <div class="story-visual-title">Started on WhatsApp</div>
+        <div class="story-visual-text">Every great business starts somewhere. Ours started with a single conversation.</div>
+      </div>
     </div>
-    
-        <!-- Production API base (added) -->
-        <script>
-            // previously no base or used window.__API_BASE__ in some pages
-            const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api"; // previously: window.__API_BASE__ || '/api'
-        </script>
+
+    <div class="story-block reverse">
+      <div class="story-text">
+        <h2>What Makes Us Different</h2>
+        <p>We inspect every phone before it's listed. Used phones come with honest condition reports — battery health, known issues, everything. No surprises when you open the box.</p>
+        <p>If we wouldn't buy it ourselves, we don't sell it.</p>
+      </div>
+      <div class="story-visual">
+        <span class="story-icon">✅</span>
+        <div class="story-visual-title">Every Phone Verified</div>
+        <div class="story-visual-text">Condition, battery, screen, charging — we check it all before listing.</div>
+      </div>
+    </div>
+
+    <div class="story-block">
+      <div class="story-text">
+        <h2>Trade-Ins & Upgrades</h2>
+        <p>We know upgrading can feel expensive. That's why we built our trade-in program — bring your old phone, get a fair value, and only pay the difference on your new one.</p>
+        <p>We've helped hundreds of customers upgrade without breaking the bank.</p>
+      </div>
+      <div class="story-visual">
+        <span class="story-icon">🔄</span>
+        <div class="story-visual-title">Fair Trade-In Values</div>
+        <div class="story-visual-text">We give you what your phone is actually worth — not the lowest possible offer.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <div class="values-section">
+    <div class="values-inner">
+      <p class="section-eyebrow">What We Stand For</p>
+      <h2 class="section-title">Our Values</h2>
+      <div class="values-grid">
+        <div class="value-card"><span class="value-icon">🤝</span><div class="value-title">Honesty First</div><div class="value-desc">We tell you exactly what you're getting. No surprises, no hidden problems.</div></div>
+        <div class="value-card"><span class="value-icon">💰</span><div class="value-title">Fair Pricing</div><div class="value-desc">Prices that make sense — not inflated, not suspiciously cheap.</div></div>
+        <div class="value-card"><span class="value-icon">⚡</span><div class="value-title">Fast Response</div><div class="value-desc">We reply on WhatsApp quickly. Real people, real answers, no bots.</div></div>
+        <div class="value-card"><span class="value-icon">🔒</span><div class="value-title">Safe Transactions</div><div class="value-desc">Your money is safe with us. We've never had a customer regret a purchase.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-section">
+    <p class="section-eyebrow">By the Numbers</p>
+    <h2 class="section-title">Trusted by Nigerians</h2>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number">500+</div><div class="stat-label">Phones Sold</div></div>
+      <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Verified Stock</div></div>
+      <div class="stat-card"><div class="stat-number">24h</div><div class="stat-label">Response Time</div></div>
+      <div class="stat-card"><div class="stat-number">⭐ 5</div><div class="stat-label">Customer Rating</div></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <div class="cta-card">
+      <h2>Ready to find your next phone?</h2>
+      <p>Browse our verified collection or chat with us directly on WhatsApp.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/2348065739757" target="_blank" class="btn-wa">💬 Chat with Us</a>
+        <a href="products.html" class="btn-browse">Browse Phones</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">SmanAppleComms</div>
+    <p class="footer-copy">© 2026 SmanAppleComms. All rights reserved.</p>
+  </footer>
+
+  <a href="https://wa.me/2348065739757" target="_blank" class="float-wa">💬</a>
+
 </body>
 </html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
+  <title>S&S Collection</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background-color: #f8f8f8; }
+
+    header {
+      background: linear-gradient(135deg, #ff6b6b, #ff4b4b);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .header-inner { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:8px; }
+    .site-logo { width:56px; height:56px; object-fit:contain; border-radius:8px; background:white; padding:4px; }
+    header h1 { font-size:22px; }
+    header p { font-size:13px; opacity:0.9; margin-bottom:10px; }
+    .navigate { display:flex; justify-content:center; gap:6px; flex-wrap:wrap; }
+    .navigate a { color:white; text-decoration:none; padding:5px 12px; border-radius:20px; font-size:13px; border:1px solid rgba(255,255,255,0.3); transition:background 0.2s; }
+    .navigate a:hover { background:rgba(255,255,255,0.2); }
+
+    .browse-all { text-align:center; margin:24px 0 10px; }
+    .browse-all a { background:white; color:#ff4b4b; border:2px solid #ff4b4b; padding:10px 24px; border-radius:30px; text-decoration:none; font-weight:bold; font-size:15px; transition:all 0.2s; }
+    .browse-all a:hover { background:#ff4b4b; color:white; }
+
+    .section-title { text-align:center; font-size:1.5em; color:#333; margin:28px 0 16px; font-weight:bold; }
+    .section-title span { color:#ff4b4b; }
+
+    /* Category cards */
+    .categories-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:14px; padding:0 16px; max-width:1100px; margin:0 auto 30px; }
+    .category-card { background:white; border-radius:14px; box-shadow:0 3px 10px rgba(0,0,0,0.08); overflow:hidden; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; text-decoration:none; display:block; }
+    .category-card:hover { transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
+    .category-banner { height:90px; background:linear-gradient(135deg, #ff6b6b, #ff4b4b); display:flex; align-items:center; justify-content:center; font-size:32px; }
+    .category-info { padding:12px 14px; }
+    .category-info h3 { font-size:15px; color:#222; margin-bottom:4px; }
+    .subcategory-pills { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+    .pill { background:#fff0f0; color:#ff4b4b; font-size:11px; padding:2px 8px; border-radius:20px; border:1px solid #ffcdd2; font-weight:600; }
+    .category-count { font-size:12px; color:#aaa; margin-top:4px; }
+
+    /* Product cards */
+    .products-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(145px, 1fr)); gap:12px; padding:0 16px; max-width:1100px; margin:0 auto 40px; }
+    .product-card { background:white; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); overflow:hidden; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; position:relative; }
+    .product-card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
+    .product-card img { width:100%; height:140px; object-fit:cover; }
+    .sold-out-overlay { position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.72); color:white; font-size:10px; font-weight:bold; padding:3px 8px; border-radius:10px; }
+    .product-info { padding:10px; }
+    .product-info h3 { font-size:13px; font-weight:600; color:#222; margin-bottom:3px; }
+    .product-info .price { font-size:14px; font-weight:bold; color:#ff4b4b; }
+
+    /* Modal */
+    .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:2000; }
+    .modal-content { width:95%; max-width:420px; background:white; padding:22px; border-radius:14px; position:relative; box-shadow:0 8px 24px rgba(0,0,0,0.3); animation:fadeIn 0.3s ease; max-height:90vh; overflow-y:auto; }
+    @keyframes fadeIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+    .modal-content img { width:100%; border-radius:10px; margin-bottom:12px; }
+    .modal-content h2 { font-size:19px; color:#222; margin-bottom:6px; }
+    .modal-content p { font-size:14px; color:#555; margin:5px 0; }
+    .modal-close { position:absolute; top:10px; right:12px; font-size:24px; font-weight:bold; color:white; background:#ff3b3b; border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; line-height:32px; text-align:center; }
+    .modal-close:hover { background:#e60000; }
+    .buy-button { margin-top:12px; padding:12px; background:#ff4b4b; border:none; border-radius:8px; color:white; font-weight:bold; cursor:pointer; width:100%; font-size:15px; transition:background 0.2s; }
+    .buy-button:hover { background:#e63939; }
+    .sold-out-box { margin-top:12px; background:#fff5f5; border:1px solid #ffcdd2; border-radius:8px; padding:14px; text-align:center; }
+    .sold-out-box p { color:#c62828; font-weight:bold; margin-bottom:8px; }
+    .notify-btn { padding:10px 20px; background:#333; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:bold; }
+    .notify-input { width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #ddd; font-size:14px; }
+
+    .floating-logo { position:fixed; top:24px; right:24px; width:120px; opacity:0.07; transform:rotate(-12deg); z-index:500; pointer-events:none; }
+    .loading { text-align:center; color:#bbb; padding:30px; font-size:15px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <img class="site-logo" src="/logo/s%20and%20s%20collection%20logo.png" alt="S&S logo">
+      <h1>S&S Collection</h1>
+    </div>
+    <p>Explore our most popular and trending products</p>
+    <div class="navigate">
+      <a href="/">Home</a>
+      <a href="/products.html">Products</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+  </header>
+
+  <div class="browse-all">
+    <a href="products.html">Browse All Products 🛍️</a>
+  </div>
+
+  <h2 class="section-title">Shop by <span>Category</span></h2>
+  <div class="categories-grid" id="categoriesGrid">
+    <div class="loading">Loading categories...</div>
+  </div>
+
+  <h2 class="section-title">✨ Featured <span>Products</span></h2>
+  <div class="products-grid" id="productsGrid">
+    <div class="loading">Loading products...</div>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="productModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <img id="modalImage" src="" alt="Product" />
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+      <p id="modalPrice" style="font-weight:bold;font-size:18px;color:#ff4b4b;"></p>
+      <p id="modalQty" style="color:#888;font-size:13px;"></p>
+      <div id="soldOutBox" class="sold-out-box" style="display:none;">
+        <p>🚫 This product is currently sold out</p>
+        <button class="notify-btn" onclick="openNotifyModal()">🔔 Notify Me</button>
+      </div>
+      <button class="buy-button" id="addToCartBtn" onclick="modalAddToCart()">🛒 Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- Notify Modal -->
+  <div id="notifyModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeNotifyModal()">×</button>
+      <h2>🔔 Notify Me</h2>
+      <p style="margin-bottom:14px;color:#666;">We'll let you know when this is back in stock.</p>
+      <form id="notifyForm">
+        <input type="hidden" id="notifyProductId" />
+        <input class="notify-input" type="text" id="notifyName" placeholder="Your Name" required />
+        <input class="notify-input" type="email" id="notifyEmail" placeholder="Your Email" required />
+        <textarea class="notify-input" id="notifyMessage" placeholder="Message (optional)" rows="3"></textarea>
+        <button type="submit" class="buy-button" style="background:#28a745;">Submit</button>
+      </form>
+      <p id="notifyMsg" style="margin-top:10px;text-align:center;"></p>
+    </div>
+  </div>
+
+  <img class="floating-logo" src="/logo/s%20and%20s%20collection%20logo.png" alt="">
+
+  <script>
+    const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    let currentModalProduct = null;
+
+    async function loadCategories() {
+      const grid = document.getElementById('categoriesGrid');
+      try {
+        const res = await fetch(`${baseUrl}/categories`);
+        if (!res.ok) throw new Error();
+        const categories = await res.json();
+        if (categories.length === 0) { grid.innerHTML = '<p class="loading">No categories yet.</p>'; return; }
+        grid.innerHTML = '';
+        categories.forEach(cat => {
+          const children = cat.children || [];
+          const pillsHtml = children.map(c => `<span class="pill">${c.name}</span>`).join('');
+          const card = document.createElement('a');
+          card.className = 'category-card';
+          card.href = `products.html?category=${cat.id}`;
+          card.innerHTML = `
+            <div class="category-banner">📦</div>
+            <div class="category-info">
+              <h3>${cat.name}</h3>
+              ${children.length > 0
+                ? `<div class="subcategory-pills">${pillsHtml}</div>`
+                : `<p class="category-count">Tap to browse</p>`}
+            </div>`;
+          grid.appendChild(card);
+        });
+      } catch { grid.innerHTML = '<p class="loading">Could not load categories.</p>'; }
+    }
+
+    async function loadFeaturedProducts() {
+      const grid = document.getElementById('productsGrid');
+      try {
+        const res = await fetch(`${baseUrl}/products`);
+        if (!res.ok) throw new Error();
+        const products = await res.json();
+        if (products.length === 0) { grid.innerHTML = '<p class="loading">No products yet.</p>'; return; }
+        grid.innerHTML = '';
+        products.slice(0, 8).forEach(product => {
+          const soldOut = product.quantity < 1;
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            ${soldOut ? '<span class="sold-out-overlay">Sold Out</span>' : ''}
+            <img src="${product.image_url || 'https://via.placeholder.com/150x140'}" alt="${product.name}" />
+            <div class="product-info">
+              <h3>${product.name}</h3>
+              <p class="price">₦${product.price.toLocaleString()}</p>
+            </div>`;
+          card.addEventListener('click', () => openModal(product));
+          grid.appendChild(card);
+        });
+      } catch { grid.innerHTML = '<p class="loading">Could not load products.</p>'; }
+    }
+
+    function openModal(product) {
+      currentModalProduct = product;
+      const soldOut = product.quantity < 1;
+      document.getElementById('modalImage').src = product.image_url || 'https://via.placeholder.com/300x200';
+      document.getElementById('modalTitle').textContent = product.name;
+      document.getElementById('modalDesc').textContent = product.description || 'No description.';
+      document.getElementById('modalPrice').textContent = '₦' + product.price.toLocaleString();
+      document.getElementById('modalQty').textContent = soldOut ? 'Out of stock' : `${product.quantity} available`;
+      document.getElementById('soldOutBox').style.display = soldOut ? 'block' : 'none';
+      document.getElementById('addToCartBtn').style.display = soldOut ? 'none' : 'block';
+      document.getElementById('productModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+
+    function modalAddToCart() {
+      if (!currentModalProduct) return;
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existing = cart.find(i => i.id === currentModalProduct.id);
+      if (existing) { existing.quantity += 1; } else { cart.push({ ...currentModalProduct, quantity: 1 }); }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Added to cart! 🛒');
+      closeModal();
+    }
+
+    function openNotifyModal() {
+      if (currentModalProduct) document.getElementById('notifyProductId').value = currentModalProduct.id;
+      document.getElementById('notifyModal').style.display = 'flex';
+      document.getElementById('notifyMsg').textContent = '';
+    }
+
+    function closeNotifyModal() { document.getElementById('notifyModal').style.display = 'none'; }
+
+    document.getElementById('notifyForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('notifyMsg');
+      try {
+        const res = await fetch(`${baseUrl}/request-product`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            product_id: parseInt(document.getElementById('notifyProductId').value),
+            customer_name: document.getElementById('notifyName').value.trim(),
+            customer_email: document.getElementById('notifyEmail').value.trim(),
+            message: document.getElementById('notifyMessage').value.trim() || 'No message.'
+          })
+        });
+        if (res.ok) { msg.style.color = 'green'; msg.textContent = '✅ We will notify you!'; this.reset(); setTimeout(closeNotifyModal, 2000); }
+        else { msg.style.color = 'red'; msg.textContent = 'Something went wrong.'; }
+      } catch { msg.style.color = 'red'; msg.textContent = 'Network error.'; }
+    });
+
+    window.onclick = function(e) {
+      if (e.target.id === 'productModal') closeModal();
+      if (e.target.id === 'notifyModal') closeNotifyModal();
+    };
+
+    loadCategories();
+    loadFeaturedProducts();
+  </script>
+
+</body>
+</html>

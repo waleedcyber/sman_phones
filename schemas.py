@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
@@ -13,7 +14,7 @@ class CategoryOut(BaseModel):
     children: List["CategoryOut"] = []
     model_config = {"from_attributes": True}
 
-CategoryOut.model_rebuild()  # needed for self-referencing
+CategoryOut.model_rebuild()
 
 class ProductCreate(BaseModel):
     name: str
@@ -27,8 +28,15 @@ class ProductOut(BaseModel):
     name: str
     description: Optional[str]
     price: float
+    original_price: Optional[float] = None
     quantity: int
     image_url: Optional[str]
+    brand: Optional[str] = None
+    condition: Optional[str] = None
+    storage: Optional[str] = None
+    color: Optional[str] = None
+    battery_health: Optional[int] = None
+    is_featured: Optional[bool] = False
     categories: List[CategoryOut] = []
     model_config = {"from_attributes": True}
 
@@ -76,4 +84,32 @@ class ProductRequestResponseSchema(BaseModel):
     customer_name: str
     customer_email: str
     message: str
+    model_config = {"from_attributes": True}
+
+class TradeInCreate(BaseModel):
+    customer_name: str
+    customer_phone: str
+    customer_email: Optional[str] = None
+    phone_brand: str
+    phone_model: str
+    phone_storage: Optional[str] = None
+    phone_condition: str
+    battery_health: Optional[int] = None
+    issues: Optional[str] = None
+    desired_phone: Optional[str] = None
+
+class TradeInOut(BaseModel):
+    id: int
+    customer_name: str
+    customer_phone: str
+    customer_email: Optional[str]
+    phone_brand: str
+    phone_model: str
+    phone_storage: Optional[str]
+    phone_condition: str
+    battery_health: Optional[int]
+    issues: Optional[str]
+    desired_phone: Optional[str]
+    timestamp: datetime
+    status: str
     model_config = {"from_attributes": True}

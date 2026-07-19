@@ -38,73 +38,58 @@ def admin_login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+
 @router.post("/admin/upload", tags=["Admin"])
 def upload_product(
     name: str = Form(...),
     description: str = Form(...),
     price: float = Form(...),
+    original_price: float = Form(None),
     quantity: int = Form(...),
-    category_ids: str = Form(...),  # comma-separated e.g. "1,2,3"
+    category_ids: str = Form(...),
+    brand: str = Form(None),
+    condition: str = Form(None),
+    storage: str = Form(None),
+    color: str = Form(None),
+    battery_health: int = Form(None),
+    is_featured: bool = Form(False),
     image: UploadFile = File(...),
     db: Session = Depends(get_db),
     admin: dict = Depends(get_current_admin),
 ):
-    # Validate image format
     file_ext = os.path.splitext(image.filename)[1].lower()
     if file_ext not in [".jpg", ".jpeg", ".png", ".webp"]:
         raise HTTPException(status_code=400, detail="Invalid image format")
 
-    # Parse category IDs
     try:
         ids = [int(i.strip()) for i in category_ids.split(",") if i.strip()]
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid category IDs")
 
-    if not ids:
-        raise HTTPException(status_code=400, detail="Please select at least one category")
-
-    # Fetch category objects
     categories = db.query(Category).filter(Category.id.in_(ids)).all()
-    if not categories:
-        raise HTTPException(status_code=400, detail="No valid categories found")
 
-    # Upload to Cloudinary
     try:
-        result = cloudinary.uploader.upload(
-            image.file,
-            folder="s_and_s_collection",
-            resource_type="image",
-        )
+        result = cloudinary.uploader.upload(image.file, folder="sman_apple_comms", resource_type="image")
         image_url = result["secure_url"]
         public_id = result["public_id"]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Image upload failed: {str(e)}")
 
-    # Create product with many-to-many categories
     product = Product(
-        name=name,
-        description=description,
-        price=price,
-        quantity=quantity,
-        image_url=image_url,
+        name=name, description=description,
+        price=price, original_price=original_price,
+        quantity=quantity, image_url=image_url,
         cloudinary_public_id=public_id,
-        categories=categories,  # ✅ assign list of category objects
+        brand=brand, condition=condition,
+        storage=storage, color=color,
+        battery_health=battery_health,
+        is_featured=is_featured,
+        categories=categories,
     )
     db.add(product)
     db.commit()
     db.refresh(product)
-
-    return {
-        "message": "Product uploaded successfully",
-        "product": {
-            "id": product.id,
-            "name": product.name,
-            "price": product.price,
-            "quantity": product.quantity,
-            "image_url": product.image_url,
-            "categories": [{"id": c.id, "name": c.name} for c in product.categories],
-        }
-    }
+    return {"message": "Product uploaded successfully", "product": product}
 
 
 @router.get("/admin/products", tags=["Admin"])
