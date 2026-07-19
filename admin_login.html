@@ -3,109 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
-  <title>Admin Login</title>
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Admin Login — SmanAppleComms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
-    header {
-      background-color: #333;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    .form-container {
-      max-width: 400px;
-      margin: 60px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    input, button { 
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .password-wrapper {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 14px;
-      color: #666;
-      user-select: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 14px; max-width: 380px; width: 100%; padding: 40px 28px; animation: popIn 0.4s ease; }
+    @keyframes popIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .logo { font-family: var(--font-display); font-size: 20px; color: var(--gold); text-align: center; margin-bottom: 6px; }
+    .subtitle { font-size: 12px; color: var(--white-dim); text-align: center; margin-bottom: 32px; letter-spacing: 0.5px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 13px 14px; border-radius: 4px; font-size: 15px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--gold); }
+    .form-input::placeholder { color: rgba(170,170,170,0.4); }
+    .btn-login { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 15px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); margin-top: 8px; transition: background 0.2s; }
+    .btn-login:hover { background: var(--gold-light); }
+    .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+    #errMsg { text-align: center; font-size: 13px; color: #ef4444; margin-top: 12px; display: none; }
+    #errMsg.show { display: block; }
+    .back-link { display: block; text-align: center; margin-top: 20px; font-size: 12px; color: var(--white-dim); text-decoration: none; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Admin Dashboard</h1>
-    <p>Login to access your tools</p>
-  </header>
-
-  <div class="form-container">
-    <h2>Admin Login</h2>
-    <form onsubmit="loginAdmin(event)">
-      <input type="text" id="username" placeholder="Username" required />
-      
-      <div class="password-wrapper">
-        <input type="password" id="password" placeholder="Password" required />
-        <span class="toggle-password" onclick="togglePassword()">👁</span>
-      </div>
-      
-      <button type="submit">Login</button>
-    </form>
+  <div class="card">
+    <div class="logo">SmanAppleComms</div>
+    <div class="subtitle">Admin Dashboard</div>
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input class="form-input" type="text" id="username" placeholder="Enter username" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()" />
+    </div>
+    <button class="btn-login" id="loginBtn" onclick="login()">Sign In</button>
+    <div id="errMsg">Invalid username or password.</div>
+    <a href="index.html" class="back-link">← Back to Store</a>
   </div>
-
   <script>
-    function togglePassword() {
-      const passwordField = document.getElementById('password');
-      passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
-    }
-
-    async function loginAdmin(event) {
-      event.preventDefault()
-
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
-//const res = await fetch("https://s-and-s-collection-32bh.onrender.com/api/admin/login", {
-const res = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.access_token);
-        alert("Login successful!");
-        window.location.href = "admin_home.html";
-      } else {
-        alert("Login failed: " + (data.detail || "Unknown error"));
-      }
+    const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    if (localStorage.getItem('token')) window.location.href = 'admin_home.html';
+    async function login() {
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('errMsg');
+      btn.disabled = true; btn.textContent = 'Signing in...'; err.classList.remove('show');
+      const form = new FormData();
+      form.append('username', document.getElementById('username').value.trim());
+      form.append('password', document.getElementById('password').value);
+      try {
+        const res = await fetch(`${baseUrl}/admin/login`, { method: 'POST', body: form });
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem('token', data.access_token);
+          window.location.href = 'admin_home.html';
+        } else { err.classList.add('show'); }
+      } catch { err.textContent = 'Network error. Try again.'; err.classList.add('show'); }
+      finally { btn.disabled = false; btn.textContent = 'Sign In'; }
     }
   </script>
 </body>

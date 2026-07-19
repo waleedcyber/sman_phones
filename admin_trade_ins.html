@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Trade-Ins — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
+    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
+    .page { max-width: 800px; margin: 0 auto; padding: 24px 16px 80px; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 24px; }
+    .stat { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 8px; padding: 14px; text-align: center; }
+    .stat-val { font-family: var(--font-display); font-size: 24px; color: var(--gold); font-weight: 700; }
+    .stat-lbl { font-size: 10px; color: var(--white-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 4px; }
+    .trade-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+    .trade-header { padding: 14px 16px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+    .trade-header:active { background: var(--black-4); }
+    .trade-phone { flex: 1; }
+    .trade-phone-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+    .trade-phone-meta { font-size: 11px; color: var(--white-dim); }
+    .trade-customer { font-size: 12px; color: var(--white-dim); text-align: right; }
+    .status-badge { font-size: 10px; padding: 3px 8px; border-radius: 3px; font-weight: 600; white-space: nowrap; }
+    .status-pending { background: rgba(249,115,22,0.1); color: #f97316; }
+    .status-reviewed { background: rgba(201,168,76,0.1); color: var(--gold); }
+    .status-completed { background: rgba(37,211,102,0.1); color: #25D366; }
+    .trade-body { display: none; padding: 16px; border-top: 1px solid rgba(255,255,255,0.04); background: var(--black-4); }
+    .trade-body.open { display: block; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .detail-item { background: var(--black-3); border-radius: 6px; padding: 10px 12px; }
+    .detail-label { font-size: 9px; color: var(--white-dim); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px; }
+    .detail-value { font-size: 13px; color: var(--white); font-weight: 400; }
+    .issues-box { background: var(--black-3); border-radius: 6px; padding: 10px 12px; margin-bottom: 14px; font-size: 13px; color: var(--white-dim); line-height: 1.5; }
+    .action-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-action { padding: 9px 16px; border: none; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: opacity 0.2s; }
+    .btn-action:hover { opacity: 0.85; }
+    .btn-review { background: rgba(201,168,76,0.15); color: var(--gold); }
+    .btn-complete { background: rgba(37,211,102,0.12); color: #25D366; }
+    .btn-wa { background: #25D366; color: white; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+    .empty { text-align: center; padding: 60px 20px; color: var(--white-dim); }
+    .empty-icon { font-size: 40px; margin-bottom: 14px; display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-title">🔄 Trade-In Requests</div>
+    <a href="admin_home.html" class="back-link">← Dashboard</a>
+  </header>
+  <div class="page">
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val" id="statTotal">—</div><div class="stat-lbl">Total</div></div>
+      <div class="stat"><div class="stat-val" id="statPending" style="color:#f97316;">—</div><div class="stat-lbl">Pending</div></div>
+      <div class="stat"><div class="stat-val" id="statDone" style="color:#25D366;">—</div><div class="stat-lbl">Completed</div></div>
+    </div>
+    <div id="tradeList"><div class="empty"><span class="empty-icon">🔄</span>Loading trade-ins...</div></div>
+  </div>
+  <script>
+    const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'admin_login.html';
+    let tradeIns = [];
+    function timeAgo(d) {
+      const s = Math.floor((new Date() - new Date(d)) / 1000);
+      if (s < 60) return 'Just now';
+      if (s < 3600) return Math.floor(s/60) + 'm ago';
+      if (s < 86400) return Math.floor(s/3600) + 'h ago';
+      return Math.floor(s/86400) + 'd ago';
+    }
+    function toggle(id) {
+      const body = document.getElementById('body-' + id);
+      body.classList.toggle('open');
+    }
+    async function updateStatus(id, status) {
+      try {
+        const res = await fetch(`${baseUrl}/admin/trade-ins/${id}/status?status=${status}`, { method: 'PUT', headers: { Authorization: `Bearer ${token}` } });
+        if (res.ok) loadTradeIns();
+      } catch { alert('Failed to update status.'); }
+    }
+    function render(data) {
+      const list = document.getElementById('tradeList');
+      document.getElementById('statTotal').textContent = data.length;
+      document.getElementById('statPending').textContent = data.filter(t => t.status === 'pending').length;
+      document.getElementById('statDone').textContent = data.filter(t => t.status === 'completed').length;
+      if (data.length === 0) { list.innerHTML = '<div class="empty"><span class="empty-icon">🔄</span><p>No trade-in requests yet.</p></div>'; return; }
+      list.innerHTML = data.map(t => {
+        const statusClass = t.status === 'pending' ? 'status-pending' : t.status === 'reviewed' ? 'status-reviewed' : 'status-completed';
+        const waMsg = encodeURIComponent(`Hi ${t.customer_name}, we've received your trade-in request for your ${t.phone_brand} ${t.phone_model}. We'll get back to you with a valuation shortly.`);
+        return `
+        <div class="trade-card">
+          <div class="trade-header" onclick="toggle(${t.id})">
+            <div class="trade-phone">
+              <div class="trade-phone-name">${t.phone_brand} ${t.phone_model}${t.phone_storage ? ` · ${t.phone_storage}` : ''}</div>
+              <div class="trade-phone-meta">${t.phone_condition}${t.battery_health ? ` · Battery: ${t.battery_health}%` : ''} · ${timeAgo(t.timestamp)}</div>
+            </div>
+            <div class="trade-customer">${t.customer_name}<br><span class="status-badge ${statusClass}">${t.status}</span></div>
+          </div>
+          <div class="trade-body" id="body-${t.id}">
+            <div class="detail-grid">
+              <div class="detail-item"><div class="detail-label">Customer</div><div class="detail-value">${t.customer_name}</div></div>
+              <div class="detail-item"><div class="detail-label">Phone</div><div class="detail-value">${t.customer_phone}</div></div>
+              ${t.customer_email ? `<div class="detail-item"><div class="detail-label">Email</div><div class="detail-value">${t.customer_email}</div></div>` : ''}
+              ${t.desired_phone ? `<div class="detail-item"><div class="detail-label">Wants</div><div class="detail-value">${t.desired_phone}</div></div>` : ''}
+            </div>
+            ${t.issues ? `<div class="issues-box"><strong style="color:var(--white);">Issues:</strong> ${t.issues}</div>` : ''}
+            <div class="action-row">
+              <a href="https://wa.me/${t.customer_phone.replace(/\D/g,'')}?text=${waMsg}" target="_blank" class="btn-wa">💬 WhatsApp Customer</a>
+              ${t.status === 'pending' ? `<button class="btn-action btn-review" onclick="updateStatus(${t.id},'reviewed')">Mark Reviewed</button>` : ''}
+              ${t.status !== 'completed' ? `<button class="btn-action btn-complete" onclick="updateStatus(${t.id},'completed')">Mark Completed</button>` : ''}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    async function loadTradeIns() {
+      try {
+        const res = await fetch(`${baseUrl}/admin/trade-ins`, { headers: { Authorization: `Bearer ${token}` } });
+        if (res.status === 401) { window.location.href = 'admin_login.html'; return; }
+        tradeIns = res.ok ? await res.json() : [];
+        render(tradeIns);
+      } catch { document.getElementById('tradeList').innerHTML = '<div class="empty"><span class="empty-icon">⚠️</span><p>Failed to load trade-ins.</p></div>'; }
+    }
+    loadTradeIns();
+  </script>
+</body>
+</html>

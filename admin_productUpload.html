@@ -1,205 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
-  <title>Admin - Upload Product</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Add Phone — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
-    header {
-      background-color: #333;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    header a {
-      color: #aaa;
-      text-decoration: none;
-      font-size: 14px;
-      margin-left: 20px;
-    }
-    header a:hover { color: white; }
-    .form-container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    .form-container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      background-color: #28a745;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover { background-color: #218838; }
-    #categoryCheckboxes {
-      margin: 10px 0;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fafafa;
-    }
-    #responseMsg {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 15px;
-      font-weight: bold;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
+    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
+    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
+    .page { max-width: 680px; margin: 0 auto; padding: 24px 16px 80px; }
+    .form-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 12px; padding: 22px 18px; margin-bottom: 14px; }
+    .form-card-title { font-family: var(--font-display); font-size: 15px; color: var(--white); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 12px 14px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--gold); }
+    .form-input::placeholder { color: rgba(170,170,170,0.4); }
+    select.form-input option { background: var(--black-3); }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .battery-field { display: none; }
+    .battery-field.show { display: block; }
+    /* Category checkboxes */
+    .cat-box { background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); border-radius: 4px; padding: 12px; max-height: 160px; overflow-y: auto; }
+    .cat-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; cursor: pointer; color: var(--white-dim); }
+    .cat-option input[type=checkbox] { appearance: none; width: 18px; height: 18px; border: 1px solid var(--gold-dim); border-radius: 3px; background: transparent; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+    .cat-option input[type=checkbox]:checked { background: var(--gold); border-color: var(--gold); }
+    .cat-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); padding: 8px 0 4px; font-weight: 500; }
+    /* Image preview */
+    .img-preview { display: none; width: 100%; max-height: 200px; object-fit: cover; border-radius: 6px; margin-top: 10px; border: 1px solid rgba(201,168,76,0.2); }
+    /* Toggle */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+    .toggle-label { font-size: 13px; color: var(--white-dim); }
+    .toggle { position: relative; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--black-4); border: 1px solid rgba(201,168,76,0.2); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: var(--white-dim); border-radius: 50%; transition: transform 0.2s; }
+    .toggle input:checked + .toggle-slider { background: var(--gold); border-color: var(--gold); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: var(--black); }
+    /* Submit */
+    .btn-submit { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 16px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; }
+    .btn-submit:hover { background: var(--gold-light); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    #statusMsg { text-align: center; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-top: 12px; display: none; }
+    #statusMsg.success { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.2); display: block; }
+    #statusMsg.error { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); display: block; }
+    #statusMsg.loading { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); display: block; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>Upload New Product</h1>
-    <a href="admin_home.html">← Back to Dashboard</a>
+    <div class="header-title">📱 Add New Phone</div>
+    <a href="admin_home.html" class="back-link">← Dashboard</a>
   </header>
+  <div class="page">
 
-  <div class="form-container">
-    <h2>Product Details</h2>
+    <!-- Basic info -->
+    <div class="form-card">
+      <div class="form-card-title">📋 Basic Information</div>
+      <div class="form-group">
+        <label class="form-label">Phone Name / Title</label>
+        <input class="form-input" type="text" id="name" placeholder="e.g. iPhone 15 Pro Max 256GB" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price (₦)</label>
+          <input class="form-input" type="number" id="price" placeholder="e.g. 850000" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Original Price (₦)</label>
+          <input class="form-input" type="number" id="originalPrice" placeholder="Optional — for strikethrough" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Quantity in Stock</label>
+        <input class="form-input" type="number" id="quantity" placeholder="e.g. 1" value="1" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-input" id="description" placeholder="Describe the phone — any extras, accessories, warranty info..."></textarea>
+      </div>
+    </div>
 
-    <form id="productForm">
-      <input type="text" name="name" placeholder="Product Name" required />
-      <textarea name="description" placeholder="Product Description" rows="3"></textarea>
-      <input type="number" name="price" placeholder="Price (₦)" step="0.01" required />
-      <input type="number" name="quantity" placeholder="Quantity in Stock" required />
+    <!-- Phone specs -->
+    <div class="form-card">
+      <div class="form-card-title">⚙️ Phone Specifications</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Brand</label>
+          <select class="form-input" id="brand">
+            <option value="">Select brand</option>
+            <option>Apple</option>
+            <option>Samsung</option>
+            <option>Google</option>
+            <option>Tecno</option>
+            <option>Infinix</option>
+            <option>Xiaomi</option>
+            <option>OnePlus</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Condition</label>
+          <select class="form-input" id="condition" onchange="handleCondition(this.value)">
+            <option value="">Select condition</option>
+            <option>New</option>
+            <option>Open Box</option>
+            <option>Used</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Storage</label>
+          <select class="form-input" id="storage">
+            <option value="">Select storage</option>
+            <option>64GB</option>
+            <option>128GB</option>
+            <option>256GB</option>
+            <option>512GB</option>
+            <option>1TB</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <input class="form-input" type="text" id="color" placeholder="e.g. Midnight Black" />
+        </div>
+      </div>
+      <div class="form-group battery-field" id="batteryField">
+        <label class="form-label">Battery Health (%)</label>
+        <input class="form-input" type="number" id="batteryHealth" placeholder="e.g. 87" min="1" max="100" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Featured on Homepage</label>
+        <div class="toggle-row">
+          <span class="toggle-label">Show this phone on the homepage</span>
+          <label class="toggle"><input type="checkbox" id="isFeatured"><div class="toggle-slider"></div></label>
+        </div>
+      </div>
+    </div>
 
-      <label style="font-size: 15px; color: #555;">Category</label>
-      <div id="categoryCheckboxes">Loading categories...</div>
+    <!-- Categories -->
+    <div class="form-card">
+      <div class="form-card-title">🗂️ Categories</div>
+      <div class="form-group">
+        <label class="form-label">Select Categories</label>
+        <div class="cat-box" id="categoryCheckboxes">Loading categories...</div>
+      </div>
+    </div>
 
-      <label style="font-size: 15px; color: #555;">Product Image</label>
-      <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" required />
+    <!-- Image -->
+    <div class="form-card">
+      <div class="form-card-title">📸 Product Image</div>
+      <div class="form-group">
+        <label class="form-label">Phone Image</label>
+        <input class="form-input" type="file" id="image" accept=".jpg,.jpeg,.png,.webp" onchange="previewImage(this)" required />
+        <img class="img-preview" id="imgPreview" />
+      </div>
+    </div>
 
-      <button type="submit">Upload Product</button>
-    </form>
-
-    <p id="responseMsg"></p>
+    <button class="btn-submit" id="submitBtn" onclick="uploadProduct()">📱 Upload Phone</button>
+    <div id="statusMsg"></div>
   </div>
 
-  <!-- ✅ Script is at the bottom AFTER the HTML elements exist -->
   <script>
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Access denied. Please log in first.");
-      window.location.href = "admin_login.html";
-    }
-
     const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'admin_login.html';
 
-async function fetchCategories() {
-  try {
-    const res = await fetch(`${baseUrl}/admin/categories`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (res.ok) {
-      const categories = await res.json();
-      const container = document.getElementById("categoryCheckboxes");
-      container.innerHTML = "";
-
-      // Separate parents and children
-      const parents = categories.filter(c => !c.parent_id);
-      const children = categories.filter(c => c.parent_id);
-
-      if (parents.length === 0) {
-        container.textContent = "No categories found. Add some first.";
-        return;
-      }
-
-      parents.forEach(parent => {
-        const parentChildren = children.filter(c => c.parent_id === parent.id);
-
-        // Parent label (not selectable, just a group header)
-        container.innerHTML += `
-          <p style="font-weight:bold; color:#333; margin:10px 0 4px; font-size:15px;">
-            📁 ${parent.name}
-          </p>`;
-
-        if (parentChildren.length > 0) {
-          // Show subcategories as checkboxes
-          parentChildren.forEach(child => {
-            container.innerHTML += `
-              <label style="display:flex; align-items:center; gap:10px; padding:6px 0 6px 16px; font-size:15px; cursor:pointer;">
-                <input type="checkbox" value="${child.id}" style="width:20px; height:20px;">
-                ${child.name}
-              </label>`;
-          });
-        } else {
-          // No subcategories — parent itself is selectable
-          container.innerHTML += `
-            <label style="display:flex; align-items:center; gap:10px; padding:6px 0 6px 16px; font-size:15px; cursor:pointer;">
-              <input type="checkbox" value="${parent.id}" style="width:20px; height:20px;">
-              ${parent.name}
-            </label>`;
-        }
-      });
+    function handleCondition(val) {
+      document.getElementById('batteryField').classList.toggle('show', val === 'Used');
     }
-  } catch (err) {
-    document.getElementById("categoryCheckboxes").textContent = "Failed to load categories.";
-  }
-}
 
-    document.getElementById("productForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+    function previewImage(input) {
+      const preview = document.getElementById('imgPreview');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
 
-      const formData = new FormData(this);
+    function showMsg(text, type) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = text; el.className = type;
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-      // Get selected category — just use the first checked one (your API takes one category_id)
+    async function loadCategories() {
+      try {
+        const res = await fetch(`${baseUrl}/admin/categories`, { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) return;
+        const cats = await res.json();
+        const container = document.getElementById('categoryCheckboxes');
+        container.innerHTML = '';
+        const parents = cats.filter(c => !c.parent_id);
+        const children = cats.filter(c => c.parent_id);
+        if (parents.length === 0) { container.textContent = 'No categories yet. Add some first.'; return; }
+        parents.forEach(p => {
+          const kids = children.filter(c => c.parent_id === p.id);
+          container.innerHTML += `<div class="cat-group-label">📁 ${p.name}</div>`;
+          if (kids.length > 0) {
+            kids.forEach(k => { container.innerHTML += `<label class="cat-option"><input type="checkbox" value="${k.id}"> ${k.name}</label>`; });
+          } else {
+            container.innerHTML += `<label class="cat-option"><input type="checkbox" value="${p.id}"> ${p.name}</label>`;
+          }
+        });
+      } catch { document.getElementById('categoryCheckboxes').textContent = 'Failed to load categories.'; }
+    }
+
+    async function uploadProduct() {
+      const name = document.getElementById('name').value.trim();
+      const price = document.getElementById('price').value;
+      const quantity = document.getElementById('quantity').value;
+      const image = document.getElementById('image').files[0];
+      if (!name || !price || !quantity || !image) { showMsg('Please fill in name, price, quantity and image.', 'error'); return; }
       const checked = document.querySelectorAll('#categoryCheckboxes input[type=checkbox]:checked');
-      if (checked.length === 0) {
-        document.getElementById("responseMsg").style.color = "red";
-        document.getElementById("responseMsg").textContent = "Please select at least one category.";
-        return;
-      }
+      if (checked.length === 0) { showMsg('Please select at least one category.', 'error'); return; }
 
-      // Append category_id (single value since your API uses category_id not category_ids)
-      const selectedIds = Array.from(checked).map(c => c.value).join(',');
-      formData.append("category_ids", selectedIds);
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; showMsg('Uploading phone...', 'loading');
 
-      const res = await fetch(`${baseUrl}/admin/upload`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData
-      });
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('description', document.getElementById('description').value.trim());
+      formData.append('price', price);
+      formData.append('quantity', quantity);
+      formData.append('category_ids', Array.from(checked).map(c => c.value).join(','));
+      formData.append('image', image);
+      const originalPrice = document.getElementById('originalPrice').value;
+      if (originalPrice) formData.append('original_price', originalPrice);
+      const brand = document.getElementById('brand').value;
+      if (brand) formData.append('brand', brand);
+      const condition = document.getElementById('condition').value;
+      if (condition) formData.append('condition', condition);
+      const storage = document.getElementById('storage').value;
+      if (storage) formData.append('storage', storage);
+      const color = document.getElementById('color').value.trim();
+      if (color) formData.append('color', color);
+      const battery = document.getElementById('batteryHealth').value;
+      if (battery) formData.append('battery_health', battery);
+      formData.append('is_featured', document.getElementById('isFeatured').checked);
 
-      const msg = document.getElementById("responseMsg");
-      if (res.ok) {
-        msg.style.color = "green";
-        msg.textContent = "Product uploaded successfully!";
-        this.reset();
-        document.querySelectorAll('#categoryCheckboxes input[type=checkbox]').forEach(cb => cb.checked = false);
-      } else {
-       const data = await res.json();
-       msg.style.color = "red";
-       msg.textContent = data.detail || data.message || JSON.stringify(data) || "Upload failed.";
-      }
-    });
+      try {
+        const res = await fetch(`${baseUrl}/admin/upload`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: formData });
+        if (res.ok) {
+          showMsg('✅ Phone uploaded successfully!', 'success');
+          document.getElementById('name').value = '';
+          document.getElementById('price').value = '';
+          document.getElementById('originalPrice').value = '';
+          document.getElementById('quantity').value = '1';
+          document.getElementById('description').value = '';
+          document.getElementById('color').value = '';
+          document.getElementById('batteryHealth').value = '';
+          document.getElementById('brand').value = '';
+          document.getElementById('condition').value = '';
+          document.getElementById('storage').value = '';
+          document.getElementById('isFeatured').checked = false;
+          document.getElementById('image').value = '';
+          document.getElementById('imgPreview').style.display = 'none';
+          document.querySelectorAll('#categoryCheckboxes input[type=checkbox]').forEach(cb => cb.checked = false);
+        } else {
+          const d = await res.json().catch(() => ({}));
+          showMsg(d.detail || 'Upload failed. Try again.', 'error');
+        }
+      } catch { showMsg('Network error. Try again.', 'error'); }
+      finally { btn.disabled = false; }
+    }
 
-    fetchCategories();
+    loadCategories();
   </script>
-
 </body>
 </html>

@@ -2,80 +2,156 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard - S&A Collection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Dashboard — SmanAppleComms Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 0;
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
-
-    header {
-      background: #222;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    .admin-btn {
-      display: block;
-      width: 100%;
-      max-width: 300px;
-      margin: 15px auto;
-      padding: 15px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .admin-btn:hover {
-      background-color: #0056b3;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; min-height: 100vh; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-logo { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
+    .header-sub { font-size: 11px; color: var(--white-dim); margin-top: 2px; }
+    .btn-logout { background: none; border: 1px solid rgba(239,68,68,0.3); color: rgba(239,68,68,0.7); padding: 7px 14px; border-radius: 4px; font-size: 12px; cursor: pointer; font-family: var(--font-body); transition: all 0.2s; }
+    .btn-logout:hover { border-color: #ef4444; color: #ef4444; }
+    .page { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
+    .welcome { margin-bottom: 28px; }
+    .welcome h1 { font-family: var(--font-display); font-size: 22px; color: var(--white); margin-bottom: 4px; }
+    .welcome p { font-size: 13px; color: var(--white-dim); }
+    .gold-line { width: 32px; height: 2px; background: var(--gold); margin: 10px 0 24px; }
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 28px; }
+    .stat-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; padding: 18px 16px; }
+    .stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--white-dim); margin-bottom: 8px; }
+    .stat-value { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
+    .stat-sub { font-size: 11px; color: var(--white-dim); margin-top: 4px; }
+    /* Nav tiles */
+    .section-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
+    .nav-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 28px; }
+    .nav-tile { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; padding: 20px 16px; text-decoration: none; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s, transform 0.2s; cursor: pointer; }
+    .nav-tile:hover { border-color: rgba(201,168,76,0.35); transform: translateY(-2px); }
+    .nav-tile-icon { font-size: 26px; flex-shrink: 0; }
+    .nav-tile-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+    .nav-tile-desc { font-size: 11px; color: var(--white-dim); }
+    .nav-tile.highlight { border-color: rgba(201,168,76,0.2); background: rgba(201,168,76,0.04); }
+    /* Recent orders */
+    .recent-order { background: var(--black-3); border: 1px solid rgba(201,168,76,0.06); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .order-info { flex: 1; min-width: 0; }
+    .order-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .order-meta { font-size: 11px; color: var(--white-dim); }
+    .order-amount { font-size: 15px; font-weight: 600; color: var(--gold); white-space: nowrap; }
+    .badge { font-size: 10px; padding: 3px 8px; border-radius: 3px; font-weight: 500; white-space: nowrap; }
+    .badge-paid { background: rgba(37,211,102,0.1); color: #25D366; }
+    .badge-pending { background: rgba(249,115,22,0.1); color: #f97316; }
+    .empty-orders { text-align: center; padding: 30px; color: var(--white-dim); font-size: 13px; }
   </style>
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
 </head>
 <body>
   <header>
-    <h1>Admin Dashboard</h1>
-    <p>Welcome, Admin. Choose your task 👇</p>
+    <div>
+      <div class="header-logo">SmanAppleComms</div>
+      <div class="header-sub">Admin Dashboard</div>
+    </div>
+    <button class="btn-logout" onclick="logout()">Sign Out</button>
   </header>
-
-  <div class="container">
-    <a href="admin_productUpload.html" class="admin-btn">📤 Upload New Product</a>
-    <a href="admin_product.html" class="admin-btn">🛠️ Manage Products</a>
-    <a href="admin_productRrequest.html" class="admin-btn">📬 Product Requests</a>
-    <a href="admin_orders.html" class="admin-btn">📦 View Orders</a>
-    <a href="admin_categories.html" class="admin-btn">📚 Manage Categories</a> <!-- Added link -->
-    <a href="admin_login.html" class="admin-btn" onclick="logout()">🚪 Logout</a>
+  <div class="page">
+    <div class="welcome">
+      <h1>Welcome back 👋</h1>
+      <p>Here's what's happening in your store today.</p>
+      <div class="gold-line"></div>
+    </div>
+    <!-- Stats -->
+    <div class="stats" id="statsGrid">
+      <div class="stat-card"><div class="stat-label">Total Phones</div><div class="stat-value" id="statPhones">—</div></div>
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="statOrders">—</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="statRevenue">—</div><div class="stat-sub">from paid orders</div></div>
+      <div class="stat-card"><div class="stat-label">Trade-Ins</div><div class="stat-value" id="statTradeIns">—</div><div class="stat-sub">pending review</div></div>
+    </div>
+    <!-- Nav tiles -->
+    <div class="section-label">Quick Actions</div>
+    <div class="nav-grid">
+      <a href="admin_productUpload.html" class="nav-tile highlight">
+        <span class="nav-tile-icon">📱</span>
+        <div><div class="nav-tile-title">Add Phone</div><div class="nav-tile-desc">List a new phone</div></div>
+      </a>
+      <a href="admin_product.html" class="nav-tile">
+        <span class="nav-tile-icon">📦</span>
+        <div><div class="nav-tile-title">Manage Phones</div><div class="nav-tile-desc">Edit or remove listings</div></div>
+      </a>
+      <a href="admin_orders.html" class="nav-tile">
+        <span class="nav-tile-icon">🧾</span>
+        <div><div class="nav-tile-title">Orders</div><div class="nav-tile-desc">View and update orders</div></div>
+      </a>
+      <a href="admin_trade_ins.html" class="nav-tile">
+        <span class="nav-tile-icon">🔄</span>
+        <div><div class="nav-tile-title">Trade-Ins</div><div class="nav-tile-desc">Review swap requests</div></div>
+      </a>
+      <a href="admin_categories.html" class="nav-tile">
+        <span class="nav-tile-icon">🗂️</span>
+        <div><div class="nav-tile-title">Categories</div><div class="nav-tile-desc">Manage categories</div></div>
+      </a>
+      <a href="index.html" target="_blank" class="nav-tile">
+        <span class="nav-tile-icon">🌐</span>
+        <div><div class="nav-tile-title">View Store</div><div class="nav-tile-desc">See the live site</div></div>
+      </a>
+    </div>
+    <!-- Recent orders -->
+    <div class="section-label">Recent Orders</div>
+    <div id="recentOrders"><div class="empty-orders">Loading orders...</div></div>
   </div>
-
   <script>
-    function logout() {
-      localStorage.removeItem("token");
-      alert("Logged out successfully.");
+    const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'admin_login.html';
+    function logout() { localStorage.removeItem('token'); window.location.href = 'admin_login.html'; }
+    function timeAgo(d) {
+      const s = Math.floor((new Date() - new Date(d)) / 1000);
+      if (s < 60) return 'Just now';
+      if (s < 3600) return Math.floor(s/60) + 'm ago';
+      if (s < 86400) return Math.floor(s/3600) + 'h ago';
+      return Math.floor(s/86400) + 'd ago';
     }
+    async function loadDashboard() {
+      try {
+        const [prodRes, orderRes, tradeRes] = await Promise.all([
+          fetch(`${baseUrl}/admin/products`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${baseUrl}/orders`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${baseUrl}/admin/trade-ins`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => ({ ok: false }))
+        ]);
+        if (prodRes.status === 401) { logout(); return; }
+        const products = prodRes.ok ? await prodRes.json() : [];
+        const orders = orderRes.ok ? await orderRes.json() : [];
+        const tradeIns = tradeRes.ok ? await tradeRes.json() : [];
+        // Stats
+        document.getElementById('statPhones').textContent = products.length;
+        document.getElementById('statOrders').textContent = orders.length;
+        const revenue = orders.filter(o => o.payment_status === 'Paid').reduce((s, o) => s + o.total, 0);
+        document.getElementById('statRevenue').textContent = '₦' + revenue.toLocaleString();
+        const pendingTrades = tradeIns.filter(t => t.status === 'pending').length;
+        document.getElementById('statTradeIns').textContent = pendingTrades;
+        // Recent orders
+        const recentDiv = document.getElementById('recentOrders');
+        const recent = orders.slice(0, 5);
+        if (recent.length === 0) { recentDiv.innerHTML = '<div class="empty-orders">No orders yet.</div>'; return; }
+        recentDiv.innerHTML = recent.map(o => `
+          <div class="recent-order">
+            <div class="order-info">
+              <div class="order-name">${o.customer_name}</div>
+              <div class="order-meta">${o.order_id} · ${timeAgo(o.timestamp)}</div>
+            </div>
+            <span class="order-amount">₦${Number(o.total).toLocaleString()}</span>
+            <span class="badge ${o.payment_status === 'Paid' ? 'badge-paid' : 'badge-pending'}">${o.payment_status}</span>
+          </div>`).join('');
+      } catch(e) { console.error(e); }
+    }
+    loadDashboard();
   </script>
 </body>
 </html>
