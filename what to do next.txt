@@ -1,7 +1,0 @@
-i haven't make a page for the admin to edit what she put 
-and i think this should be done in the product request page
-
-i think i need a to edit the admin message so that it can only work or he can only see alert if a person has paid for the item or if he has inqury them like they are out of stock and he like it so he will ask for it and the admin can see the order
-add contact, about us,  on the index page
-i think we should tweak the index file a little so that i will just pop up a random image and name base on the categori the admin saved it 
-i think we should add children section and maybe male,female and unisex section on the categories

@@ -27,6 +27,10 @@ def create_product(
             image.file,
             folder="s_and_s_collection",
             resource_type="image",
+            transformation=[
+                {"width": 800, "height": 300, "crop": 'fill', quality: 'auto', fetch_format: 'auto'}
+            ]
+            
         )
         image_url = result["secure_url"]
         public_id = result["public_id"]
