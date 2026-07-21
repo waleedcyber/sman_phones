@@ -1,7 +1,9 @@
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from sqlalchemy.orm import Session
 from db import get_db
-from fastapi.security import OAuth2PasswordRequestForm
+import os
+import hmac
+import hashlib
 from models import Product, Order, Category, ProductRequest
 from schemas import ProductRequestResponseSchema, CategoryCreate
 from models import Admin
@@ -355,10 +357,12 @@ def mark_order_paid(
     return {"message": "Marked as paid and stock updated"}
 
 
+"""
 
 import os
 import hmac
 import hashlib
+"""
 
 # Assuming router and get_db are imported globally in this file
 @router.post("/paystack-webhook", tags=["Payments"])
