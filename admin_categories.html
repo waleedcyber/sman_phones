@@ -3,429 +3,243 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
-  <title>Manage Categories</title>
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Categories — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
+    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
+    .page { max-width: 680px; margin: 0 auto; padding: 24px 16px 80px; }
 
-    body { font-family: Arial, sans-serif; background: #f0f2f5; }
-
-    header {
-      background: #333;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .container {
-      max-width: 650px;
-      margin: 30px auto;
-      padding: 0 12px;
-    }
-
-    /* Add form card */
-    .add-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 24px;
-    }
-
-    .add-card h2 {
-      font-size: 16px;
-      color: #555;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .form-row input,
-    .form-row select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 15px;
-    }
-
-    .form-row input:focus,
-    .form-row select:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
-    }
-
-    .add-btn {
-      width: 100%;
-      padding: 13px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .add-btn:hover { background: #0056b3; }
-
-    #msg {
-      text-align: center;
-      margin: 10px 0;
-      font-size: 14px;
-      font-weight: bold;
-    }
+    /* Add form */
+    .add-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.12); border-radius: 12px; padding: 20px 18px; margin-bottom: 24px; }
+    .add-card h3 { font-family: var(--font-display); font-size: 15px; color: var(--white); margin-bottom: 16px; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 12px 14px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--gold); }
+    .form-input::placeholder { color: rgba(170,170,170,0.4); }
+    select.form-input option { background: var(--black-3); }
+    .btn-add { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 13px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-body); margin-top: 4px; transition: background 0.2s; }
+    .btn-add:hover { background: var(--gold-light); }
+    #addMsg { text-align: center; font-size: 13px; margin-top: 10px; display: none; font-weight: 500; }
+    #addMsg.success { color: #25D366; display: block; }
+    #addMsg.error { color: #ef4444; display: block; }
 
     /* Category list */
-    .section-title {
-      font-size: 15px;
-      font-weight: bold;
-      color: #555;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
+    .section-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
 
-    /* Parent category block */
-    .parent-block {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
+    /* Parent block */
+    .parent-block { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+    .parent-row { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .parent-icon { font-size: 16px; }
+    .parent-name { flex: 1; font-size: 15px; font-weight: 500; color: var(--white); }
+    .sub-count { font-size: 11px; background: rgba(201,168,76,0.1); color: var(--gold); padding: 2px 8px; border-radius: 10px; }
+    .edit-input { flex: 1; background: var(--black-4); border: 1px solid var(--gold); color: var(--white); padding: 8px 10px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); display: none; }
+    .edit-input:focus { outline: none; }
+    .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; padding: 4px 6px; border-radius: 4px; transition: background 0.2s; }
+    .btn-icon:hover { background: var(--black-4); }
 
-    .parent-row {
-      display: flex;
-      align-items: center;
-      padding: 14px 16px;
-      border-bottom: 1px solid #f0f0f0;
-      gap: 10px;
-    }
-
-    .parent-label {
-      font-size: 15px;
-      font-weight: bold;
-      color: #222;
-      flex: 1;
-    }
-
-    .parent-label span {
-      font-size: 11px;
-      background: #007bff;
-      color: white;
-      padding: 2px 7px;
-      border-radius: 10px;
-      margin-left: 8px;
-      font-weight: normal;
-    }
-
-    /* Child category rows */
-    .children-list {
-      padding: 8px 0;
-    }
-
-    .child-row {
-      display: flex;
-      align-items: center;
-      padding: 10px 16px 10px 32px;
-      gap: 10px;
-      border-bottom: 1px solid #fafafa;
-    }
-
+    /* Children */
+    .children-list { padding: 4px 0; }
+    .child-row { display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 32px; border-bottom: 1px solid rgba(255,255,255,0.02); }
     .child-row:last-child { border-bottom: none; }
+    .child-arrow { color: var(--white-dim); font-size: 12px; flex-shrink: 0; }
+    .child-name { flex: 1; font-size: 13px; color: var(--white-dim); }
 
-    .child-label {
-      flex: 1;
-      font-size: 14px;
-      color: #444;
-    }
+    .empty-msg { text-align: center; padding: 40px 20px; color: var(--white-dim); font-size: 14px; }
 
-    .child-label::before {
-      content: "↳ ";
-      color: #aaa;
-    }
-
-    /* Edit input */
-    .edit-input {
-      flex: 1;
-      padding: 7px 10px;
-      border: 1px solid #007bff;
-      border-radius: 6px;
-      font-size: 14px;
-      display: none;
-    }
-
-    /* Action buttons */
-    .action-btn {
-      padding: 6px 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .action-btn:hover { opacity: 0.8; }
-
-    .btn-edit { background: #ffc107; color: #000; }
-    .btn-save { background: #28a745; color: #fff; display: none; }
-    .btn-cancel { background: #6c757d; color: #fff; display: none; }
-    .btn-delete { background: #dc3545; color: #fff; }
-
-    /* No categories message */
-    .empty-msg {
-      text-align: center;
-      color: #aaa;
-      padding: 30px;
-      background: white;
-      border-radius: 12px;
-    }
+    /* Status msg */
+    #globalMsg { text-align: center; font-size: 13px; margin-bottom: 14px; font-weight: 500; display: none; padding: 10px; border-radius: 6px; }
+    #globalMsg.success { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.2); display: block; }
+    #globalMsg.error { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); display: block; }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>Admin Dashboard</h1>
-    <p>Manage Categories</p>
+    <div class="header-title">🗂️ Categories</div>
+    <a href="admin_home.html" class="back-link">← Dashboard</a>
   </header>
 
-  <div class="container">
+  <div class="page">
 
-    <!-- Add Category Form -->
+    <!-- Add category -->
     <div class="add-card">
-      <h2>Add New Category</h2>
-      <form id="addCategoryForm">
-        <div class="form-row">
-          <input type="text" id="newCategoryName" placeholder="Category name e.g. Fashion" required />
-          <select id="parentSelect">
-            <option value="">No parent — this is a main category</option>
-          </select>
-          <button type="submit" class="add-btn">+ Add Category</button>
-        </div>
-      </form>
-      <p id="msg"></p>
+      <h3>Add New Category</h3>
+      <div class="form-group">
+        <label class="form-label">Category Name</label>
+        <input class="form-input" type="text" id="newCatName" placeholder="e.g. iPhones, Samsung, Used Phones" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Parent Category (optional)</label>
+        <select class="form-input" id="parentSelect">
+          <option value="">None — this is a main category</option>
+        </select>
+      </div>
+      <button class="btn-add" onclick="addCategory()">+ Add Category</button>
+      <div id="addMsg"></div>
     </div>
 
-    <!-- Category List -->
-    <div class="section-title">All Categories</div>
-    <div id="categoryList"></div>
-
+    <div id="globalMsg"></div>
+    <div class="section-label">All Categories</div>
+    <div id="categoryList"><div class="empty-msg">Loading categories...</div></div>
   </div>
 
   <script>
-    const baseUrl = "https://sman-phones-1.onrender.com/api";
-    const token = localStorage.getItem("token");
+    const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'admin_login.html';
+    let allCats = [];
 
-    if (!token) {
-      alert("Access denied. Please log in first.");
-      window.location.href = "admin_login.html";
-    }
-
-    let allCategories = [];
-
-    async function fetchCategories() {
-      const res = await fetch(`${baseUrl}/admin/categories`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      if (!res.ok) {
-        document.getElementById("categoryList").innerHTML = '<div class="empty-msg">Failed to load categories.</div>';
-        return;
-      }
-
-      allCategories = await res.json();
-      renderCategories();
-      populateParentDropdown();
+    function showGlobalMsg(text, type) {
+      const el = document.getElementById('globalMsg');
+      el.textContent = text; el.className = type;
+      setTimeout(() => { el.className = ''; el.textContent = ''; }, 3000);
     }
 
     function populateParentDropdown() {
-      const select = document.getElementById("parentSelect");
-      // Only show parent categories (no parent_id) as options
-      const parents = allCategories.filter(c => !c.parent_id);
-      select.innerHTML = '<option value="">No parent — this is a main category</option>';
+      const select = document.getElementById('parentSelect');
+      const parents = allCats.filter(c => !c.parent_id);
+      select.innerHTML = '<option value="">None — this is a main category</option>';
       parents.forEach(p => {
         select.innerHTML += `<option value="${p.id}">${p.name}</option>`;
       });
     }
 
     function renderCategories() {
-      const list = document.getElementById("categoryList");
-      list.innerHTML = "";
-
-      // Separate parents and children
-      const parents = allCategories.filter(c => !c.parent_id);
+      const list = document.getElementById('categoryList');
+      const parents = allCats.filter(c => !c.parent_id);
+      const children = allCats.filter(c => c.parent_id);
 
       if (parents.length === 0) {
         list.innerHTML = '<div class="empty-msg">No categories yet. Add one above!</div>';
         return;
       }
 
-      parents.forEach(parent => {
-        const children = allCategories.filter(c => c.parent_id === parent.id);
-
-        const block = document.createElement("div");
-        block.className = "parent-block";
-
-        // Parent row
-        block.innerHTML = `
+      list.innerHTML = parents.map(p => {
+        const kids = children.filter(c => c.parent_id === p.id);
+        return `
+        <div class="parent-block">
           <div class="parent-row">
-            <span class="parent-label">
-              ${parent.name}
-              ${children.length > 0 ? `<span>${children.length} sub</span>` : ''}
-            </span>
-            <input type="text" class="edit-input" id="edit-${parent.id}" value="${parent.name}" />
-            <button class="action-btn btn-edit" onclick="toggleEdit(${parent.id})">✏️ Edit</button>
-            <button class="action-btn btn-save" id="save-${parent.id}" onclick="saveEdit(${parent.id}, null)">Save</button>
-            <button class="action-btn btn-cancel" id="cancel-${parent.id}" onclick="cancelEdit(${parent.id})">Cancel</button>
-            <button class="action-btn btn-delete" onclick="deleteCategory(${parent.id})">🗑️</button>
+            <span class="parent-icon">📁</span>
+            <span class="parent-name" id="name-${p.id}">${p.name}</span>
+            <input class="edit-input" id="edit-${p.id}" value="${p.name}" />
+            ${kids.length > 0 ? `<span class="sub-count">${kids.length} sub</span>` : ''}
+            <button class="btn-icon" id="editbtn-${p.id}" onclick="startEdit(${p.id})" title="Edit">✏️</button>
+            <button class="btn-icon" id="savebtn-${p.id}" onclick="saveEdit(${p.id}, null)" title="Save" style="display:none;">✅</button>
+            <button class="btn-icon" id="cancelbtn-${p.id}" onclick="cancelEdit(${p.id})" title="Cancel" style="display:none;">❌</button>
+            <button class="btn-icon" onclick="deleteCategory(${p.id})" title="Delete">🗑️</button>
           </div>
-        `;
-
-        // Children rows
-        if (children.length > 0) {
-          const childrenDiv = document.createElement("div");
-          childrenDiv.className = "children-list";
-
-          children.forEach(child => {
-            childrenDiv.innerHTML += `
-              <div class="child-row">
-                <span class="child-label" id="label-${child.id}">${child.name}</span>
-                <input type="text" class="edit-input" id="edit-${child.id}" value="${child.name}" />
-                <button class="action-btn btn-edit" id="editbtn-${child.id}" onclick="toggleEdit(${child.id})">✏️ Edit</button>
-                <button class="action-btn btn-save" id="save-${child.id}" onclick="saveEdit(${child.id}, ${parent.id})">Save</button>
-                <button class="action-btn btn-cancel" id="cancel-${child.id}" onclick="cancelEdit(${child.id})">Cancel</button>
-                <button class="action-btn btn-delete" onclick="deleteCategory(${child.id})">🗑️</button>
-              </div>
-            `;
-          });
-
-          block.appendChild(childrenDiv);
-        }
-
-        list.appendChild(block);
-      });
+          ${kids.length > 0 ? `
+          <div class="children-list">
+            ${kids.map(k => `
+            <div class="child-row">
+              <span class="child-arrow">↳</span>
+              <span class="child-name" id="name-${k.id}">${k.name}</span>
+              <input class="edit-input" id="edit-${k.id}" value="${k.name}" />
+              <button class="btn-icon" id="editbtn-${k.id}" onclick="startEdit(${k.id})" title="Edit">✏️</button>
+              <button class="btn-icon" id="savebtn-${k.id}" onclick="saveEdit(${k.id}, ${p.id})" title="Save" style="display:none;">✅</button>
+              <button class="btn-icon" id="cancelbtn-${k.id}" onclick="cancelEdit(${k.id})" title="Cancel" style="display:none;">❌</button>
+              <button class="btn-icon" onclick="deleteCategory(${k.id})" title="Delete">🗑️</button>
+            </div>`).join('')}
+          </div>` : ''}
+        </div>`;
+      }).join('');
     }
 
-    function toggleEdit(id) {
-      document.getElementById(`edit-${id}`).style.display = "inline-block";
-      document.getElementById(`save-${id}`).style.display = "inline-block";
-      document.getElementById(`cancel-${id}`).style.display = "inline-block";
-      // hide label if child
-      const label = document.getElementById(`label-${id}`);
-      if (label) label.style.display = "none";
-      // hide edit button
-      const editBtn = document.getElementById(`editbtn-${id}`);
-      if (editBtn) editBtn.style.display = "none";
+    function startEdit(id) {
+      document.getElementById(`name-${id}`).style.display = 'none';
+      document.getElementById(`edit-${id}`).style.display = 'block';
+      document.getElementById(`editbtn-${id}`).style.display = 'none';
+      document.getElementById(`savebtn-${id}`).style.display = 'inline-block';
+      document.getElementById(`cancelbtn-${id}`).style.display = 'inline-block';
+      document.getElementById(`edit-${id}`).focus();
     }
 
     function cancelEdit(id) {
-      document.getElementById(`edit-${id}`).style.display = "none";
-      document.getElementById(`save-${id}`).style.display = "none";
-      document.getElementById(`cancel-${id}`).style.display = "none";
-      const label = document.getElementById(`label-${id}`);
-      if (label) label.style.display = "inline";
-      const editBtn = document.getElementById(`editbtn-${id}`);
-      if (editBtn) editBtn.style.display = "inline-block";
+      document.getElementById(`name-${id}`).style.display = 'inline';
+      document.getElementById(`edit-${id}`).style.display = 'none';
+      document.getElementById(`editbtn-${id}`).style.display = 'inline-block';
+      document.getElementById(`savebtn-${id}`).style.display = 'none';
+      document.getElementById(`cancelbtn-${id}`).style.display = 'none';
     }
 
     async function saveEdit(id, parentId) {
       const name = document.getElementById(`edit-${id}`).value.trim();
       if (!name) return;
-      await updateCategory(id, name, parentId);
-      fetchCategories();
-    }
-
-    async function addCategory(name, parentId) {
-      const msg = document.getElementById("msg");
-      msg.textContent = "";
-      const body = { name };
-      if (parentId) body.parent_id = parseInt(parentId);
-
-      const res = await fetch(`${baseUrl}/admin/categories`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (res.ok) {
-        msg.style.color = "green";
-        msg.textContent = "✅ Category added!";
-        fetchCategories();
-      } else {
-        const data = await res.json();
-        msg.style.color = "red";
-        msg.textContent = data.detail || "Failed to add category.";
-      }
-    }
-
-    async function updateCategory(id, name, parentId) {
-      const msg = document.getElementById("msg");
-      const body = { name };
-      if (parentId) body.parent_id = parentId;
-
-      const res = await fetch(`${baseUrl}/admin/categories/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (res.ok) {
-        msg.style.color = "green";
-        msg.textContent = "✅ Category updated!";
-      } else {
-        const data = await res.json();
-        msg.style.color = "red";
-        msg.textContent = data.detail || "Failed to update.";
-      }
+      try {
+        const body = { name };
+        if (parentId) body.parent_id = parentId;
+        const res = await fetch(`${baseUrl}/admin/categories/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) { showGlobalMsg('✅ Category updated!', 'success'); loadCategories(); }
+        else { showGlobalMsg('Failed to update.', 'error'); }
+      } catch { showGlobalMsg('Network error.', 'error'); }
     }
 
     async function deleteCategory(id) {
-      const msg = document.getElementById("msg");
-      if (!confirm("Delete this category? This may affect products assigned to it.")) return;
-
-      const res = await fetch(`${baseUrl}/admin/categories/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      if (res.ok) {
-        msg.style.color = "green";
-        msg.textContent = "✅ Category deleted!";
-        fetchCategories();
-      } else {
-        const data = await res.json();
-        msg.style.color = "red";
-        msg.textContent = data.detail || "Failed to delete.";
-      }
+      if (!confirm('Delete this category? Products in this category will lose it.')) return;
+      try {
+        const res = await fetch(`${baseUrl}/admin/categories/${id}`, {
+          method: 'DELETE', headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) { showGlobalMsg('✅ Category deleted!', 'success'); loadCategories(); }
+        else { showGlobalMsg('Failed to delete.', 'error'); }
+      } catch { showGlobalMsg('Network error.', 'error'); }
     }
 
-    document.getElementById("addCategoryForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const name = document.getElementById("newCategoryName").value.trim();
-      const parentId = document.getElementById("parentSelect").value;
-      if (name) {
-        await addCategory(name, parentId);
-        this.reset();
-      }
-    });
+    async function addCategory() {
+      const name = document.getElementById('newCatName').value.trim();
+      const parentId = document.getElementById('parentSelect').value;
+      const msg = document.getElementById('addMsg');
+      if (!name) { msg.textContent = 'Please enter a category name.'; msg.className = 'error'; return; }
+      msg.className = ''; msg.textContent = '';
+      try {
+        const body = { name };
+        if (parentId) body.parent_id = parseInt(parentId);
+        const res = await fetch(`${baseUrl}/admin/categories`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          msg.textContent = '✅ Category added!'; msg.className = 'success';
+          document.getElementById('newCatName').value = '';
+          document.getElementById('parentSelect').value = '';
+          loadCategories();
+          setTimeout(() => { msg.className = ''; msg.textContent = ''; }, 3000);
+        } else {
+          const d = await res.json().catch(() => ({}));
+          msg.textContent = d.detail || 'Failed to add.'; msg.className = 'error';
+        }
+      } catch { msg.textContent = 'Network error.'; msg.className = 'error'; }
+    }
 
-    fetchCategories();
+    async function loadCategories() {
+      try {
+        const res = await fetch(`${baseUrl}/admin/categories`, { headers: { Authorization: `Bearer ${token}` } });
+        if (res.status === 401) { window.location.href = 'admin_login.html'; return; }
+        allCats = res.ok ? await res.json() : [];
+        renderCategories();
+        populateParentDropdown();
+      } catch { document.getElementById('categoryList').innerHTML = '<div class="empty-msg">Failed to load categories.</div>'; }
+    }
+
+    loadCategories();
   </script>
-
 </body>
 </html>
