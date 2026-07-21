@@ -3,222 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
-  <title>Manage Products - Admin</title>
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Manage Phones — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f7f7f7;
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
-
-    header {
-      position: sticky;
-      top: 0;
-      background-color: #333;
-      color: #fff;
-      padding: 15px 20px;
-      font-size: 20px;
-      z-index: 1000;
-      text-align: center;
-    }
-
-    .container {
-      padding: 15px;
-    }
-
-    .product-card {
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      padding: 15px;
-    }
-
-    .card-header img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-right: 15px;
-    }
-
-    .card-header h3 {
-      font-size: 18px;
-      margin: 0;
-    }
-
-    .card-body {
-      display: none;
-      padding: 15px;
-      border-top: 1px solid #eee;
-    }
-
-    .card-body p {
-      margin: 5px 0;
-    }
-
-    .card-body button {
-      margin-right: 10px;
-      margin-top: 10px;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .edit-btn {
-      background-color: #ffc107;
-      color: #000;
-    }
-
-    .delete-btn {
-      background-color: #dc3545;
-      color: #fff;
-    }
-
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #28a745;
-      color: #fff;
-      border: none;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      font-size: 30px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    .floating-btn:hover {
-      background-color: #218838;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
+    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
+    .page { max-width: 800px; margin: 0 auto; padding: 20px 16px 80px; }
+    /* Toolbar */
+    .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .search-input { flex: 1; min-width: 160px; background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); color: var(--white); padding: 10px 14px; border-radius: 4px; font-size: 13px; font-family: var(--font-body); }
+    .search-input:focus { outline: none; border-color: var(--gold); }
+    .search-input::placeholder { color: var(--white-dim); }
+    .filter-select { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); color: var(--white); padding: 10px 12px; border-radius: 4px; font-size: 13px; font-family: var(--font-body); }
+    .btn-add { background: var(--gold); color: var(--black); border: none; padding: 10px 18px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); white-space: nowrap; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .count-label { font-size: 12px; color: var(--white-dim); padding: 10px 0; margin-bottom: 8px; }
+    /* Product cards */
+    .product-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+    .product-card:hover { border-color: rgba(201,168,76,0.2); }
+    .card-header { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; }
+    .card-img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; background: var(--black-4); flex-shrink: 0; }
+    .card-info { flex: 1; min-width: 0; }
+    .card-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-meta { font-size: 11px; color: var(--white-dim); }
+    .card-price { font-size: 15px; font-weight: 600; color: var(--gold); white-space: nowrap; }
+    .card-body { display: none; padding: 14px 16px; border-top: 1px solid rgba(255,255,255,0.04); background: var(--black-4); }
+    .card-body.open { display: block; }
+    .specs-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .spec-tag { background: var(--black-3); border: 1px solid rgba(201,168,76,0.12); color: var(--white-dim); font-size: 11px; padding: 4px 10px; border-radius: 3px; }
+    .spec-tag.gold { color: var(--gold); border-color: rgba(201,168,76,0.25); }
+    .card-desc { font-size: 13px; color: var(--white-dim); line-height: 1.5; margin-bottom: 14px; }
+    .action-row { display: flex; gap: 8px; }
+    .btn-edit { background: rgba(201,168,76,0.12); color: var(--gold); border: none; padding: 9px 18px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); text-decoration: none; display: inline-block; }
+    .btn-delete { background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 9px 18px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+    .condition-badge { font-size: 10px; padding: 2px 8px; border-radius: 3px; font-weight: 500; }
+    .cond-new { background: rgba(37,211,102,0.1); color: #25D366; }
+    .cond-open { background: rgba(201,168,76,0.1); color: var(--gold); }
+    .cond-used { background: rgba(249,115,22,0.1); color: #f97316; }
+    .featured-star { color: var(--gold); font-size: 12px; }
+    .empty { text-align: center; padding: 60px 20px; color: var(--white-dim); }
+    .empty-icon { font-size: 40px; margin-bottom: 14px; display: block; }
+    /* Delete modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: var(--black-3); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; max-width: 340px; width: 100%; padding: 28px 24px; text-align: center; }
+    .modal-box h3 { font-family: var(--font-display); font-size: 18px; color: var(--white); margin-bottom: 10px; }
+    .modal-box p { font-size: 13px; color: var(--white-dim); margin-bottom: 22px; }
+    .modal-btns { display: flex; gap: 10px; justify-content: center; }
+    .btn-confirm-delete { background: #ef4444; color: white; border: none; padding: 11px 22px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+    .btn-cancel { background: var(--black-4); color: var(--white-dim); border: 1px solid rgba(255,255,255,0.1); padding: 11px 22px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: var(--font-body); }
+    .float-add { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--gold); color: var(--black); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 20px rgba(201,168,76,0.3); text-decoration: none; font-weight: bold; transition: transform 0.2s; }
+    .float-add:hover { transform: scale(1.1); }
   </style>
 </head>
 <body>
-
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
   <header>
-    📦 Manage Products
+    <div class="header-title">📦 Manage Phones</div>
+    <a href="admin_home.html" class="back-link">← Dashboard</a>
   </header>
 
-  <div class="container" id="product-container">
-    <!-- Product cards will be injected here -->
+  <div class="page">
+    <div class="toolbar">
+      <input class="search-input" type="text" id="searchInput" placeholder="🔍 Search phones..." oninput="filterProducts()" />
+      <select class="filter-select" id="conditionFilter" onchange="filterProducts()">
+        <option value="">All Conditions</option>
+        <option value="New">New</option>
+        <option value="Open Box">Open Box</option>
+        <option value="Used">Used</option>
+      </select>
+      <a href="admin_productUpload.html" class="btn-add">+ Add</a>
+    </div>
+    <div class="count-label" id="countLabel"></div>
+    <div id="productList"><div class="empty"><span class="empty-icon">📱</span>Loading phones...</div></div>
   </div>
 
-  <button class="floating-btn" onclick="window.location.href='admin_productUpload.html'">+</button>
+  <a href="admin_productUpload.html" class="float-add" title="Add Phone">+</a>
+
+  <!-- Delete modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal-box">
+      <h3>Delete Phone?</h3>
+      <p>This will permanently remove the listing and its image. This cannot be undone.</p>
+      <div class="modal-btns">
+        <button class="btn-confirm-delete" onclick="confirmDelete()">Yes, Delete</button>
+        <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // Define the base URL for your API
-  // Replaced previous base: window.__API_BASE__ || '/api'
-  // Now using production API base
-  const baseUrl = "https://sman-phones-1.onrender.com/api"; // previously: window.__API_BASE__ || '/api'
+    const baseUrl = "https://sman-phones-1.onrender.com/api/api";
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'admin_login.html';
+    let allProducts = [];
+    let deleteId = null;
 
-    const token = localStorage.getItem("token");
-
-    // This check is correct
-    if (!token) {
-      alert("Access denied. Please log in.");
-      window.location.href = "admin_login.html";
+    function condClass(c) {
+      if (c === 'New') return 'cond-new';
+      if (c === 'Open Box') return 'cond-open';
+      return 'cond-used';
     }
 
-    async function fetchProducts() {
-      try {
-        // CHANGED: Using the baseUrl and correct API path
-        const res = await fetch(`${baseUrl}/admin/products`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    function toggle(id) {
+      document.getElementById('body-' + id).classList.toggle('open');
+    }
 
-        if (!res.ok) {
-          throw new Error(`Server responded with status: ${res.status}`);
-        }
+    function filterProducts() {
+      const kw = document.getElementById('searchInput').value.toLowerCase();
+      const cond = document.getElementById('conditionFilter').value;
+      let filtered = allProducts.filter(p => {
+        const matchKw = !kw || p.name.toLowerCase().includes(kw) || (p.brand || '').toLowerCase().includes(kw);
+        const matchCond = !cond || p.condition === cond;
+        return matchKw && matchCond;
+      });
+      renderProducts(filtered);
+    }
 
-        const data = await res.json();
-        const container = document.getElementById("product-container");
-        container.innerHTML = ""; // Clear previous content before adding new cards
-
-        data.forEach(product => {
-          const card = document.createElement("div");
-          card.className = "product-card";
-
-          const header = document.createElement("div");
-          header.className = "card-header";
-          // IMPORTANT: Make sure your API returns 'image_url' or update this to the correct property name
-          header.innerHTML = `
-            <img src="${product.image_url}" alt="Product Image" />
-            <h3>${product.name}</h3>
-          `;
-
-          const body = document.createElement("div");
-          body.className = "card-body";
-          body.innerHTML = `
-            <p><strong>Price:</strong> ₦${product.price}</p>
-            <p><strong>Quantity:</strong> ${product.quantity}</p>
-            <p><strong>Categories:</strong> ${product.categories && product.categories.length > 0 ? product.categories.map(c => c.name).join(', ') : 'None'}</p>
-            <p><strong>Description:</strong> ${product.description || 'N/A'}</p>
-            <button class="edit-btn" onclick="editProduct(${product.id})">✏️ Edit</button>
-            <button class="delete-btn" onclick="deleteProduct(${product.id})">🗑️ Delete</button>
-          `;
-
-          header.addEventListener("click", () => {
-            body.style.display = body.style.display === "block" ? "none" : "block";
-          });
-
-          card.appendChild(header);
-          card.appendChild(body);
-          container.appendChild(card);
-        });
-      } catch (err) {
-        console.error("Failed to fetch products", err);
-        alert("Something went wrong while loading products. You may need to log in again.");
+    function renderProducts(products) {
+      const list = document.getElementById('productList');
+      document.getElementById('countLabel').textContent = `${products.length} phone${products.length !== 1 ? 's' : ''}`;
+      if (products.length === 0) {
+        list.innerHTML = '<div class="empty"><span class="empty-icon">📱</span><p>No phones found.</p></div>';
+        return;
       }
+      list.innerHTML = products.map(p => `
+        <div class="product-card">
+          <div class="card-header" onclick="toggle(${p.id})">
+            <img class="card-img" src="${p.image_url || 'https://via.placeholder.com/56x56/1A1A1A/C9A84C?text=📱'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/56x56/1A1A1A/C9A84C?text=📱'" />
+            <div class="card-info">
+              <div class="card-name">${p.name} ${p.is_featured ? '<span class="featured-star">★</span>' : ''}</div>
+              <div class="card-meta">
+                ${p.condition ? `<span class="condition-badge ${condClass(p.condition)}">${p.condition}</span> ` : ''}
+                ${[p.brand, p.storage, p.color].filter(Boolean).join(' · ')}
+              </div>
+            </div>
+            <div class="card-price">₦${Number(p.price).toLocaleString()}</div>
+          </div>
+          <div class="card-body" id="body-${p.id}">
+            <div class="specs-row">
+              ${p.quantity > 0 ? `<span class="spec-tag gold">In Stock: ${p.quantity}</span>` : '<span class="spec-tag" style="color:#ef4444;border-color:rgba(239,68,68,0.2);">Out of Stock</span>'}
+              ${p.battery_health ? `<span class="spec-tag">🔋 ${p.battery_health}%</span>` : ''}
+              ${p.original_price ? `<span class="spec-tag">Was ₦${Number(p.original_price).toLocaleString()}</span>` : ''}
+              ${(p.categories || []).map(c => `<span class="spec-tag">${c.name}</span>`).join('')}
+            </div>
+            ${p.description ? `<div class="card-desc">${p.description}</div>` : ''}
+            <div class="action-row">
+              <a href="edit_product.html?id=${p.id}" class="btn-edit">✏️ Edit</a>
+              <button class="btn-delete" onclick="openDeleteModal(${p.id})">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>`).join('');
     }
 
-    // NO CHANGE NEEDED HERE: This is a page navigation, not an API call.
-    function editProduct(id) {
-      window.location.href = `edit_product.html?id=${id}`;
-    }
+    function openDeleteModal(id) { deleteId = id; document.getElementById('deleteModal').classList.add('active'); }
+    function closeDeleteModal() { deleteId = null; document.getElementById('deleteModal').classList.remove('active'); }
 
-    async function deleteProduct(id) {
-      if (!confirm("Are you sure you want to delete this product?")) return;
-
+    async function confirmDelete() {
+      if (!deleteId) return;
       try {
-        // CHANGED: Using the baseUrl and correct API path
-        const res = await fetch(`${baseUrl}/admin/products/${id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (res.ok) {
-          alert("Product deleted ✅");
-          location.reload(); // Reload the page to show the updated product list
-        } else {
-          throw new Error("Failed to delete");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("❌ Failed to delete product");
-      }
+        const res = await fetch(`${baseUrl}/admin/products/${deleteId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+        if (res.ok || res.status === 204) {
+          allProducts = allProducts.filter(p => p.id !== deleteId);
+          filterProducts();
+        } else { alert('Failed to delete.'); }
+      } catch { alert('Network error.'); }
+      closeDeleteModal();
     }
 
-    // This is correct, it runs the function when the script loads.
-    fetchProducts();
+    async function loadProducts() {
+      try {
+        const res = await fetch(`${baseUrl}/admin/products`, { headers: { Authorization: `Bearer ${token}` } });
+        if (res.status === 401) { window.location.href = 'admin_login.html'; return; }
+        allProducts = res.ok ? await res.json() : [];
+        filterProducts();
+      } catch { document.getElementById('productList').innerHTML = '<div class="empty"><span class="empty-icon">⚠️</span><p>Failed to load phones.</p></div>'; }
+    }
+    loadProducts();
   </script>
 </body>
 </html>
