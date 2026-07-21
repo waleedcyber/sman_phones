@@ -1,193 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Edit Product - Admin</title>
-  <link rel="icon" type="image/png" href="/logo/s%20and%20s%20collection%20logo.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Edit Phone — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body{font-family:Arial, sans-serif; background:#f5f5f5; margin:0}
-    header{background:#333;color:#fff;padding:16px;text-align:center}
-    .form-container{max-width:800px;margin:28px auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-    label{display:block;margin:8px 0 4px}
-    input[type=text], input[type=number], textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;}
-    button{margin-top:12px;padding:10px 14px;border:none;border-radius:6px;background:#28a745;color:#fff;cursor:pointer;width:100%;font-size:16px;}
-    .img-preview{max-width:200px;max-height:160px;object-fit:cover;border-radius:6px;margin-top:8px}
-    .category-box{background:#f9f9f9;border:1px solid #ddd;border-radius:6px;padding:12px;max-height:180px;overflow-y:auto;}
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
+    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
+    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
+    .page { max-width: 680px; margin: 0 auto; padding: 24px 16px 80px; }
+    .form-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 12px; padding: 22px 18px; margin-bottom: 14px; }
+    .form-card-title { font-family: var(--font-display); font-size: 15px; color: var(--white); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 12px 14px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--gold); }
+    .form-input::placeholder { color: rgba(170,170,170,0.4); }
+    select.form-input option { background: var(--black-3); }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .battery-field { display: none; }
+    .battery-field.show { display: block; }
+    .cat-box { background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); border-radius: 4px; padding: 12px; max-height: 160px; overflow-y: auto; }
+    .cat-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; cursor: pointer; color: var(--white-dim); }
+    .cat-option input[type=checkbox] { appearance: none; width: 18px; height: 18px; border: 1px solid var(--gold-dim); border-radius: 3px; background: transparent; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+    .cat-option input[type=checkbox]:checked { background: var(--gold); border-color: var(--gold); }
+    .cat-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); padding: 8px 0 4px; font-weight: 500; }
+    .current-img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; border: 1px solid rgba(201,168,76,0.15); display: none; }
+    .img-preview { display: none; width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; margin-top: 10px; border: 1px solid rgba(201,168,76,0.2); }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+    .toggle-label { font-size: 13px; color: var(--white-dim); }
+    .toggle { position: relative; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--black-4); border: 1px solid rgba(201,168,76,0.2); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: var(--white-dim); border-radius: 50%; transition: transform 0.2s; }
+    .toggle input:checked + .toggle-slider { background: var(--gold); border-color: var(--gold); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: var(--black); }
+    .btn-submit { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 16px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; }
+    .btn-submit:hover { background: var(--gold-light); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    #statusMsg { text-align: center; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-top: 12px; display: none; }
+    #statusMsg.success { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.2); display: block; }
+    #statusMsg.error { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); display: block; }
+    #statusMsg.loading { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); display: block; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <header>✏️ Edit Product</header>
-  <div class="form-container">
-    <form id="editForm">
-      <input type="hidden" id="productId">
+  <header>
+    <div class="header-title">✏️ Edit Phone</div>
+    <a href="admin_product.html" class="back-link">← Phones</a>
+  </header>
+  <div class="page">
 
-      <label>Name</label>
-      <input id="name" name="name" required />
+    <input type="hidden" id="productId" />
 
-      <label>Description</label>
-      <textarea id="description" name="description" rows="4"></textarea>
+    <div class="form-card">
+      <div class="form-card-title">📋 Basic Information</div>
+      <div class="form-group">
+        <label class="form-label">Phone Name / Title</label>
+        <input class="form-input" type="text" id="name" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price (₦)</label>
+          <input class="form-input" type="number" id="price" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Original Price (₦)</label>
+          <input class="form-input" type="number" id="originalPrice" placeholder="Optional" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Quantity in Stock</label>
+        <input class="form-input" type="number" id="quantity" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-input" id="description"></textarea>
+      </div>
+    </div>
 
-      <label>Price (₦)</label>
-      <input id="price" name="price" type="number" step="0.01" required />
+    <div class="form-card">
+      <div class="form-card-title">⚙️ Phone Specifications</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Brand</label>
+          <select class="form-input" id="brand">
+            <option value="">Select brand</option>
+            <option>Apple</option><option>Samsung</option><option>Google</option>
+            <option>Tecno</option><option>Infinix</option><option>Xiaomi</option>
+            <option>OnePlus</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Condition</label>
+          <select class="form-input" id="condition" onchange="handleCondition(this.value)">
+            <option value="">Select condition</option>
+            <option>New</option><option>Open Box</option><option>Used</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Storage</label>
+          <select class="form-input" id="storage">
+            <option value="">Select storage</option>
+            <option>64GB</option><option>128GB</option><option>256GB</option>
+            <option>512GB</option><option>1TB</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <input class="form-input" type="text" id="color" placeholder="e.g. Midnight Black" />
+        </div>
+      </div>
+      <div class="form-group battery-field" id="batteryField">
+        <label class="form-label">Battery Health (%)</label>
+        <input class="form-input" type="number" id="batteryHealth" min="1" max="100" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Featured on Homepage</label>
+        <div class="toggle-row">
+          <span class="toggle-label">Show on homepage</span>
+          <label class="toggle"><input type="checkbox" id="isFeatured"><div class="toggle-slider"></div></label>
+        </div>
+      </div>
+    </div>
 
-      <label>Quantity</label>
-      <input id="quantity" name="quantity" type="number" required />
+    <div class="form-card">
+      <div class="form-card-title">🗂️ Categories</div>
+      <div class="form-group">
+        <label class="form-label">Select Categories</label>
+        <div class="cat-box" id="categoryCheckboxes">Loading...</div>
+      </div>
+    </div>
 
-      <label>Categories</label>
-      <div id="categoryCheckboxes" class="category-box"></div>
+    <div class="form-card">
+      <div class="form-card-title">📸 Image</div>
+      <img class="current-img" id="currentImg" alt="Current image" />
+      <div class="form-group">
+        <label class="form-label">Replace Image (optional)</label>
+        <input class="form-input" type="file" id="image" accept=".jpg,.jpeg,.png,.webp" onchange="previewImage(this)" />
+        <img class="img-preview" id="imgPreview" />
+      </div>
+    </div>
 
-      <label>Replace Image (optional)</label>
-      <input id="image" name="image" type="file" accept="image/*" />
-      <img id="preview" class="img-preview" src="" alt="Current image" style="display:none"/>
-
-      <p id="msg"></p>
-      <button type="submit">Save Changes</button>
-    </form>
+    <button class="btn-submit" id="submitBtn" onclick="updateProduct()">💾 Save Changes</button>
+    <div id="statusMsg"></div>
   </div>
 
   <script>
-    const token = localStorage.getItem('token');
-    if (!token) { alert('Access denied. Please log in.'); window.location.href='admin_login.html'; }
-
     const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'admin_login.html';
+    const productId = new URLSearchParams(window.location.search).get('id');
+    if (!productId) window.location.href = 'admin_product.html';
 
-    function qs(param){
-      return new URLSearchParams(window.location.search).get(param);
+    function handleCondition(val) {
+      document.getElementById('batteryField').classList.toggle('show', val === 'Used');
     }
 
-   async function fetchCategories() {
-  try {
-    const res = await fetch(`${baseUrl}/admin/categories`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (res.ok) {
-      const categories = await res.json();
-      const container = document.getElementById("categoryCheckboxes");
-      container.innerHTML = "";
-
-      // Separate parents and children
-      const parents = categories.filter(c => !c.parent_id);
-      const children = categories.filter(c => c.parent_id);
-
-      if (parents.length === 0) {
-        container.textContent = "No categories found. Add some first.";
-        return;
+    function previewImage(input) {
+      const preview = document.getElementById('imgPreview');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+        reader.readAsDataURL(input.files[0]);
       }
-
-      parents.forEach(parent => {
-        const parentChildren = children.filter(c => c.parent_id === parent.id);
-
-        // Parent label (not selectable, just a group header)
-        container.innerHTML += `
-          <p style="font-weight:bold; color:#333; margin:10px 0 4px; font-size:15px;">
-            📁 ${parent.name}
-          </p>`;
-
-        if (parentChildren.length > 0) {
-          // Show subcategories as checkboxes
-          parentChildren.forEach(child => {
-            container.innerHTML += `
-              <label style="display:flex; align-items:center; gap:10px; padding:6px 0 6px 16px; font-size:15px; cursor:pointer;">
-                <input type="checkbox" value="${child.id}" style="width:20px; height:20px;">
-                ${child.name}
-              </label>`;
-          });
-        } else {
-          // No subcategories — parent itself is selectable
-          container.innerHTML += `
-            <label style="display:flex; align-items:center; gap:10px; padding:6px 0 6px 16px; font-size:15px; cursor:pointer;">
-              <input type="checkbox" value="${parent.id}" style="width:20px; height:20px;">
-              ${parent.name}
-            </label>`;
-        }
-      });
-    }
-  } catch (err) {
-    document.getElementById("categoryCheckboxes").textContent = "Failed to load categories.";
-  }
-}
-    async function loadProduct(){
-      const id = qs('id');
-      if (!id){ alert('No product id provided'); window.location.href='admin_product.html'; return; }
-      document.getElementById('productId').value = id;
-
-      await fetchCategories(); // load checkboxes first
-
-      try{
-        const res = await fetch(`${baseUrl}/admin/products/${id}`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!res.ok){ alert('Failed to load product'); return; }
-        const p = await res.json();
-
-        document.getElementById('name').value = p.name || '';
-        document.getElementById('description').value = p.description || '';
-        document.getElementById('price').value = p.price || 0;
-        document.getElementById('quantity').value = p.quantity || 0;
-
-        // Pre-check the product's current categories
-        if (p.categories && p.categories.length > 0){
-          const ids = p.categories.map(c => String(c.id));
-          document.querySelectorAll('#categoryCheckboxes input[type=checkbox]').forEach(cb => {
-            cb.checked = ids.includes(cb.value);
-          });
-        }
-
-        if (p.image_url){
-          const preview = document.getElementById('preview');
-          preview.src = p.image_url;
-          preview.style.display = 'block';
-        }
-      }catch(e){ console.error(e); alert('Error loading product'); }
     }
 
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('productId').value;
+    function showMsg(text, type) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = text; el.className = type;
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-      // Collect checked categories
-      const checked = document.querySelectorAll('#categoryCheckboxes input[type=checkbox]:checked');
-      const selectedIds = Array.from(checked).map(c => c.value).join(',');
-
-      if (!selectedIds){
-        const msg = document.getElementById('msg');
-        msg.style.color = 'red';
-        msg.textContent = 'Please select at least one category.';
-        return;
-      }
-
-      const form = new FormData();
-      form.append('name', document.getElementById('name').value);
-      form.append('description', document.getElementById('description').value);
-      form.append('price', document.getElementById('price').value);
-      form.append('quantity', document.getElementById('quantity').value);
-      form.append('category_ids', selectedIds);
-      const file = document.getElementById('image').files[0];
-      if (file) form.append('image', file);
-
-      const msg = document.getElementById('msg');
-      msg.textContent = '';
-
-      try{
-        const res = await fetch(`${baseUrl}/admin/products/${id}`, {
-          method: 'PUT',
-          headers: { Authorization: `Bearer ${token}` },
-          body: form
+    async function loadCategories(selectedIds = []) {
+      try {
+        const res = await fetch(`${baseUrl}/admin/categories`, { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) return;
+        const cats = await res.json();
+        const container = document.getElementById('categoryCheckboxes');
+        container.innerHTML = '';
+        const parents = cats.filter(c => !c.parent_id);
+        const children = cats.filter(c => c.parent_id);
+        parents.forEach(p => {
+          const kids = children.filter(c => c.parent_id === p.id);
+          container.innerHTML += `<div class="cat-group-label">📁 ${p.name}</div>`;
+          if (kids.length > 0) {
+            kids.forEach(k => {
+              const checked = selectedIds.includes(String(k.id)) ? 'checked' : '';
+              container.innerHTML += `<label class="cat-option"><input type="checkbox" value="${k.id}" ${checked}> ${k.name}</label>`;
+            });
+          } else {
+            const checked = selectedIds.includes(String(p.id)) ? 'checked' : '';
+            container.innerHTML += `<label class="cat-option"><input type="checkbox" value="${p.id}" ${checked}> ${p.name}</label>`;
+          }
         });
-        if (res.ok){
-          msg.style.color = 'green';
-          msg.textContent = 'Product updated successfully!';
-          setTimeout(() => window.location.href = 'admin_product.html', 800);
-        } else {
-          const d = await res.json().catch(() => ({detail: 'Unknown'}));
-          msg.style.color = 'red';
-          msg.textContent = d.detail || 'Update failed';
+      } catch { document.getElementById('categoryCheckboxes').textContent = 'Failed to load categories.'; }
+    }
+
+    async function loadProduct() {
+      try {
+        const res = await fetch(`${baseUrl}/admin/products/${productId}`, { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) { alert('Failed to load phone.'); window.location.href = 'admin_product.html'; return; }
+        const p = await res.json();
+        document.getElementById('productId').value = p.id;
+        document.getElementById('name').value = p.name || '';
+        document.getElementById('price').value = p.price || '';
+        document.getElementById('originalPrice').value = p.original_price || '';
+        document.getElementById('quantity').value = p.quantity || '';
+        document.getElementById('description').value = p.description || '';
+        document.getElementById('brand').value = p.brand || '';
+        document.getElementById('condition').value = p.condition || '';
+        document.getElementById('storage').value = p.storage || '';
+        document.getElementById('color').value = p.color || '';
+        document.getElementById('batteryHealth').value = p.battery_health || '';
+        document.getElementById('isFeatured').checked = p.is_featured || false;
+        if (p.condition === 'Used') document.getElementById('batteryField').classList.add('show');
+        if (p.image_url) {
+          const img = document.getElementById('currentImg');
+          img.src = p.image_url; img.style.display = 'block';
         }
-      }catch(e){
-        console.error(e);
-        msg.style.color = 'red';
-        msg.textContent = 'Network error';
-      }
-    });
+        const selectedIds = (p.categories || []).map(c => String(c.id));
+        await loadCategories(selectedIds);
+      } catch(e) { console.error(e); alert('Error loading phone.'); }
+    }
+
+    async function updateProduct() {
+      const name = document.getElementById('name').value.trim();
+      const price = document.getElementById('price').value;
+      const quantity = document.getElementById('quantity').value;
+      if (!name || !price || !quantity) { showMsg('Please fill in name, price and quantity.', 'error'); return; }
+      const checked = document.querySelectorAll('#categoryCheckboxes input[type=checkbox]:checked');
+      if (checked.length === 0) { showMsg('Please select at least one category.', 'error'); return; }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; showMsg('Saving changes...', 'loading');
+
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('description', document.getElementById('description').value.trim());
+      formData.append('price', price);
+      formData.append('quantity', quantity);
+      formData.append('category_ids', Array.from(checked).map(c => c.value).join(','));
+      const originalPrice = document.getElementById('originalPrice').value;
+      if (originalPrice) formData.append('original_price', originalPrice);
+      const brand = document.getElementById('brand').value;
+      if (brand) formData.append('brand', brand);
+      const condition = document.getElementById('condition').value;
+      if (condition) formData.append('condition', condition);
+      const storage = document.getElementById('storage').value;
+      if (storage) formData.append('storage', storage);
+      const color = document.getElementById('color').value.trim();
+      if (color) formData.append('color', color);
+      const battery = document.getElementById('batteryHealth').value;
+      if (battery) formData.append('battery_health', battery);
+      formData.append('is_featured', document.getElementById('isFeatured').checked);
+      const file = document.getElementById('image').files[0];
+      if (file) formData.append('image', file);
+
+      try {
+        const res = await fetch(`${baseUrl}/admin/products/${productId}`, {
+          method: 'PUT', headers: { Authorization: `Bearer ${token}` }, body: formData
+        });
+        if (res.ok) {
+          showMsg('✅ Phone updated successfully!', 'success');
+          setTimeout(() => window.location.href = 'admin_product.html', 1000);
+        } else {
+          const d = await res.json().catch(() => ({}));
+          showMsg(d.detail || 'Update failed. Try again.', 'error');
+        }
+      } catch { showMsg('Network error. Try again.', 'error'); }
+      finally { btn.disabled = false; }
+    }
 
     loadProduct();
   </script>
