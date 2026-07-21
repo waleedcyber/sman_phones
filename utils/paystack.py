@@ -81,3 +81,22 @@ def verify_paystack_transaction_sync(reference: str) -> dict:
         )
 
     return result["data"]
+
+if event_data.get("event") == "charge.success":
+    data = event_data["data"]
+    reference = data.get("reference") 
+    
+    order = db.query(Order).filter(Order.reference == reference).first()
+    
+    if order and not order.paid:
+        # ─── CALL THE SAME STOCK DEDUCTION UTILITY HERE ───
+        reduce_product_stock(order_id=order.id, db=db)
+
+        order.payment_status = "Paid"
+        order.paid = True
+        order.paid_at = datetime.utcnow()
+        db.commit()
+        
+        # If using WebSockets, broadcast the event to the frontend
+        if 'manager' in globals():
+            await manager.broadcast({"event": "order_updated", "reference": reference})

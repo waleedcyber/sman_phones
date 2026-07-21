@@ -340,11 +340,77 @@ def mark_order_paid(
     order = db.query(Order).get(order_id)
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
+        
+    # Prevent deducting stock twice if the order was already paid
+    if order.paid:
+        return {"message": "Order is already marked as paid"}
+
+    # ─── CALL THE STOCK DEDUCTION UTILITY HERE ───
+    reduce_product_stock(order_id=order.id, db=db)
+
     order.payment_status = "Paid"
     order.paid = True
     order.paid_at = datetime.utcnow()
     db.commit()
-    return {"message": "Marked as paid"}
+    return {"message": "Marked as paid and stock updated"}
+
+
+
+import os
+import hmac
+import hashlib
+
+# Assuming router and get_db are imported globally in this file
+@router.post("/paystack-webhook", tags=["Payments"])
+async def paystack_webhook(
+    request: Request, 
+    x_paystack_signature: str = Header(None), 
+    db: Session = Depends(get_db)
+):
+    # 1. Reject requests missing the signature header
+    if not x_paystack_signature:
+        raise HTTPException(status_code=401, detail="Missing signature header")
+        
+    # 2. Read raw request payload
+    payload_body = await request.body()
+    
+    # 3. Verify that the webhook request genuinely came from Paystack
+    PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_your_secret_key")
+    computed_signature = hmac.new(
+        PAYSTACK_SECRET_KEY.encode('utf-8'),
+        payload_body,
+        hashlib.sha512
+    ).hexdigest()
+    
+    if not hmac.compare_digest(computed_signature, x_paystack_signature):
+        raise HTTPException(status_code=401, detail="Invalid webhook signature")
+        
+    # 4. Parse the payload data
+    event_data = await request.json()
+    
+    # 5. Handle successful checkout transactions
+    if event_data.get("event") == "charge.success":
+        data = event_data["data"]
+        
+        # Paystack provides the transaction reference string
+        reference = data.get("reference") 
+        
+        # Locate the order using your database order reference column
+        order = db.query(Order).filter(Order.reference == reference).first()
+        
+        if not order:
+            # We return a 200/201 status even if order isn't found so Paystack stops retrying
+            return {"status": "ignored", "message": "Order reference not found"}
+            
+        # 6. Apply identical updates as your manual admin endpoint
+        order.payment_status = "Paid"
+        order.paid = True
+        order.paid_at = datetime.utcnow()
+        db.commit()
+        
+        return {"status": "success", "message": f"Order {reference} automated as paid."}
+        
+    return {"status": "ignored", "message": "Event type not processed"}
 
 
 @router.put("/orders/{order_id}/mark_delivered", tags=["Admin"])

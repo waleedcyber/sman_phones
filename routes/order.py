@@ -8,6 +8,9 @@ from schemas import OrderOut  # Assuming you created this
 from fastapi import Depends, HTTPException
 from auth import get_current_admin
 
+
+def reduce_product_stock(order_id: int, db: Session):
+
 router = APIRouter()
 
 
@@ -76,6 +79,37 @@ def mark_order_paid_by_code(order_id: str, reference: str, db: Session = Depends
             "paid_at": order.paid_at.isoformat()
         }
     }
+
+
+
+def reduce_product_stock(order_id: int, db: Session):
+    """
+    Looks up an order, finds its items, and subtracts the ordered quantities 
+    from the available product stock.
+    """
+    # 1. Fetch the order along with its linked items
+    # (Adjust 'order_items' to match the relationship name in your Order model)
+    order = db.query(Order).get(order_id)
+    if not order:
+        return False
+
+    for item in order.order_items:
+        product = db.query(Product).get(item.product_id)
+        if product:
+            # 2. Check if there is enough stock available
+            if product.quantity < item.quantity:
+                # Optional: You can choose to raise an error, or let it go into negative 
+                # depending on your business rules (e.g., backorders)
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"Not enough stock for product: {product.name}"
+                )
+            
+            # 3. Deduct the exact quantity purchased
+            product.quantity -= item.quantity
+            
+    db.commit()
+    return True
 
 
 # ✅ Delete an order (admin-protected)

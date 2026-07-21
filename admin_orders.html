@@ -224,6 +224,10 @@
       } catch { document.getElementById('orderList').innerHTML = '<div class="empty"><span class="empty-icon">⚠️</span><p>Failed to load orders.</p></div>'; }
     }
     loadOrders();
+
+// 🔄 ADD THIS LINE: Automatically refresh all order rows and stats every 10 seconds
+setInterval(loadOrders, 10000);
+
   </script>
 </body>
 </html>
