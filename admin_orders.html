@@ -134,12 +134,16 @@
     }
 
     function toggle(id) { document.getElementById('body-' + id).classList.toggle('open'); }
-
     function renderOrders() {
       const kw = document.getElementById('searchInput').value.toLowerCase();
       let filtered = allOrders.filter(o => {
-        if (currentFilter === 'paid' && o.payment_status !== 'Paid') return false;
-        if (currentFilter === 'unpaid' && o.payment_status === 'Paid') return false;
+        // Convert status safely to a lowercase string for comparison
+        const paymentStatus = String(o.payment_status).toLowerCase();
+
+        // 🔄 FIXED: Checks against lowercase values safely
+        if (currentFilter === 'paid' && paymentStatus !== 'paid') return false;
+        if (currentFilter === 'unpaid' && paymentStatus === 'paid') return false;
+        
         if (currentFilter === 'delivered' && o.status !== 'Delivered') return false;
         if (kw && !o.customer_name.toLowerCase().includes(kw) && !o.customer_phone.includes(kw)) return false;
         return true;
