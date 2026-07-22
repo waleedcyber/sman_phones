@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from db import get_db
 from models import Order
-from utils.paystack import verify_paystack_transaction_sync
+from utils.paystack import verify_paystack_transaction
 import httpx
 from config import PAYSTACK_SECRET_KEY, PAYSTACK_API_URL, PAYSTACK_PUBLIC_KEY
 from datetime import datetime
@@ -30,7 +30,7 @@ def verify_payment(payload: VerifyRequest, db: Session = Depends(get_db)):
     # Verify using Paystack API (sync wrapper)
     reference = payload.reference
     order_id = payload.order_id
-    data = verify_paystack_transaction_sync(reference)
+    data = verify_paystack_transaction(reference)
 
     # Basic checks
     if data.get("status") != "success":
