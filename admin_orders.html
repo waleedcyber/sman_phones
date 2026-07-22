@@ -228,16 +228,29 @@
         const res = await fetch(`${baseUrl}/orders`, { headers: { Authorization: `Bearer ${token}` } });
         if (res.status === 401) { window.location.href = 'admin_login.html'; return; }
         allOrders = res.ok ? await res.json() : [];
-        // Stats
+        
+        // 📊 Stats Counters Fixed
         document.getElementById('statTotal').textContent = allOrders.length;
-        const paid = allOrders.filter(o => o.payment_status === 'Paid');
+        
+        // 🔄 FIXED: Case-insensitive filter handles both 'Paid' and 'paid'
+        const paid = allOrders.filter(o => o.payment_status && String(o.payment_status).toLowerCase() === 'paid');
         document.getElementById('statPaid').textContent = paid.length;
+        
+        // Safe check for delivery stats
         document.getElementById('statDelivered').textContent = allOrders.filter(o => o.status === 'Delivered').length;
-        document.getElementById('statRevenue').textContent = '₦' + paid.reduce((s, o) => s + o.total, 0).toLocaleString();
+        
+        // 🔄 FIXED: Added Number mapping to prevent math errors during calculation
+        const totalRevenue = paid.reduce((s, o) => s + Number(o.total || 0), 0);
+        document.getElementById('statRevenue').textContent = '₦' + totalRevenue.toLocaleString();
+        
         renderOrders();
-      } catch { document.getElementById('orderList').innerHTML = '<div class="empty"><span class="empty-icon">⚠️</span><p>Failed to load orders.</p></div>'; }
+      } catch (err) { 
+        console.error(err);
+        document.getElementById('orderList').innerHTML = '<div class="empty"><span class="empty-icon">⚠️</span><p>Failed to load orders.</p></div>'; 
+      }
     }
     loadOrders();
+
 
 // 🔄 ADD THIS LINE: Automatically refresh all order rows and stats every 10 seconds
 setInterval(loadOrders, 10000);
