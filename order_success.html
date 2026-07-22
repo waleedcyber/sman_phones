@@ -95,26 +95,48 @@
   </div>
 
   <script>
-    // Read URL params
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Read URL params
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('reference') || params.get('ref') || params.get('trxref');
-    const method = params.get('method');
+    
+    // Automatically default to paystack if trxref exists in URL
+    const method = params.get('method') || (params.has('trxref') ? 'paystack' : null);
 
-    // Show order reference
-    if (ref && ref !== 'N/A') {
-      document.getElementById('refBox').style.display = 'block';
-      document.getElementById('refValue').textContent = ref;
+    console.log("Detected Reference:", ref); // Debugging tool
+    console.log("Detected Method:", method);    // Debugging tool
+
+    // 2. Safely show order reference box
+    const refBox = document.getElementById('refBox');
+    const refValue = document.getElementById('refValue');
+    if (ref && ref !== 'N/A' && refBox && refValue) {
+        refBox.style.display = 'block';
+        refValue.textContent = ref;
     }
 
-    // Customize for payment method
-    if (method === 'paystack') {
-      document.getElementById('eyebrow').textContent = 'Payment Confirmed';
-      document.getElementById('subtitle').textContent = 'Your payment was successful and your order is confirmed. The seller will contact you to arrange delivery.';
-      document.getElementById('methodBadge').className = 'method-badge method-pay';
-      document.getElementById('methodBadge').textContent = '💳 Payment confirmed via Paystack';
-      document.getElementById('step1').querySelector('span').textContent = 'Your payment has been received and confirmed.';
-      document.getElementById('step2').querySelector('span').textContent = 'The seller will contact you to arrange delivery or pickup.';
+    // 3. Safely customize for payment method
+    if (method && method.toLowerCase() === 'paystack') {
+        const eyebrow = document.getElementById('eyebrow');
+        const subtitle = document.getElementById('subtitle');
+        const methodBadge = document.getElementById('methodBadge');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+
+        // Update elements only if they actually exist in your HTML
+        if (eyebrow) eyebrow.textContent = 'Payment Confirmed';
+        if (subtitle) subtitle.textContent = 'Your payment was successful and your order is confirmed. The seller will contact you to arrange delivery.';
+        
+        if (methodBadge) {
+            methodBadge.className = 'method-badge method-pay';
+            methodBadge.textContent = '💳 Payment confirmed via Paystack';
+        }
+        
+        // The optional chaining (?.) stops crashes if <span> is missing
+        if (step1) step1.querySelector('span').textContent = 'Your payment has been received and confirmed.';
+        if (step2) step2.querySelector('span').textContent = 'The seller will contact you to arrange delivery or pickup.';
     }
+});
+
 
     // Clear cart
     localStorage.removeItem('cart');
