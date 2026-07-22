@@ -1,5 +1,6 @@
 import httpx
 from fastapi import HTTPException
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 
@@ -48,12 +49,9 @@ async def verify_paystack_transaction(reference: str) -> dict:
             
         return result["data"]
 
-
-def verify_paystack_transaction_sync(reference: str) -> dict:
-    """Synchronous wrapper for verifying a Paystack transaction.
-    Useful for synchronous FastAPI routes that use SQLAlchemy sync sessions.
-    Returns the `data` object from Paystack on success or raises HTTPException on failure.
-    """
+# ─── 1. FIXED VERIFICATION FUNCTION (TRUE ASYNC) ───
+async def verify_paystack_transaction(reference: str) -> dict:
+    """Asynchronous verification for a Paystack transaction."""
     if not PAYSTACK_SECRET_KEY:
         raise HTTPException(
             status_code=500,
@@ -65,7 +63,12 @@ def verify_paystack_transaction_sync(reference: str) -> dict:
         "Content-Type": "application/json"
     }
 
-    response = httpx.get(f"{PAYSTACK_BASE_URL}/transaction/verify/{reference}", headers=headers)
+    # Use AsyncClient with await so it doesn't freeze your FastAPI app
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{PAYSTACK_BASE_URL}/transaction/verify/{reference}", 
+            headers=headers
+        )
 
     if response.status_code != 200:
         raise HTTPException(
@@ -82,21 +85,4 @@ def verify_paystack_transaction_sync(reference: str) -> dict:
 
     return result["data"]
 
-if event_data.get("event") == "charge.success":
-    data = event_data["data"]
-    reference = data.get("reference") 
-    
-    order = db.query(Order).filter(Order.reference == reference).first()
-    
-    if order and not order.paid:
-        # ─── CALL THE SAME STOCK DEDUCTION UTILITY HERE ───
-        reduce_product_stock(order_id=order.id, db=db)
 
-        order.payment_status = "Paid"
-        order.paid = True
-        order.paid_at = datetime.utcnow()
-        db.commit()
-        
-        # If using WebSockets, broadcast the event to the frontend
-        if 'manager' in globals():
-            await manager.broadcast({"event": "order_updated", "reference": reference})

@@ -104,6 +104,9 @@ def initialize_payment(payload: InitializeRequest):
     data = resp.json()
     return {"authorization_url": data.get("data", {}).get("authorization_url"), "data": data.get("data")}
 
+# Import your connection manager if it is defined in another file (e.g., from main import manager)
+# Or define/import your stock reduction function
+# from utils.stock import reduce_product_stock 
 
 @router.post("/payments/webhook")
 async def paystack_webhook(request: Request, db: Session = Depends(get_db)):
@@ -131,15 +134,35 @@ async def paystack_webhook(request: Request, db: Session = Depends(get_db)):
     # Handle charge.success
     if event == "charge.success":
         reference = data.get("reference")
-        # optional: extract metadata/order id if you passed it
+        # Extract metadata/order id if you passed it
         order_code = data.get("metadata", {}).get("order_id") or data.get("reference")
 
         order = db.query(Order).filter(Order.order_id == order_code).first()
+        
+        # Check if the order exists and is not already paid to prevent double-deducting stock
         if order and order.payment_status != "paid":
+            
+            # ─── 1. CALL YOUR STOCK DEDUCTION UTILITY HERE ───
+            # Adjust the function parameters to match your helper utility signature
+            try:
+                reduce_product_stock(order_id=order.id, db=db)
+            except Exception as e:
+                # Log the error but let the webhook complete so paystack stops retrying
+                print(f"Failed to deduct stock for order {order_code}: {e}")
+
+            # ─── 2. UPDATE YOUR DATABASE STATE ───
             order.payment_status = "paid"
             order.payment_reference = reference
             order.paid_at = datetime.utcnow()
             db.commit()
 
+            # ─── 3. BROADCAST REAL-TIME UPDATE TO ADMIN WEBSOCKET ───
+            # Checks if the WebSocket manager exists globally or in imports before running
+            if 'manager' in globals():
+                await manager.broadcast({"event": "order_updated", "reference": reference})
+            elif 'admin_manager' in globals():
+                await admin_manager.broadcast({"event": "order_updated", "reference": reference})
+
     # Always return 200 to acknowledge
     return {"status": "ok"}
+
