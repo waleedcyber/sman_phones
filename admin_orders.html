@@ -134,13 +134,14 @@
     }
 
     function toggle(id) { document.getElementById('body-' + id).classList.toggle('open'); }
+    
     function renderOrders() {
       const kw = document.getElementById('searchInput').value.toLowerCase();
       let filtered = allOrders.filter(o => {
         // Convert status safely to a lowercase string for comparison
         const paymentStatus = String(o.payment_status).toLowerCase();
 
-        // 🔄 FIXED: Checks against lowercase values safely
+        // Checks against lowercase values safely
         if (currentFilter === 'paid' && paymentStatus !== 'paid') return false;
         if (currentFilter === 'unpaid' && paymentStatus === 'paid') return false;
         
@@ -156,6 +157,10 @@
         let items = '';
         try { items = JSON.parse(o.items).map(i => `${i.name} × ${i.quantity} — ₦${(i.price * i.quantity).toLocaleString()}`).join('<br>'); }
         catch { items = o.item_names; }
+
+        // 🔄 ADDED: Boolean check that handles both "Paid" and "paid" strings cleanly
+        const isOrderPaid = String(o.payment_status).toLowerCase() === 'paid';
+
         return `
         <div class="order-card">
           <div class="order-header" onclick="toggle(${o.id})">
@@ -173,13 +178,17 @@
             <div class="detail-row"><strong>Address:</strong> ${o.customer_address || 'N/A'}</div>
             <div class="detail-row"><strong>Reference:</strong> ${o.payment_reference || 'N/A'}</div>
             <div class="detail-row">
-              <span class="badge ${o.payment_status === 'Paid' ? 'badge-paid' : 'badge-unpaid'}">${o.payment_status}</span>
+              <!-- 🔄 FIXED BADGE CLASS AND TEXT: Uses the lowercase check state -->
+              <span class="badge ${isOrderPaid ? 'badge-paid' : 'badge-unpaid'}">
+                ${isOrderPaid ? 'Paid' : 'Unpaid'}
+              </span>
               &nbsp;
               <span class="badge ${o.status === 'Delivered' ? 'badge-delivered' : 'badge-pending'}">${o.status}</span>
             </div>
             <div class="items-box">${items}</div>
             <div class="action-row">
-              ${o.payment_status !== 'Paid' ? `<button class="btn-action btn-paid" onclick="markPaid(${o.id})">✅ Mark Paid</button>` : ''}
+              <!-- 🔄 FIXED BUTTON LOGIC: Hides 'Mark Paid' button instantly if order is paid -->
+              ${!isOrderPaid ? `<button class="btn-action btn-paid" onclick="markPaid(${o.id})">✅ Mark Paid</button>` : ''}
               ${o.status !== 'Delivered' ? `<button class="btn-action btn-delivered" onclick="markDelivered(${o.id})">🚚 Mark Delivered</button>` : ''}
               <button class="btn-action btn-delete" onclick="openModal(${o.id})">🗑️ Delete</button>
             </div>
@@ -187,6 +196,7 @@
         </div>`;
       }).join('');
     }
+
 
     async function markPaid(id) {
       try {
