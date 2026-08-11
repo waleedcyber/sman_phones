@@ -25,7 +25,7 @@ class Product(Base):
     description = Column(String)
     price = Column(Float, nullable=False)
     original_price = Column(Float, nullable=True)       # ✅ for strikethrough
-    stock = Column(Integer, default=0)
+   # stock = Column(Integer, default=0)
     image_url = Column(String)
     cloudinary_public_id = Column(String, nullable=True)
     quantity = Column(Integer, default=0)

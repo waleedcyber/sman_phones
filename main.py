@@ -95,8 +95,3 @@ app.include_router(payment_router, prefix="/api", tags=["Payments"])
 # ✅ Static files
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.mount("/", StaticFiles(directory=".", html=True), name="root")
-@app.exception_handler(StarletteHTTPException)
-async def custom_404_handler(request, exc):
-    if exc.status_code == 404:
-        return FileResponse("404.html")
-    raise exc
