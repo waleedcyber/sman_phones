@@ -101,24 +101,35 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // 2. Look for Paystack's exact keys: 'reference' or 'trxref'
     const ref = params.get('reference') || params.get('trxref') || params.get('ref');
-
-    // Debugging line: opens your browser console to show what was found
-    console.log("Found reference value:", ref);
-
-    // 3. If a reference exists, display it immediately
+    // Show order reference
+    const orderRefEl = document.getElementById('orderRef');
+    
     if (ref && ref !== 'N/A') {
-        const refBox = document.getElementById('refBox');
-        const refValue = document.getElementById('refValue');
-
-        if (refBox && refValue) {
-            refBox.style.style.setProperty('display', 'block', 'important'); // Forces it visible
-            refBox.style.display = 'block'; 
-            refValue.textContent = ref;
-        } else {
-            console.error("HTML elements 'refBox' or 'refValue' were not found on the page.");
-        }
+        if (orderRefEl) orderRefEl.textContent = ref;
+    } else {
+        if (orderRefEl) orderRefEl.textContent = 'Processing...';
     }
-});
+
+    // Customize for payment method
+    if (method === 'paystack') {
+        const eyebrow = document.getElementById('eyebrow');
+        const subtitle = document.getElementById('subtitle');
+        const methodBadge = document.getElementById('methodBadge');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+
+        if (eyebrow) eyebrow.textContent = 'Payment Confirmed';
+        if (subtitle) subtitle.textContent = 'Your payment was successful and your order is confirmed. The seller will contact you to arrange delivery.';
+        
+        if (methodBadge) {
+            methodBadge.className = 'method-badge method-pay';
+            methodBadge.textContent = '💳 Payment confirmed via Paystack';
+        }
+
+        if (step1) step1.querySelector('span').textContent = 'Your payment has been received and confirmed.';
+        if (step2) step2.querySelector('span').textContent = 'The seller will contact you to arrange delivery or pickup.';
+    }
+});   
 
   </script>
 
