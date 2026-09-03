@@ -1,237 +1,458 @@
+cat > /mnt/user-data/outputs/dr_apple_index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo/logo.png" />
-  <title>SmanAppleComms — Premium Phones</title>
+  <title>Dr Apple — Phones, Laptops & Accessories | Kano</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C96A;
-      --gold-dim: #8B6914;
-      --black: #0A0A0A;
-      --black-2: #111111;
-      --black-3: #1A1A1A;
-      --black-4: #222222;
-      --white: #F5F5F0;
-      --white-dim: #AAAAAA;
+      --blue: #1A56DB;
+      --blue-dark: #1040B0;
+      --blue-light: #EEF2FF;
+      --black: #0D0D0D;
+      --dark: #1A1A1A;
+      --gray: #4B5563;
+      --gray-light: #F3F4F6;
+      --white: #FFFFFF;
+      --white-dim: #6B7280;
+      --border: #E5E7EB;
       --font-display: 'Playfair Display', serif;
       --font-body: 'Poppins', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; line-height: 1.6; overflow-x: hidden; }
+    body { background: var(--white); color: var(--black); font-family: var(--font-body); font-weight: 300; line-height: 1.6; overflow-x: hidden; }
     ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--black); }
-    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(to bottom, rgba(10,10,10,0.98), transparent); transition: background 0.3s; }
-    nav.scrolled { background: rgba(10,10,10,0.98); border-bottom: 1px solid rgba(201,168,76,0.15); }
-    .nav-logo { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--gold); letter-spacing: 0.5px; text-decoration: none; }
-    .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
-    .nav-links a { color: var(--white-dim); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.5px; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--gold); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 2px; }
+
+    /* Nav */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border); transition: box-shadow 0.3s; }
+    nav.scrolled { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .nav-logo { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--black); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .nav-logo span { color: var(--blue); }
+    .nav-links { display: flex; gap: 24px; list-style: none; align-items: center; }
+    .nav-links a { color: var(--gray); text-decoration: none; font-size: 13px; font-weight: 400; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--blue); }
     .nav-whatsapp { background: #25D366; color: white !important; padding: 8px 16px; border-radius: 20px; font-weight: 500 !important; font-size: 12px !important; }
-    .cart-nav { position: relative; color: var(--white-dim); font-size: 20px; cursor: pointer; transition: color 0.2s; }
-    .cart-nav:hover { color: var(--gold); }
-    .cart-badge { position: absolute; top: -6px; right: -8px; background: var(--gold); color: var(--black); border-radius: 50%; width: 16px; height: 16px; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 60px; position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 80% 80%, rgba(201,168,76,0.04) 0%, transparent 60%); pointer-events: none; }
-    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%); }
-    .hero-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; font-weight: 500; }
-    .hero-title { font-family: var(--font-display); font-size: clamp(36px, 7vw, 72px); font-weight: 700; line-height: 1.1; margin-bottom: 20px; color: var(--white); }
-    .hero-title span { color: var(--gold); display: block; }
-    .hero-subtitle { font-size: clamp(14px, 2vw, 17px); color: var(--white-dim); max-width: 480px; margin: 0 auto 40px; font-weight: 300; line-height: 1.7; }
-    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-    .btn-gold { background: var(--gold); color: var(--black); padding: 14px 32px; border-radius: 4px; font-family: var(--font-body); font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.2s; display: inline-block; }
-    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
-    .btn-outline { background: transparent; color: var(--gold); padding: 13px 32px; border-radius: 4px; font-family: var(--font-body); font-size: 13px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; border: 1px solid var(--gold-dim); cursor: pointer; transition: border-color 0.2s, color 0.2s, transform 0.2s; display: inline-block; }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold-light); transform: translateY(-2px); }
-    .hero-stats { display: flex; gap: 48px; margin-top: 64px; padding-top: 40px; border-top: 1px solid rgba(201,168,76,0.15); flex-wrap: wrap; justify-content: center; }
+    .cart-nav { position: relative; color: var(--gray); font-size: 20px; cursor: pointer; transition: color 0.2s; }
+    .cart-nav:hover { color: var(--blue); }
+    .cart-badge { position: absolute; top: -6px; right: -8px; background: var(--blue); color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 60px; position: relative; overflow: hidden; background: linear-gradient(180deg, #F0F4FF 0%, #FFFFFF 100%); }
+    .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(26,86,219,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(26,86,219,0.04) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--blue-light); color: var(--blue); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 20px; font-weight: 500; border: 1px solid rgba(26,86,219,0.15); }
+    .hero-title { font-family: var(--font-display); font-size: clamp(32px, 6vw, 64px); font-weight: 700; line-height: 1.1; margin-bottom: 20px; color: var(--black); }
+    .hero-title span { color: var(--blue); display: block; }
+    .hero-subtitle { font-size: clamp(14px, 2vw, 16px); color: var(--gray); max-width: 500px; margin: 0 auto 40px; font-weight: 300; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn-blue { background: var(--blue); color: white; padding: 14px 32px; border-radius: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-decoration: none; border: none; cursor: pointer; transition: background 0.2s, transform 0.2s; display: inline-block; font-family: var(--font-body); }
+    .btn-blue:hover { background: var(--blue-dark); transform: translateY(-2px); }
+    .btn-outline-blue { background: transparent; color: var(--blue); padding: 13px 32px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; border: 1.5px solid var(--blue); cursor: pointer; transition: all 0.2s; display: inline-block; font-family: var(--font-body); }
+    .btn-outline-blue:hover { background: var(--blue-light); transform: translateY(-2px); }
+    .hero-location { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-size: 13px; color: var(--gray); background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; }
+    .open-badge { background: #D1FAE5; color: #065F46; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+    .hero-stats { display: flex; gap: 48px; margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); flex-wrap: wrap; justify-content: center; }
     .stat { text-align: center; }
-    .stat-number { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
-    .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--white-dim); margin-top: 4px; }
+    .stat-number { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1; }
+    .stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-top: 4px; }
+
+    /* Sections */
     section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
-    .section-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 500; }
-    .section-title { font-family: var(--font-display); font-size: clamp(24px, 4vw, 36px); font-weight: 600; color: var(--white); margin-bottom: 40px; }
-    .gold-divider { width: 40px; height: 2px; background: var(--gold); margin-bottom: 32px; }
-    .condition-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .condition-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 8px; padding: 28px 20px; text-align: center; cursor: pointer; text-decoration: none; transition: border-color 0.2s, transform 0.2s, background 0.2s; display: block; }
-    .condition-card:hover { border-color: var(--gold); transform: translateY(-4px); background: var(--black-4); }
-    .condition-icon { font-size: 32px; margin-bottom: 12px; display: block; }
-    .condition-name { font-family: var(--font-display); font-size: 16px; color: var(--white); margin-bottom: 6px; }
-    .condition-desc { font-size: 12px; color: var(--white-dim); line-height: 1.5; }
+    .section-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; font-weight: 500; }
+    .section-title { font-family: var(--font-display); font-size: clamp(22px, 4vw, 34px); font-weight: 600; color: var(--black); margin-bottom: 36px; }
+    .blue-divider { width: 40px; height: 3px; background: var(--blue); border-radius: 2px; margin-bottom: 32px; }
+
+    /* Category cards */
+    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .category-card { background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 28px 20px; text-align: center; cursor: pointer; text-decoration: none; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; display: block; }
+    .category-card:hover { border-color: var(--blue); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(26,86,219,0.1); }
+    .category-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+    .category-name { font-family: var(--font-display); font-size: 16px; color: var(--black); margin-bottom: 6px; }
+    .category-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+    .category-count { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-top: 8px; font-weight: 500; }
+
+    /* Brand grid */
     .brand-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
-    .brand-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 8px; padding: 20px 12px; text-align: center; cursor: pointer; text-decoration: none; transition: border-color 0.2s, transform 0.2s; display: block; }
-    .brand-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .brand-card { background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 18px 12px; text-align: center; text-decoration: none; transition: border-color 0.2s, transform 0.2s; display: block; }
+    .brand-card:hover { border-color: var(--blue); transform: translateY(-3px); }
     .brand-icon { font-size: 24px; display: block; margin-bottom: 8px; }
-    .brand-name { font-size: 12px; font-weight: 500; color: var(--white-dim); letter-spacing: 0.5px; }
+    .brand-name { font-size: 12px; font-weight: 500; color: var(--gray); }
+
+    /* Products grid */
     .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-    .product-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 8px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.2s; }
-    .product-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); }
-    .product-card img { width: 100%; height: 180px; object-fit: cover; display: block; background: var(--black-4); }
+    .product-card { background: white; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+    .product-card:hover { border-color: var(--blue); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+    .product-card img { width: 100%; height: 180px; object-fit: cover; display: block; background: var(--gray-light); }
     .product-card-body { padding: 14px; }
-    .product-condition { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; font-weight: 500; }
-    .product-name { font-family: var(--font-display); font-size: 14px; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
-    .product-price { font-size: 16px; font-weight: 600; color: var(--gold); }
-    .product-original-price { font-size: 12px; color: var(--white-dim); text-decoration: line-through; margin-left: 6px; }
-    .product-storage { font-size: 11px; color: var(--white-dim); margin-top: 4px; }
-    .sold-badge { display: inline-block; background: rgba(220,38,38,0.15); color: #ef4444; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-top: 6px; font-weight: 500; }
-    .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-    .why-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 8px; padding: 28px 22px; }
-    .why-icon { font-size: 28px; margin-bottom: 14px; display: block; }
-    .why-title { font-family: var(--font-display); font-size: 15px; color: var(--white); margin-bottom: 8px; }
-    .why-desc { font-size: 13px; color: var(--white-dim); line-height: 1.6; }
-    .cta-banner { background: linear-gradient(135deg, var(--black-3), var(--black-4)); border: 1px solid rgba(201,168,76,0.2); border-radius: 12px; padding: 48px 32px; text-align: center; max-width: 1052px; margin: 0 auto 80px; position: relative; overflow: hidden; }
-    .cta-banner::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%); pointer-events: none; }
-    .cta-banner h2 { font-family: var(--font-display); font-size: clamp(22px, 4vw, 32px); color: var(--white); margin-bottom: 12px; }
-    .cta-banner p { font-size: 14px; color: var(--white-dim); margin-bottom: 28px; max-width: 420px; margin-left: auto; margin-right: auto; }
-    .whatsapp-btn { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 14px 28px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s, transform 0.2s; letter-spacing: 0.5px; }
-    .whatsapp-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-    footer { background: var(--black-2); border-top: 1px solid rgba(201,168,76,0.1); padding: 40px 24px; text-align: center; }
-    .footer-logo { font-family: var(--font-display); font-size: 20px; color: var(--gold); margin-bottom: 16px; }
-    .footer-links { display: flex; gap: 24px; justify-content: center; list-style: none; margin-bottom: 24px; flex-wrap: wrap; }
-    .footer-links a { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--gold); }
-    .footer-copy { font-size: 12px; color: rgba(170,170,170,0.5); }
-    .float-whatsapp { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: #25D366; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 20px rgba(37,211,102,0.4); text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
-    .float-whatsapp:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.5); }
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+    .product-category-tag { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 4px; font-weight: 500; }
+    .product-name { font-family: var(--font-display); font-size: 13px; color: var(--black); margin-bottom: 6px; line-height: 1.3; }
+    .product-price { font-size: 15px; font-weight: 600; color: var(--blue); }
+    .product-original { font-size: 11px; color: var(--gray); text-decoration: line-through; margin-left: 6px; }
+    .product-meta { font-size: 11px; color: var(--gray); margin-top: 3px; }
+    .sold-badge { display: inline-block; background: #FEE2E2; color: #DC2626; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; margin-top: 4px; font-weight: 500; }
+
+    /* Why us */
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .why-card { background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 26px 20px; transition: border-color 0.2s; }
+    .why-card:hover { border-color: var(--blue); }
+    .why-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+    .why-title { font-family: var(--font-display); font-size: 15px; color: var(--black); margin-bottom: 8px; }
+    .why-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+    /* Repair section */
+    .repair-section { background: linear-gradient(135deg, var(--black) 0%, var(--dark) 100%); border-radius: 16px; padding: 56px 40px; margin: 0 24px 80px; max-width: 1052px; margin-left: auto; margin-right: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .repair-left h2 { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); color: white; margin-bottom: 14px; }
+    .repair-left p { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 20px; }
+    .repair-services { display: flex; flex-wrap: wrap; gap: 8px; }
+    .repair-tag { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); font-size: 12px; padding: 5px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+    .repair-form { background: white; border-radius: 12px; padding: 28px 24px; }
+    .repair-form h3 { font-family: var(--font-display); font-size: 16px; color: var(--black); margin-bottom: 18px; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--gray-light); border: 1.5px solid var(--border); color: var(--black); padding: 11px 13px; border-radius: 6px; font-size: 13px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--blue); background: white; }
+    .form-input::placeholder { color: #9CA3AF; }
+    select.form-input option { background: white; }
+    .btn-repair { width: 100%; background: var(--blue); color: white; border: none; padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; margin-top: 4px; }
+    .btn-repair:hover { background: var(--blue-dark); }
+
+    /* Location */
+    .location-section { background: var(--gray-light); border-radius: 16px; padding: 48px 32px; margin: 0 24px 80px; max-width: 1052px; margin-left: auto; margin-right: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .location-info h2 { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: var(--black); margin-bottom: 20px; }
+    .location-detail { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    .location-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .location-text-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); font-weight: 500; margin-bottom: 3px; }
+    .location-text-value { font-size: 14px; color: var(--black); }
+    .location-hours { background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 20px; }
+    .hours-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; font-weight: 500; }
+    .hours-row { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--border); color: var(--gray); }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row span:last-child { color: var(--black); font-weight: 500; }
+    .open-now { display: inline-flex; align-items: center; gap: 6px; background: #D1FAE5; color: #065F46; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
+    .open-now::before { content: ''; width: 7px; height: 7px; background: #10B981; border-radius: 50%; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* CTA Banner */
+    .cta-banner { background: var(--blue); border-radius: 16px; padding: 48px 32px; text-align: center; max-width: 1052px; margin: 0 auto 80px; }
+    .cta-banner h2 { font-family: var(--font-display); font-size: clamp(20px, 4vw, 30px); color: white; margin-bottom: 12px; }
+    .cta-banner p { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 28px; }
+    .btn-white { display: inline-flex; align-items: center; gap: 8px; background: white; color: var(--blue); padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+    .btn-white:hover { opacity: 0.9; }
+    .btn-whatsapp-cta { display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white; padding: 14px 28px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; margin-left: 12px; transition: opacity 0.2s; }
+    .btn-whatsapp-cta:hover { opacity: 0.9; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* Footer */
+    footer { background: var(--black); padding: 48px 24px 28px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-logo { font-family: var(--font-display); font-size: 20px; color: white; margin-bottom: 10px; }
+    .footer-logo span { color: var(--blue); }
+    .footer-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+    .footer-col-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 14px; font-weight: 500; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+    .footer-copy { text-align: center; font-size: 12px; color: rgba(255,255,255,0.25); padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); max-width: 1100px; margin: 0 auto; }
+
+    /* Float WA */
+    .float-wa { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: #25D366; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 4px 20px rgba(37,211,102,0.4); text-decoration: none; transition: transform 0.2s; }
+    .float-wa:hover { transform: scale(1.1); }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.active { display: flex; }
-    .modal-box { background: var(--black-3); border: 1px solid rgba(201,168,76,0.2); border-radius: 12px; max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s ease; }
-    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    .modal-img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px 12px 0 0; }
+    .modal-box { background: white; border-radius: 14px; max-width: 440px; width: 100%; max-height: 92vh; overflow-y: auto; animation: modalIn 0.25s ease; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-img { width: 100%; height: 220px; object-fit: cover; border-radius: 14px 14px 0 0; display: block; background: var(--gray-light); }
+    .modal-close { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.5); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .modal-body { padding: 20px; }
-    .modal-condition { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; font-weight: 500; }
-    .modal-title { font-family: var(--font-display); font-size: 20px; color: var(--white); margin-bottom: 14px; }
-    .modal-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-    .spec-item { background: var(--black-4); border-radius: 6px; padding: 10px 12px; }
-    .spec-label { font-size: 10px; color: var(--white-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
-    .spec-value { font-size: 13px; color: var(--white); font-weight: 500; }
-    .modal-price { font-size: 22px; font-weight: 600; color: var(--gold); margin-bottom: 10px; }
-    .modal-desc { font-size: 13px; color: var(--white-dim); margin-bottom: 20px; line-height: 1.6; }
+    .modal-tag { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; font-weight: 500; }
+    .modal-title { font-family: var(--font-display); font-size: 20px; color: var(--black); margin-bottom: 12px; }
+    .modal-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+    .modal-price { font-size: 22px; font-weight: 600; color: var(--blue); }
+    .modal-original { font-size: 13px; color: var(--gray); text-decoration: line-through; }
+    .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .spec-item { background: var(--gray-light); border-radius: 6px; padding: 10px 12px; }
+    .spec-label { font-size: 9px; color: var(--gray); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px; }
+    .spec-value { font-size: 13px; color: var(--black); font-weight: 500; }
+    .modal-desc { font-size: 13px; color: var(--gray); line-height: 1.65; margin-bottom: 18px; }
     .modal-actions { display: flex; flex-direction: column; gap: 10px; }
-    .modal-close-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .modal-wrapper { position: relative; }
-    @media (max-width: 600px) { .condition-grid { grid-template-columns: 1fr; gap: 10px; } .nav-links { display: none; } .hero-stats { gap: 24px; } .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
-    @media (max-width: 400px) { .products-grid { grid-template-columns: 1fr; } }
+    .btn-wa-modal { display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; color: white; padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; }
+    .btn-cart-modal { background: var(--blue); color: white; border: none; padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+    .sold-notice { background: #FEE2E2; color: #DC2626; padding: 12px; border-radius: 6px; text-align: center; font-size: 13px; font-weight: 500; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .repair-section { grid-template-columns: 1fr; }
+      .location-section { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+      .category-grid { grid-template-columns: 1fr; gap: 10px; }
+      .nav-links { display: none; }
+      .hero-stats { gap: 24px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .btn-whatsapp-cta { margin-left: 0; }
+    }
+    @media (max-width: 400px) {
+      .products-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Nav -->
   <nav id="navbar">
-    <a href="/" class="nav-logo">SmanAppleComms</a>
+    <a href="/" class="nav-logo">Dr <span>Apple</span></a>
     <ul class="nav-links">
-      <li><a href="products.html">Phones</a></li>
-      <li><a href="products.html?condition=used">Used</a></li>
-      <li><a href="trade_in.html">Trade-In</a></li>
+      <li><a href="products.html?category=phones">Phones</a></li>
+      <li><a href="products.html?category=laptops">Laptops</a></li>
+      <li><a href="products.html?category=accessories">Accessories</a></li>
+      <li><a href="repair.html">Repairs</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="https://wa.me/2348065739757" target="_blank" class="nav-whatsapp">💬 WhatsApp</a></li>
+      <li><a href="https://wa.me/2348137843328" target="_blank" class="nav-whatsapp">💬 WhatsApp</a></li>
       <li><span class="cart-nav" onclick="window.location.href='cart.html'">🛒<span class="cart-badge" id="cartCount">0</span></span></li>
     </ul>
   </nav>
 
+  <!-- Hero -->
   <div class="hero">
-    <div class="hero-grid"></div>
-    <p class="hero-eyebrow">Nigeria · Trusted · Verified Stock</p>
-    <h1 class="hero-title">Your Next Phone,<span>Found Here.</span></h1>
-    <p class="hero-subtitle">New, open box, and certified used iPhones, Samsungs, and more — all verified, all priced fairly.</p>
+    <div class="hero-badge">📍 Zoo Road, MYCA Plaza · Kano</div>
+    <h1 class="hero-title">Kano's Most Trusted<span>Tech Store.</span></h1>
+    <p class="hero-subtitle">Phones, laptops and accessories — verified, fairly priced and always available. Walk in or order online.</p>
     <div class="hero-actions">
-      <a href="products.html" class="btn-gold">Browse Phones</a>
-      <a href="https://wa.me/2348065739757" target="_blank" class="btn-outline">💬 Chat with Us</a>
+      <a href="products.html" class="btn-blue">Shop Now</a>
+      <a href="repair.html" class="btn-outline-blue">🔧 Book a Repair</a>
+    </div>
+    <div class="hero-location">
+      <span>📍 Shop 62, MYCA 7 Plaza, Zoo Road, Kano</span>
+      <span class="open-badge">Open 24hrs</span>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-number" id="statProducts">—</div><div class="stat-label">Phones Available</div></div>
+      <div class="stat"><div class="stat-number" id="statProducts">—</div><div class="stat-label">Products Listed</div></div>
+      <div class="stat"><div class="stat-number">3</div><div class="stat-label">Categories</div></div>
+      <div class="stat"><div class="stat-number">24h</div><div class="stat-label">Always Open</div></div>
       <div class="stat"><div class="stat-number">100%</div><div class="stat-label">Verified Stock</div></div>
-      <div class="stat"><div class="stat-number">24h</div><div class="stat-label">Response Time</div></div>
     </div>
   </div>
 
+  <!-- Shop by Category -->
   <section>
     <p class="section-eyebrow">What are you looking for?</p>
-    <h2 class="section-title">Shop by Condition</h2>
-    <div class="gold-divider"></div>
-    <div class="condition-grid">
-      <a href="products.html?condition=New" class="condition-card"><span class="condition-icon">✨</span><div class="condition-name">Brand New</div><div class="condition-desc">Sealed box, full warranty, never touched</div></a>
-      <a href="products.html?condition=Open+Box" class="condition-card"><span class="condition-icon">📦</span><div class="condition-name">Open Box</div><div class="condition-desc">Opened but unused — same quality, better price</div></a>
-      <a href="products.html?condition=Used" class="condition-card"><span class="condition-icon">🔋</span><div class="condition-name">Certified Used</div><div class="condition-desc">Inspected and graded — honest condition reports</div></a>
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="blue-divider"></div>
+    <div class="category-grid">
+      <a href="products.html?category=phones" class="category-card">
+        <span class="category-icon">📱</span>
+        <div class="category-name">Phones</div>
+        <div class="category-desc">iPhones, Samsung, Tecno, Infinix and more — new, open box and used</div>
+        <span class="category-count">Browse Phones →</span>
+      </a>
+      <a href="products.html?category=laptops" class="category-card">
+        <span class="category-icon">💻</span>
+        <div class="category-name">Laptops</div>
+        <div class="category-desc">MacBooks, HP, Dell, Lenovo — for work, school and gaming</div>
+        <span class="category-count">Browse Laptops →</span>
+      </a>
+      <a href="products.html?category=accessories" class="category-card">
+        <span class="category-icon">🎧</span>
+        <div class="category-name">Accessories</div>
+        <div class="category-desc">Cases, chargers, earphones, cables and more for all devices</div>
+        <span class="category-count">Browse Accessories →</span>
+      </a>
     </div>
   </section>
 
+  <!-- Shop by Brand -->
   <section style="padding-top:0;">
     <p class="section-eyebrow">Browse by Brand</p>
     <h2 class="section-title">Popular Brands</h2>
-    <div class="gold-divider"></div>
+    <div class="blue-divider"></div>
     <div class="brand-grid">
-      <a href="products.html?brand=Apple" class="brand-card"><span class="brand-icon">🍎</span><div class="brand-name">iPhone</div></a>
+      <a href="products.html?brand=Apple" class="brand-card"><span class="brand-icon">🍎</span><div class="brand-name">Apple</div></a>
       <a href="products.html?brand=Samsung" class="brand-card"><span class="brand-icon">📱</span><div class="brand-name">Samsung</div></a>
-      <a href="products.html?brand=Google" class="brand-card"><span class="brand-icon">🔍</span><div class="brand-name">Google</div></a>
+      <a href="products.html?brand=HP" class="brand-card"><span class="brand-icon">💻</span><div class="brand-name">HP</div></a>
+      <a href="products.html?brand=Dell" class="brand-card"><span class="brand-icon">🖥️</span><div class="brand-name">Dell</div></a>
       <a href="products.html?brand=Tecno" class="brand-card"><span class="brand-icon">📲</span><div class="brand-name">Tecno</div></a>
       <a href="products.html?brand=Infinix" class="brand-card"><span class="brand-icon">⚡</span><div class="brand-name">Infinix</div></a>
+      <a href="products.html?brand=Lenovo" class="brand-card"><span class="brand-icon">🔵</span><div class="brand-name">Lenovo</div></a>
       <a href="products.html?brand=Xiaomi" class="brand-card"><span class="brand-icon">🌟</span><div class="brand-name">Xiaomi</div></a>
     </div>
   </section>
 
+  <!-- Featured Products -->
   <section style="padding-top:0;">
     <p class="section-eyebrow">Handpicked for you</p>
-    <h2 class="section-title">Featured Phones</h2>
-    <div class="gold-divider"></div>
-    <div class="products-grid" id="featuredGrid"><div style="grid-column:1/-1;text-align:center;color:var(--white-dim);padding:40px;">Loading phones...</div></div>
-    <div style="text-align:center;margin-top:32px;"><a href="products.html" class="btn-outline">View All Phones →</a></div>
-  </section>
-
-  <section style="padding-top:0;">
-    <p class="section-eyebrow">Why customers choose us</p>
-    <h2 class="section-title">The SmanAppleComms Difference</h2>
-    <div class="gold-divider"></div>
-    <div class="why-grid">
-      <div class="why-card"><span class="why-icon">✅</span><div class="why-title">Every Phone Verified</div><div class="why-desc">We inspect every device before listing. No surprises when it arrives.</div></div>
-      <div class="why-card"><span class="why-icon">💰</span><div class="why-title">Fair Pricing Always</div><div class="why-desc">No inflated prices. What you see is what you pay — no hidden charges.</div></div>
-      <div class="why-card"><span class="why-icon">🔄</span><div class="why-title">Easy Trade-Ins</div><div class="why-desc">Swap your old phone for a new one. We'll give you a fair trade-in value.</div></div>
-      <div class="why-card"><span class="why-icon">💬</span><div class="why-title">Real Support</div><div class="why-desc">Talk to a real person on WhatsApp. We respond fast, every day.</div></div>
+    <h2 class="section-title">Featured Products</h2>
+    <div class="blue-divider"></div>
+    <div class="products-grid" id="featuredGrid">
+      <div style="grid-column:1/-1;text-align:center;color:var(--gray);padding:40px;">Loading products...</div>
+    </div>
+    <div style="text-align:center;margin-top:32px;">
+      <a href="products.html" class="btn-outline-blue">View All Products →</a>
     </div>
   </section>
 
-  <div class="cta-banner">
-    <h2>Not sure which phone to get?</h2>
-    <p>Tell us your budget and what you need — we'll find the perfect match for you.</p>
-    <a href="https://wa.me/2348065739757?text=Hi%2C%20I%20need%20help%20choosing%20a%20phone" target="_blank" class="whatsapp-btn">💬 Get a Recommendation</a>
+  <!-- Why Us -->
+  <section style="padding-top:0;">
+    <p class="section-eyebrow">Why customers choose us</p>
+    <h2 class="section-title">The Dr Apple Difference</h2>
+    <div class="blue-divider"></div>
+    <div class="why-grid">
+      <div class="why-card"><span class="why-icon">✅</span><div class="why-title">Verified Stock Only</div><div class="why-desc">Every phone and laptop is inspected before it goes on the shelf. No fakes, no surprises.</div></div>
+      <div class="why-card"><span class="why-icon">🕐</span><div class="why-title">Open 24 Hours</div><div class="why-desc">Day or night, we're open. Walk in anytime or reach us on WhatsApp at any hour.</div></div>
+      <div class="why-card"><span class="why-icon">🔧</span><div class="why-title">In-House Repairs</div><div class="why-desc">Screen cracks, battery issues, charging ports — we fix it all right here in the shop.</div></div>
+      <div class="why-card"><span class="why-icon">💰</span><div class="why-title">Fair Prices</div><div class="why-desc">No hidden charges, no price inflation. What you see is what you pay.</div></div>
+    </div>
+  </section>
+
+  <!-- Repair Booking -->
+  <div class="repair-section">
+    <div class="repair-left">
+      <h2>Book a Device Repair</h2>
+      <p>Cracked screen? Dead battery? Charging issues? Bring it to us — we fix phones, laptops and tablets fast and at honest prices.</p>
+      <div class="repair-services">
+        <span class="repair-tag">📱 Screen Replacement</span>
+        <span class="repair-tag">🔋 Battery Replacement</span>
+        <span class="repair-tag">🔌 Charging Port Fix</span>
+        <span class="repair-tag">💧 Water Damage</span>
+        <span class="repair-tag">💻 Laptop Repair</span>
+        <span class="repair-tag">🔊 Speaker Fix</span>
+      </div>
+    </div>
+    <div class="repair-form">
+      <h3>🔧 Book a Repair</h3>
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input class="form-input" type="text" id="repairName" placeholder="Full name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input class="form-input" type="tel" id="repairPhone" placeholder="+234 800 000 0000" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Device</label>
+        <select class="form-input" id="repairDevice">
+          <option value="">Select device type</option>
+          <option>iPhone</option>
+          <option>Android Phone</option>
+          <option>MacBook</option>
+          <option>Windows Laptop</option>
+          <option>iPad / Tablet</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Issue</label>
+        <input class="form-input" type="text" id="repairIssue" placeholder="e.g. Cracked screen, won't charge..." />
+      </div>
+      <button class="btn-repair" onclick="bookRepair()">💬 Send Repair Request</button>
+    </div>
   </div>
 
+  <!-- Location -->
+  <div class="location-section">
+    <div class="location-info">
+      <h2>Find Us in Kano</h2>
+      <div class="open-now">Open Right Now</div>
+      <div class="location-detail">
+        <span class="location-icon">📍</span>
+        <div>
+          <div class="location-text-label">Address</div>
+          <div class="location-text-value">Shop No. 62, MYCA 7 Plaza<br>Zoo Road, opposite MTN Office<br>Albasa, Kano</div>
+        </div>
+      </div>
+      <div class="location-detail">
+        <span class="location-icon">📞</span>
+        <div>
+          <div class="location-text-label">Phone</div>
+          <div class="location-text-value"><a href="tel:+2348137843328" style="color:var(--blue);text-decoration:none;">+234 813 784 3328</a></div>
+        </div>
+      </div>
+      <div class="location-detail">
+        <span class="location-icon">💬</span>
+        <div>
+          <div class="location-text-label">WhatsApp</div>
+          <div class="location-text-value"><a href="https://wa.me/2348137843328" target="_blank" style="color:var(--blue);text-decoration:none;">Chat with us now</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="location-hours">
+      <div class="hours-title">🕐 Opening Hours</div>
+      <div class="hours-row"><span>Monday – Friday</span><span>Open 24hrs</span></div>
+      <div class="hours-row"><span>Saturday</span><span>Open 24hrs</span></div>
+      <div class="hours-row"><span>Sunday</span><span>Open 24hrs</span></div>
+      <div style="margin-top:14px;padding:10px;background:#D1FAE5;border-radius:6px;font-size:12px;color:#065F46;text-align:center;font-weight:500;">
+        🟢 We never close — walk in anytime!
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <h2>Not sure what to get?</h2>
+    <p>Tell us your budget — we'll help you find the perfect phone, laptop or accessory.</p>
+    <div class="cta-btns">
+      <a href="products.html" class="btn-white">Browse Products</a>
+      <a href="https://wa.me/2348137843328?text=Hi%20Dr%20Apple%2C%20I%20need%20help%20choosing%20a%20device" target="_blank" class="btn-whatsapp-cta">💬 Ask on WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <footer>
-    <div class="footer-logo">SmanAppleComms</div>
-    <ul class="footer-links">
-      <li><a href="products.html">All Phones</a></li>
-      <li><a href="trade_in.html">Trade-In</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-    <p class="footer-copy">© 2026 SmanAppleComms. All rights reserved.</p>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Dr <span>Apple</span></div>
+        <div class="footer-desc">Kano's trusted tech store for phones, laptops and accessories. Open 24 hours at Zoo Road, MYCA Plaza.</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Shop</div>
+        <ul class="footer-links">
+          <li><a href="products.html?category=phones">Phones</a></li>
+          <li><a href="products.html?category=laptops">Laptops</a></li>
+          <li><a href="products.html?category=accessories">Accessories</a></li>
+          <li><a href="repair.html">Repairs</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Info</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="trade_in.html">Trade-In</a></li>
+          <li><a href="https://wa.me/2348137843328" target="_blank">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-copy">© 2026 Dr Apple — Zoo Road, MYCA 7 Plaza, Kano. All rights reserved.</div>
   </footer>
 
-  <a href="https://wa.me/2348065739757" target="_blank" class="float-whatsapp" title="Chat on WhatsApp">💬</a>
+  <a href="https://wa.me/2348137843328" target="_blank" class="float-wa">💬</a>
 
+  <!-- Modal -->
   <div class="modal-overlay" id="productModal">
-    <div class="modal-wrapper">
-      <div class="modal-box">
-        <img class="modal-img" id="modalImg" src="" alt="" />
-        <button class="modal-close-btn" onclick="closeModal()">×</button>
-        <div class="modal-body">
-          <div class="modal-condition" id="modalCondition"></div>
-          <div class="modal-title" id="modalTitle"></div>
-          <div class="modal-specs" id="modalSpecs"></div>
-          <div class="modal-price" id="modalPrice"></div>
-          <div class="modal-desc" id="modalDesc"></div>
-          <div class="modal-actions" id="modalActions"></div>
+    <div class="modal-box">
+      <img class="modal-img" id="modalImg" src="" alt="" />
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="modal-body">
+        <div class="modal-tag" id="modalTag"></div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-price-row">
+          <span class="modal-price" id="modalPrice"></span>
+          <span class="modal-original" id="modalOriginal"></span>
         </div>
+        <div class="specs-grid" id="modalSpecs"></div>
+        <div class="modal-desc" id="modalDesc"></div>
+        <div class="modal-actions" id="modalActions"></div>
       </div>
     </div>
   </div>
 
   <script>
-    const baseUrl = "https://sman-phones-1.onrender.com/api";
-    const WHATSAPP = "2348065739757";
+    const baseUrl = "https://sman-phones-1.onrender.com/api"; // update to Dr Apple's deployment URL
+    const WHATSAPP = "2348137843328";
     let currentProduct = null;
 
     window.addEventListener('scroll', () => {
@@ -251,7 +472,7 @@
         document.getElementById('statProducts').textContent = products.length + '+';
         const grid = document.getElementById('featuredGrid');
         if (products.length === 0) {
-          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--white-dim);padding:40px;">No phones listed yet.</div>';
+          grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--gray);padding:40px;">No products listed yet. Check back soon!</div>';
           return;
         }
         grid.innerHTML = '';
@@ -260,40 +481,43 @@
           const card = document.createElement('div');
           card.className = 'product-card';
           card.innerHTML = `
-            <img src="${p.image_url || 'https://via.placeholder.com/200x180/1A1A1A/C9A84C?text=Phone'}" alt="${p.name}" />
+            <img src="${p.image_url || 'https://via.placeholder.com/200x180/F3F4F6/1A56DB?text=📱'}" alt="${p.name}" loading="lazy" />
             <div class="product-card-body">
-              ${p.condition ? `<div class="product-condition">${p.condition}</div>` : ''}
+              ${p.condition ? `<div class="product-category-tag">${p.condition}</div>` : ''}
               <div class="product-name">${p.name}</div>
-              <div class="product-price">₦${Number(p.price).toLocaleString()}${p.original_price ? `<span class="product-original-price">₦${Number(p.original_price).toLocaleString()}</span>` : ''}</div>
-              ${p.storage ? `<div class="product-storage">${p.storage}</div>` : ''}
+              <div class="product-price">₦${Number(p.price).toLocaleString()}${p.original_price ? `<span class="product-original">₦${Number(p.original_price).toLocaleString()}</span>` : ''}</div>
+              <div class="product-meta">${[p.brand, p.storage].filter(Boolean).join(' · ')}</div>
               ${outOfStock ? '<span class="sold-badge">Sold</span>' : ''}
             </div>`;
           card.addEventListener('click', () => openModal(p));
           grid.appendChild(card);
         });
       } catch {
-        document.getElementById('featuredGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--white-dim);padding:40px;">Could not load phones.</div>';
+        document.getElementById('featuredGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--gray);padding:40px;">Could not load products. Please refresh.</div>';
       }
     }
 
     function openModal(p) {
       currentProduct = p;
       const outOfStock = p.quantity < 1;
-      document.getElementById('modalImg').src = p.image_url || 'https://via.placeholder.com/440x220/1A1A1A/C9A84C?text=Phone';
-      document.getElementById('modalCondition').textContent = p.condition || '';
+      document.getElementById('modalImg').src = p.image_url || 'https://via.placeholder.com/440x220/F3F4F6/1A56DB?text=📱';
+      document.getElementById('modalTag').textContent = [p.condition, p.brand].filter(Boolean).join(' · ');
       document.getElementById('modalTitle').textContent = p.name;
       document.getElementById('modalPrice').textContent = `₦${Number(p.price).toLocaleString()}`;
+      document.getElementById('modalOriginal').textContent = p.original_price ? `₦${Number(p.original_price).toLocaleString()}` : '';
       document.getElementById('modalDesc').textContent = p.description || '';
       const specs = [];
-      if (p.brand) specs.push({ label: 'Brand', value: p.brand });
-      if (p.storage) specs.push({ label: 'Storage', value: p.storage });
-      if (p.color) specs.push({ label: 'Color', value: p.color });
-      if (p.battery_health) specs.push({ label: 'Battery', value: p.battery_health + '%' });
-      document.getElementById('modalSpecs').innerHTML = specs.map(s => `<div class="spec-item"><div class="spec-label">${s.label}</div><div class="spec-value">${s.value}</div></div>`).join('');
-      const waText = encodeURIComponent(`Hi, I'm interested in the ${p.name}. Price: ₦${Number(p.price).toLocaleString()}`);
+      if (p.brand) specs.push({ l: 'Brand', v: p.brand });
+      if (p.storage) specs.push({ l: 'Storage', v: p.storage });
+      if (p.color) specs.push({ l: 'Color', v: p.color });
+      if (p.battery_health) specs.push({ l: 'Battery', v: p.battery_health + '%' });
+      if (p.ram) specs.push({ l: 'RAM', v: p.ram });
+      if (p.processor) specs.push({ l: 'Processor', v: p.processor });
+      document.getElementById('modalSpecs').innerHTML = specs.map(s => `<div class="spec-item"><div class="spec-label">${s.l}</div><div class="spec-value">${s.v}</div></div>`).join('');
+      const waText = encodeURIComponent(`Hi Dr Apple! I'm interested in the *${p.name}*${p.storage ? ` (${p.storage})` : ''}. Price: ₦${Number(p.price).toLocaleString()}. Is it available?`);
       document.getElementById('modalActions').innerHTML = outOfStock
-        ? `<div style="background:rgba(220,38,38,0.1);color:#ef4444;padding:12px;border-radius:6px;text-align:center;font-size:14px;">This phone is currently sold</div><a href="https://wa.me/${WHATSAPP}?text=${waText}" target="_blank" class="btn-outline" style="text-align:center;">💬 Ask about similar phones</a>`
-        : `<a href="https://wa.me/${WHATSAPP}?text=${waText}" target="_blank" class="whatsapp-btn" style="justify-content:center;">💬 Order on WhatsApp</a><button class="btn-gold" onclick="addToCart()">🛒 Add to Cart</button>`;
+        ? `<div class="sold-notice">This item is currently sold out</div><a href="https://wa.me/${WHATSAPP}?text=${waText}" target="_blank" class="btn-wa-modal" style="margin-top:8px;">💬 Ask about similar items</a>`
+        : `<a href="https://wa.me/${WHATSAPP}?text=${waText}" target="_blank" class="btn-wa-modal">💬 Order on WhatsApp</a><button class="btn-cart-modal" onclick="addToCart()">🛒 Add to Cart</button>`;
       document.getElementById('productModal').classList.add('active');
     }
 
@@ -316,10 +540,30 @@
       updateCartCount();
       closeModal();
       const toast = document.createElement('div');
-      toast.textContent = 'Added to cart!';
-      toast.style.cssText = 'position:fixed;bottom:90px;right:24px;background:var(--gold);color:var(--black);padding:10px 18px;border-radius:4px;font-size:13px;font-weight:600;z-index:9999;';
+      toast.textContent = 'Added to cart! 🛒';
+      toast.style.cssText = 'position:fixed;bottom:90px;right:24px;background:var(--blue);color:white;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.15);';
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 2500);
+    }
+
+    function bookRepair() {
+      const name = document.getElementById('repairName').value.trim();
+      const phone = document.getElementById('repairPhone').value.trim();
+      const device = document.getElementById('repairDevice').value;
+      const issue = document.getElementById('repairIssue').value.trim();
+      if (!name || !phone || !device || !issue) {
+        alert('Please fill in all fields to book a repair.');
+        return;
+      }
+      const msg = encodeURIComponent(
+        `Hello Dr Apple! I'd like to book a repair.\n\n` +
+        `*Name:* ${name}\n` +
+        `*Phone:* ${phone}\n` +
+        `*Device:* ${device}\n` +
+        `*Issue:* ${issue}\n\n` +
+        `Please let me know when I can bring it in. Thank you!`
+      );
+      window.open(`https://wa.me/${WHATSAPP}?text=${msg}`, '_blank');
     }
 
     loadFeatured();
@@ -327,3 +571,4 @@
   </script>
 </body>
 </html>
+HTMLEOF

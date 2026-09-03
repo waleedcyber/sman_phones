@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/logo/logo.png" />
+  <title>Create Account — SmanAppleComms</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
+      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+    .card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 14px; max-width: 420px; width: 100%; padding: 36px 28px; animation: popIn 0.4s ease; }
+    @keyframes popIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    .logo { font-family: var(--font-display); font-size: 20px; color: var(--gold); text-align: center; margin-bottom: 4px; }
+    .tagline { font-size: 12px; color: var(--white-dim); text-align: center; margin-bottom: 28px; }
+
+    .page-title { font-family: var(--font-display); font-size: 22px; color: var(--white); margin-bottom: 6px; }
+    .page-sub { font-size: 13px; color: var(--white-dim); margin-bottom: 24px; }
+    .gold-line { width: 32px; height: 2px; background: var(--gold); margin-bottom: 24px; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 13px 14px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--gold); }
+    .form-input::placeholder { color: rgba(170,170,170,0.4); }
+
+    /* Password strength */
+    .strength-bar { height: 3px; border-radius: 2px; margin-top: 6px; background: var(--black-4); overflow: hidden; }
+    .strength-fill { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; width: 0%; }
+    .strength-label { font-size: 10px; color: var(--white-dim); margin-top: 4px; }
+
+    .btn-register { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 15px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); margin-top: 6px; transition: background 0.2s; }
+    .btn-register:hover { background: var(--gold-light); }
+    .btn-register:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #statusMsg { text-align: center; padding: 11px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-top: 12px; display: none; }
+    #statusMsg.success { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.2); display: block; }
+    #statusMsg.error { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); display: block; }
+
+    .divider { display: flex; align-items: center; gap: 10px; margin: 20px 0; }
+    .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+    .divider-text { font-size: 11px; color: var(--white-dim); }
+
+    .btn-guest { width: 100%; background: transparent; color: var(--white-dim); border: 1px solid rgba(255,255,255,0.08); padding: 13px; border-radius: 4px; font-size: 13px; cursor: pointer; font-family: var(--font-body); transition: border-color 0.2s, color 0.2s; text-decoration: none; display: block; text-align: center; }
+    .btn-guest:hover { border-color: var(--gold-dim); color: var(--white); }
+
+    .login-link { text-align: center; margin-top: 20px; font-size: 13px; color: var(--white-dim); }
+    .login-link a { color: var(--gold); text-decoration: none; font-weight: 500; }
+    .login-link a:hover { color: var(--gold-light); }
+
+    .benefits { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .benefit { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--white-dim); }
+    .benefit-icon { font-size: 14px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">SmanAppleComms</div>
+    <div class="tagline">Premium Verified Phones</div>
+
+    <h2 class="page-title">Create Account</h2>
+    <p class="page-sub">Track your orders and checkout faster.</p>
+    <div class="gold-line"></div>
+
+    <!-- Benefits -->
+    <div class="benefits">
+      <div class="benefit"><span class="benefit-icon">📦</span> Track all your orders in one place</div>
+      <div class="benefit"><span class="benefit-icon">⚡</span> Faster checkout — details saved</div>
+      <div class="benefit"><span class="benefit-icon">🔔</span> Get notified when phones are back in stock</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Full Name</label>
+      <input class="form-input" type="text" id="name" placeholder="Your full name" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" type="email" id="email" placeholder="you@example.com" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Phone Number</label>
+      <input class="form-input" type="tel" id="phone" placeholder="+234 800 000 0000" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="password" placeholder="At least 8 characters" oninput="checkStrength(this.value)" />
+      <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+      <div class="strength-label" id="strengthLabel"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirm Password</label>
+      <input class="form-input" type="password" id="confirmPassword" placeholder="Repeat your password" />
+    </div>
+
+    <button class="btn-register" id="registerBtn" onclick="register()">Create Account</button>
+    <div id="statusMsg"></div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">or</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <a href="checkout.html" class="btn-guest">Continue as Guest</a>
+
+    <div class="login-link">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </div>
+
+  <script>
+    const baseUrl = "https://s-and-s-collection-32bh.onrender.com/api";
+
+    // Redirect if already logged in
+    if (localStorage.getItem('userToken')) window.location.href = 'account.html';
+
+    function checkStrength(password) {
+      const fill = document.getElementById('strengthFill');
+      const label = document.getElementById('strengthLabel');
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      const levels = [
+        { width: '0%', color: 'transparent', text: '' },
+        { width: '25%', color: '#ef4444', text: 'Weak' },
+        { width: '50%', color: '#f97316', text: 'Fair' },
+        { width: '75%', color: '#eab308', text: 'Good' },
+        { width: '100%', color: '#25D366', text: 'Strong' },
+      ];
+
+      fill.style.width = levels[strength].width;
+      fill.style.background = levels[strength].color;
+      label.textContent = levels[strength].text;
+      label.style.color = levels[strength].color;
+    }
+
+    function showMsg(text, type) {
+      const el = document.getElementById('statusMsg');
+      el.textContent = text; el.className = type;
+    }
+
+    async function register() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirmPassword').value;
+
+      if (!name) { showMsg('Please enter your full name.', 'error'); return; }
+      if (!email) { showMsg('Please enter your email.', 'error'); return; }
+      if (!password) { showMsg('Please enter a password.', 'error'); return; }
+      if (password.length < 8) { showMsg('Password must be at least 8 characters.', 'error'); return; }
+      if (password !== confirm) { showMsg('Passwords do not match.', 'error'); return; }
+
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true; btn.textContent = 'Creating account...';
+
+      try {
+        const res = await fetch(`${baseUrl}/user/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showMsg('✅ Account created! Redirecting to login...', 'success');
+          setTimeout(() => window.location.href = 'login.html', 1500);
+        } else {
+          showMsg(data.detail || 'Registration failed. Try again.', 'error');
+        }
+      } catch {
+        showMsg('Network error. Please try again.', 'error');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Create Account';
+      }
+    }
+  </script>
+</body>
+</html>
