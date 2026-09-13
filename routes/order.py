@@ -1,15 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from db import get_db
-from models import Order
+from models import Order, Product
 from datetime import datetime
 from typing import List, Optional
 from schemas import OrderOut  # Assuming you created this
 from fastapi import Depends, HTTPException
 from auth import get_current_admin
+import json
 
-
-def reduce_product_stock(order_id: int, db: Session):
 
 router = APIRouter()
 
@@ -59,20 +58,43 @@ def mark_order_paid_by_id(order_id: int, db: Session = Depends(get_db)):
 
 # ✅ Mark order as paid using custom string order_id and ref
 @router.post("/orders/by-code/{order_id}/mark-paid")
-def mark_order_paid_by_code(order_id: str, reference: str, db: Session = Depends(get_db)):
-    order = db.query(Order).filter(Order.order_id == order_id).first()
+def mark_order_paid_by_code(
+    order_id: str,
+    reference: str,
+    db: Session = Depends(get_db)
+):
+    order = db.query(Order).filter(
+        Order.order_id == order_id
+    ).first()
+
     if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Order not found"
+        )
+
+    # Prevent duplicate stock deduction
+    if order.paid:
+        return {
+            "message": "Order is already marked as paid"
+        }
+
+    # Check stock and deduct it
+    reduce_product_stock(
+        order_id=order.id,
+        db=db
+    )
 
     order.payment_status = "paid"
     order.payment_reference = reference
+    order.paid = True
     order.paid_at = datetime.utcnow()
 
     db.commit()
     db.refresh(order)
 
     return {
-        "message": "Order marked as paid",
+        "message": "Order marked as paid and stock updated",
         "order": {
             "order_id": order.order_id,
             "payment_status": order.payment_status,
@@ -81,36 +103,68 @@ def mark_order_paid_by_code(order_id: str, reference: str, db: Session = Depends
     }
 
 
-
 def reduce_product_stock(order_id: int, db: Session):
     """
-    Looks up an order, finds its items, and subtracts the ordered quantities 
-    from the available product stock.
+    Deduct product quantities from stock for a paid order.
+    Uses the product_id and quantity stored in Order.items.
     """
-    # 1. Fetch the order along with its linked items
-    # (Adjust 'order_items' to match the relationship name in your Order model)
-    order = db.query(Order).get(order_id)
+
+    order = db.query(Order).filter(Order.id == order_id).first()
+
     if not order:
-        return False
+        raise HTTPException(status_code=404, detail="Order not found")
 
-    for item in order.order_items:
-        product = db.query(Product).get(item.product_id)
-        if product:
-            # 2. Check if there is enough stock available
-            if product.quantity < item.quantity:
-                # Optional: You can choose to raise an error, or let it go into negative 
-                # depending on your business rules (e.g., backorders)
-                raise HTTPException(
-                    status_code=400, 
-                    detail=f"Not enough stock for product: {product.name}"
+    try:
+        items = json.loads(order.items)
+    except (json.JSONDecodeError, TypeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid order items data"
+        )
+
+    # Check ALL products before deducting anything.
+    # This prevents a multi-product order from partially
+    # reducing stock if one product doesn't have enough stock.
+    for item in items:
+        product_id = item.get("product_id")
+        requested_quantity = int(item.get("quantity", 0))
+
+        if not product_id or requested_quantity < 1:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid product information in order"
+            )
+
+        product = db.query(Product).filter(
+            Product.id == product_id
+        ).first()
+
+        if not product:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Product {product_id} not found"
+            )
+
+        if product.quantity < requested_quantity:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"Not enough stock for {product.name}. "
+                    f"Only {product.quantity} left in stock."
                 )
-            
-            # 3. Deduct the exact quantity purchased
-            product.quantity -= item.quantity
-            
-    db.commit()
-    return True
+            )
 
+    # All products have enough stock, so now deduct.
+    for item in items:
+        product = db.query(Product).filter(
+            Product.id == item["product_id"]
+        ).first()
+
+        product.quantity -= int(item["quantity"])
+
+    db.commit()
+
+    return True
 
 # ✅ Delete an order (admin-protected)
 @router.delete("/orders/{order_id}")

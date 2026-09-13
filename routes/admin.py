@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 import cloudinary
 import cloudinary.uploader
-import os
+import os as os_module
 
 router = APIRouter()
 
@@ -41,7 +41,6 @@ def admin_login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-
 @router.post("/admin/upload", tags=["Admin"])
 def upload_product(
     name: str = Form(...),
@@ -50,17 +49,27 @@ def upload_product(
     original_price: float = Form(None),
     quantity: int = Form(...),
     category_ids: str = Form(...),
+    product_type: str = Form(None),
     brand: str = Form(None),
     condition: str = Form(None),
-    storage: str = Form(None),
     color: str = Form(None),
-    battery_health: int = Form(None),
     is_featured: bool = Form(False),
+    # Phone fields
+    storage: str = Form(None),
+    battery_health: int = Form(None),
+    # Laptop fields
+    ram: str = Form(None),
+    processor: str = Form(None),
+    screen_size: str = Form(None),
+    os: str = Form(None),
+    # Accessory fields
+    accessory_type: str = Form(None),
+    compatible_with: str = Form(None),
     image: UploadFile = File(...),
     db: Session = Depends(get_db),
     admin: dict = Depends(get_current_admin),
 ):
-    file_ext = os.path.splitext(image.filename)[1].lower()
+    file_ext = os_module.path.splitext(image.filename)[1].lower()
     if file_ext not in [".jpg", ".jpeg", ".png", ".webp"]:
         raise HTTPException(status_code=400, detail="Invalid image format")
 
@@ -72,7 +81,7 @@ def upload_product(
     categories = db.query(Category).filter(Category.id.in_(ids)).all()
 
     try:
-        result = cloudinary.uploader.upload(image.file, folder="sman_apple_comms", resource_type="image")
+        result = cloudinary.uploader.upload(image.file, folder="dr_apple", resource_type="image")
         image_url = result["secure_url"]
         public_id = result["public_id"]
     except Exception as e:
@@ -83,10 +92,14 @@ def upload_product(
         price=price, original_price=original_price,
         quantity=quantity, image_url=image_url,
         cloudinary_public_id=public_id,
+        product_type=product_type,
         brand=brand, condition=condition,
-        storage=storage, color=color,
-        battery_health=battery_health,
-        is_featured=is_featured,
+        color=color, is_featured=is_featured,
+        storage=storage, battery_health=battery_health,
+        ram=ram, processor=processor,
+        screen_size=screen_size, os=os,
+        accessory_type=accessory_type,
+        compatible_with=compatible_with,
         categories=categories,
     )
     db.add(product)
@@ -134,87 +147,253 @@ def delete_product(
 
 
 @router.get("/admin/products/{product_id}", tags=["Admin"])
-def get_product(product_id: int, db: Session = Depends(get_db), admin: dict = Depends(get_current_admin)):
+def get_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    admin: dict = Depends(get_current_admin)
+):
     product = db.query(Product).filter(Product.id == product_id).first()
+
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+
     return {
         "id": product.id,
         "name": product.name,
-        "price": product.price,
-        "quantity": product.quantity,
         "description": product.description,
+        "price": product.price,
+        "original_price": product.original_price,
+        "quantity": product.quantity,
         "image_url": product.image_url,
-        "categories": [{"id": c.id, "name": c.name} for c in product.categories],
-    }
 
+        # Product information
+        "product_type": product.product_type,
+        "brand": product.brand,
+        "condition": product.condition,
+        "color": product.color,
+        "is_featured": product.is_featured,
+
+        # Phone
+        "storage": product.storage,
+        "battery_health": product.battery_health,
+
+        # Laptop
+        "ram": product.ram,
+        "processor": product.processor,
+        "screen_size": product.screen_size,
+        "os": product.os,
+
+        # Accessory
+        "accessory_type": product.accessory_type,
+        "compatible_with": product.compatible_with,
+
+        # Categories
+        "categories": [
+            {
+                "id": c.id,
+                "name": c.name
+            }
+            for c in product.categories
+        ],
+    }
 
 @router.put("/admin/products/{product_id}", tags=["Admin"])
 def update_product(
     product_id: int,
+
+    # Basic product fields
     name: str = Form(...),
     description: str = Form(None),
     price: float = Form(...),
+    original_price: float = Form(None),
     quantity: int = Form(...),
-    category_ids: str = Form(...),  # comma-separated
+    category_ids: str = Form(...),
+
+    # Product information
+    product_type: str = Form(None),
+    brand: str = Form(None),
+    condition: str = Form(None),
+    color: str = Form(None),
+    is_featured: bool = Form(False),
+
+    # Phone fields
+    storage: str = Form(None),
+    battery_health: int = Form(None),
+
+    # Laptop fields
+    ram: str = Form(None),
+    processor: str = Form(None),
+    screen_size: str = Form(None),
+    os: str = Form(None),
+
+    # Accessory fields
+    accessory_type: str = Form(None),
+    compatible_with: str = Form(None),
+
+    # Optional image
     image: UploadFile = File(None),
+
     db: Session = Depends(get_db),
     admin: dict = Depends(get_current_admin),
 ):
+    # Find product
     product = db.query(Product).filter(Product.id == product_id).first()
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
 
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail="Product not found"
+        )
+
+    # ---------------------------------------------------------
+    # Validate category IDs
+    # ---------------------------------------------------------
+    try:
+        ids = [
+            int(i.strip())
+            for i in category_ids.split(",")
+            if i.strip()
+        ]
+    except ValueError:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid category IDs"
+        )
+
+    categories = (
+        db.query(Category)
+        .filter(Category.id.in_(ids))
+        .all()
+    )
+
+    # Make sure every submitted category actually exists
+    if len(categories) != len(set(ids)):
+        raise HTTPException(
+            status_code=400,
+            detail="One or more category IDs are invalid"
+        )
+
+    # ---------------------------------------------------------
+    # Update product fields
+    # ---------------------------------------------------------
     product.name = name
     product.description = description
     product.price = price
+    product.original_price = original_price
     product.quantity = quantity
 
-    # Update categories
-    try:
-        ids = [int(i.strip()) for i in category_ids.split(",") if i.strip()]
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid category IDs")
+    product.product_type = product_type
+    product.brand = brand
+    product.condition = condition
+    product.color = color
+    product.is_featured = is_featured
 
-    categories = db.query(Category).filter(Category.id.in_(ids)).all()
-    product.categories = categories  # ✅ replaces old categories
+    # Phone fields
+    product.storage = storage
+    product.battery_health = battery_health
 
+    # Laptop fields
+    product.ram = ram
+    product.processor = processor
+    product.screen_size = screen_size
+    product.os = os
+
+    # Accessory fields
+    product.accessory_type = accessory_type
+    product.compatible_with = compatible_with
+
+    # Replace old categories
+    product.categories = categories
+
+    # ---------------------------------------------------------
+    # Replace image if a new one was uploaded
+    # ---------------------------------------------------------
     if image is not None:
-        file_ext = os.path.splitext(image.filename)[1].lower()
-        if file_ext not in [".jpg", ".jpeg", ".png", ".webp"]:
-            raise HTTPException(status_code=400, detail="Invalid image format")
+        file_ext = os_module.path.splitext(image.filename)[1].lower()
 
+        if file_ext not in [".jpg", ".jpeg", ".png", ".webp"]:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid image format"
+            )
+
+        # Delete old Cloudinary image
         if product.cloudinary_public_id:
             try:
-                cloudinary.uploader.destroy(product.cloudinary_public_id)
+                cloudinary.uploader.destroy(
+                    product.cloudinary_public_id
+                )
             except Exception:
+                # Don't fail the update if deleting the old
+                # Cloudinary image fails
                 pass
 
+        # Upload new image
         try:
             result = cloudinary.uploader.upload(
                 image.file,
-                folder="s_and_s_collection",
+                folder="dr_apple",
                 resource_type="image",
             )
+
             product.image_url = result["secure_url"]
             product.cloudinary_public_id = result["public_id"]
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Image upload failed: {str(e)}")
 
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Image upload failed: {str(e)}"
+            )
+
+    # ---------------------------------------------------------
+    # Save changes
+    # ---------------------------------------------------------
     db.commit()
     db.refresh(product)
+
     return {
-        "message": "Product updated",
+        "message": "Product updated successfully",
         "product": {
             "id": product.id,
             "name": product.name,
+            "description": product.description,
             "price": product.price,
+            "original_price": product.original_price,
             "quantity": product.quantity,
             "image_url": product.image_url,
-            "categories": [{"id": c.id, "name": c.name} for c in product.categories],
+
+            "product_type": product.product_type,
+            "brand": product.brand,
+            "condition": product.condition,
+            "color": product.color,
+            "is_featured": product.is_featured,
+
+            # Phone fields
+            "storage": product.storage,
+            "battery_health": product.battery_health,
+
+            # Laptop fields
+            "ram": product.ram,
+            "processor": product.processor,
+            "screen_size": product.screen_size,
+            "os": product.os,
+
+            # Accessory fields
+            "accessory_type": product.accessory_type,
+            "compatible_with": product.compatible_with,
+
+            "categories": [
+                {
+                    "id": c.id,
+                    "name": c.name
+                }
+                for c in product.categories
+            ],
         }
     }
 
+
+    
 
 @router.post("/admin/categories", status_code=201, tags=["Admin Categories"])
 def create_category(

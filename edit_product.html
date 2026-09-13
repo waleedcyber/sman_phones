@@ -4,289 +4,1896 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo/logo.png" />
-  <title>Edit Phone — Admin</title>
+
+  <title>Edit Product — Dr Apple Admin</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
-      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
-      --white: #F5F5F0; --white-dim: #AAAAAA;
-      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
-    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
-    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .back-link:hover { color: var(--gold); }
-    .page { max-width: 680px; margin: 0 auto; padding: 24px 16px 80px; }
-    .form-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 12px; padding: 22px 18px; margin-bottom: 14px; }
-    .form-card-title { font-family: var(--font-display); font-size: 15px; color: var(--white); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-    .form-group { margin-bottom: 14px; }
-    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
-    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 12px 14px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
-    .form-input:focus { outline: none; border-color: var(--gold); }
-    .form-input::placeholder { color: rgba(170,170,170,0.4); }
-    select.form-input option { background: var(--black-3); }
-    textarea.form-input { resize: vertical; min-height: 80px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .battery-field { display: none; }
-    .battery-field.show { display: block; }
-    .cat-box { background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); border-radius: 4px; padding: 12px; max-height: 160px; overflow-y: auto; }
-    .cat-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; cursor: pointer; color: var(--white-dim); }
-    .cat-option input[type=checkbox] { appearance: none; width: 18px; height: 18px; border: 1px solid var(--gold-dim); border-radius: 3px; background: transparent; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
-    .cat-option input[type=checkbox]:checked { background: var(--gold); border-color: var(--gold); }
-    .cat-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); padding: 8px 0 4px; font-weight: 500; }
-    .current-img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; border: 1px solid rgba(201,168,76,0.15); display: none; }
-    .img-preview { display: none; width: 100%; max-height: 180px; object-fit: cover; border-radius: 6px; margin-top: 10px; border: 1px solid rgba(201,168,76,0.2); }
-    .toggle-row { display: flex; align-items: center; justify-content: space-between; }
-    .toggle-label { font-size: 13px; color: var(--white-dim); }
-    .toggle { position: relative; width: 44px; height: 24px; }
-    .toggle input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider { position: absolute; inset: 0; background: var(--black-4); border: 1px solid rgba(201,168,76,0.2); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
-    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: var(--white-dim); border-radius: 50%; transition: transform 0.2s; }
-    .toggle input:checked + .toggle-slider { background: var(--gold); border-color: var(--gold); }
-    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: var(--black); }
-    .btn-submit { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 16px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; }
-    .btn-submit:hover { background: var(--gold-light); }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    #statusMsg { text-align: center; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-top: 12px; display: none; }
-    #statusMsg.success { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.2); display: block; }
-    #statusMsg.error { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); display: block; }
-    #statusMsg.loading { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); display: block; }
-    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="header-title">✏️ Edit Phone</div>
-    <a href="admin_product.html" class="back-link">← Phones</a>
-  </header>
-  <div class="page">
+      --blue: #1A56DB;
+      --blue-dark: #1040B0;
+      --blue-light: #EEF2FF;
 
-    <input type="hidden" id="productId" />
+      --black: #0D0D0D;
+      --gray: #4B5563;
+      --gray-light: #F3F4F6;
+      --white: #FFFFFF;
+      --border: #E5E7EB;
 
-    <div class="form-card">
-      <div class="form-card-title">📋 Basic Information</div>
-      <div class="form-group">
-        <label class="form-label">Phone Name / Title</label>
-        <input class="form-input" type="text" id="name" required />
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Price (₦)</label>
-          <input class="form-input" type="number" id="price" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Original Price (₦)</label>
-          <input class="form-input" type="number" id="originalPrice" placeholder="Optional" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Quantity in Stock</label>
-        <input class="form-input" type="number" id="quantity" required />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-input" id="description"></textarea>
-      </div>
-    </div>
-
-    <div class="form-card">
-      <div class="form-card-title">⚙️ Phone Specifications</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Brand</label>
-          <select class="form-input" id="brand">
-            <option value="">Select brand</option>
-            <option>Apple</option><option>Samsung</option><option>Google</option>
-            <option>Tecno</option><option>Infinix</option><option>Xiaomi</option>
-            <option>OnePlus</option><option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Condition</label>
-          <select class="form-input" id="condition" onchange="handleCondition(this.value)">
-            <option value="">Select condition</option>
-            <option>New</option><option>Open Box</option><option>Used</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Storage</label>
-          <select class="form-input" id="storage">
-            <option value="">Select storage</option>
-            <option>64GB</option><option>128GB</option><option>256GB</option>
-            <option>512GB</option><option>1TB</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Color</label>
-          <input class="form-input" type="text" id="color" placeholder="e.g. Midnight Black" />
-        </div>
-      </div>
-      <div class="form-group battery-field" id="batteryField">
-        <label class="form-label">Battery Health (%)</label>
-        <input class="form-input" type="number" id="batteryHealth" min="1" max="100" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Featured on Homepage</label>
-        <div class="toggle-row">
-          <span class="toggle-label">Show on homepage</span>
-          <label class="toggle"><input type="checkbox" id="isFeatured"><div class="toggle-slider"></div></label>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-card">
-      <div class="form-card-title">🗂️ Categories</div>
-      <div class="form-group">
-        <label class="form-label">Select Categories</label>
-        <div class="cat-box" id="categoryCheckboxes">Loading...</div>
-      </div>
-    </div>
-
-    <div class="form-card">
-      <div class="form-card-title">📸 Image</div>
-      <img class="current-img" id="currentImg" alt="Current image" />
-      <div class="form-group">
-        <label class="form-label">Replace Image (optional)</label>
-        <input class="form-input" type="file" id="image" accept=".jpg,.jpeg,.png,.webp" onchange="previewImage(this)" />
-        <img class="img-preview" id="imgPreview" />
-      </div>
-    </div>
-
-    <button class="btn-submit" id="submitBtn" onclick="updateProduct()">💾 Save Changes</button>
-    <div id="statusMsg"></div>
-  </div>
-
-  <script>
-    const token = localStorage.getItem('token');
-    if (!token) { alert('Access denied. Please log in.'); window.location.href='admin_login.html'; }
-
-    const baseUrl = "https://sman-phones-1.onrender.com/api";
-
-    function qs(param){
-      return new URLSearchParams(window.location.search).get(param);
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Poppins', sans-serif;
     }
 
-    function previewImage(input) {
-      const preview = document.getElementById('imgPreview');
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
-        reader.readAsDataURL(input.files[0]);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--gray-light);
+      color: var(--black);
+      font-family: var(--font-body);
+      font-weight: 300;
+    }
+
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .header-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .header-title span {
+      color: var(--black);
+    }
+
+    .back-link {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--blue);
+    }
+
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 18px;
+      margin-bottom: 14px;
+    }
+
+    .form-card-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      color: var(--black);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      color: var(--black);
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: var(--font-body);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,86,219,0.08);
+    }
+
+    .form-input::placeholder {
+      color: #9CA3AF;
+    }
+
+    select.form-input option {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    textarea.form-input {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Product type */
+    .type-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .type-option {
+      position: relative;
+    }
+
+    .type-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .type-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-height: 72px;
+      padding: 10px;
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--gray);
+      transition: all 0.2s;
+    }
+
+    .type-option label span {
+      font-size: 23px;
+    }
+
+    .type-option input:checked + label {
+      background: var(--blue-light);
+      border-color: var(--blue);
+      color: var(--blue);
+      font-weight: 500;
+    }
+
+    /* Specification sections */
+    .spec-section {
+      display: none;
+    }
+
+    .spec-section.show {
+      display: block;
+    }
+
+    .battery-field {
+      display: none;
+    }
+
+    .battery-field.show {
+      display: block;
+    }
+
+    /* Categories */
+    .cat-box {
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .cat-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    .cat-option input[type=checkbox] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1px solid #9CA3AF;
+      border-radius: 4px;
+      background: var(--white);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .cat-option input[type=checkbox]:checked {
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: inset 0 0 0 4px var(--white);
+    }
+
+    .cat-group-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      padding: 8px 0 4px;
+      font-weight: 600;
+    }
+
+    /* Image */
+    .current-img,
+    .img-preview {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      background: var(--gray-light);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .current-img {
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .img-preview {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .image-note {
+      font-size: 11px;
+      color: var(--gray);
+      margin-top: 7px;
+    }
+
+    /* Featured */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: #D1D5DB;
+      border: 1px solid #D1D5DB;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
+      background: var(--white);
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(20px);
+    }
+
+    /* Button */
+    .btn-submit {
+      width: 100%;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      padding: 16px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: var(--blue-dark);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Status */
+    #statusMsg {
+      text-align: center;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 12px;
+      display: none;
+    }
+
+    #statusMsg.success {
+      background: #ECFDF5;
+      color: #059669;
+      border: 1px solid #A7F3D0;
+      display: block;
+    }
+
+    #statusMsg.error {
+      background: #FEF2F2;
+      color: #DC2626;
+      border: 1px solid #FECACA;
+      display: block;
+    }
+
+    #statusMsg.loading {
+      background: var(--blue-light);
+      color: var(--blue);
+      border: 1px solid #C7D2FE;
+      display: block;
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .type-selector {
+        grid-template-columns: 1fr;
       }
     }
+  </style>
+</head>
 
-    function showMsg(text, type) {
-      const el = document.getElementById('statusMsg');
-      el.textContent = text; el.className = type;
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+<body>
 
-    async function loadCategories(selectedIds = []) {
-      try {
-        const res = await fetch(`${baseUrl}/admin/categories`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!res.ok) return;
-        const cats = await res.json();
-        const container = document.getElementById('categoryCheckboxes');
-        container.innerHTML = '';
-        const parents = cats.filter(c => !c.parent_id);
-        const children = cats.filter(c => c.parent_id);
-        parents.forEach(p => {
-          const kids = children.filter(c => c.parent_id === p.id);
-          container.innerHTML += `<div class="cat-group-label">📁 ${p.name}</div>`;
-          if (kids.length > 0) {
-            kids.forEach(k => {
-              const checked = selectedIds.includes(String(k.id)) ? 'checked' : '';
-              container.innerHTML += `<label class="cat-option"><input type="checkbox" value="${k.id}" ${checked}> ${k.name}</label>`;
-            });
-          } else {
-            const checked = selectedIds.includes(String(p.id)) ? 'checked' : '';
-            container.innerHTML += `<label class="cat-option"><input type="checkbox" value="${p.id}" ${checked}> ${p.name}</label>`;
-          }
-        });
-      } catch { document.getElementById('categoryCheckboxes').textContent = 'Failed to load categories.'; }
-    }
+<header>
+  <div class="header-title">
+    Dr <span>Apple</span> — Edit Product
+  </div>
 
-    async function loadProduct() {
-      try {
-        const res = await fetch(`${baseUrl}/admin/products/${productId}`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!res.ok) { alert('Failed to load phone.'); window.location.href = 'admin_product.html'; return; }
-        const p = await res.json();
-        document.getElementById('productId').value = p.id;
-        document.getElementById('name').value = p.name || '';
-        document.getElementById('price').value = p.price || '';
-        document.getElementById('originalPrice').value = p.original_price || '';
-        document.getElementById('quantity').value = p.quantity || '';
-        document.getElementById('description').value = p.description || '';
-        document.getElementById('brand').value = p.brand || '';
-        document.getElementById('condition').value = p.condition || '';
-        document.getElementById('storage').value = p.storage || '';
-        document.getElementById('color').value = p.color || '';
-        document.getElementById('batteryHealth').value = p.battery_health || '';
-        document.getElementById('isFeatured').checked = p.is_featured || false;
-        if (p.condition === 'Used') document.getElementById('batteryField').classList.add('show');
-        if (p.image_url) {
-          const img = document.getElementById('currentImg');
-          img.src = p.image_url; img.style.display = 'block';
+  <a href="admin_product.html" class="back-link">
+    ← Products
+  </a>
+</header>
+
+
+<div class="page">
+
+  <input type="hidden" id="productId" />
+
+
+  <!-- Basic Information -->
+  <div class="form-card">
+
+    <div class="form-card-title">
+      📋 Basic Information
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label">Product Type</label>
+
+      <div class="type-selector">
+
+        <div class="type-option">
+          <input type="radio" name="productType" id="typePhone" value="phone" onchange="switchType('phone')">
+          <label for="typePhone">
+            <span>📱</span>
+            Phone
+          </label>
+        </div>
+
+        <div class="type-option">
+          <input type="radio" name="productType" id="typeLaptop" value="laptop" onchange="switchType('laptop')">
+          <label for="typeLaptop">
+            <span>💻</span>
+            Laptop
+          </label>
+        </div>
+
+        <div class="type-option">
+          <input type="radio" name="productType" id="typeAccessory" value="accessory" onchange="switchType('accessory')">
+          <label for="typeAccessory">
+            <span>🎧</span>
+            Accessory
+          </label>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">Product Name / Title</label>
+
+      <input
+        class="form-input"
+        type="text"
+        id="name"
+        required
+      />
+
+    </div>
+
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Price (₦)</label>
+
+        <input
+          class="form-input"
+          type="number"
+          id="price"
+          required
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Original Price (₦)</label>
+
+        <input
+          class="form-input"
+          type="number"
+          id="originalPrice"
+          placeholder="Optional"
+        />
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">Quantity in Stock</label>
+
+      <input
+        class="form-input"
+        type="number"
+        id="quantity"
+        required
+      />
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">Description</label>
+
+      <textarea
+        class="form-input"
+        id="description"
+      ></textarea>
+
+    </div>
+
+  </div>
+
+
+  <!-- Phone Specifications -->
+  <div class="form-card spec-section" id="phoneSpecs">
+
+    <div class="form-card-title">
+      📱 Phone Specifications
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Brand</label>
+
+        <select class="form-input" id="phoneBrand">
+
+          <option value="">Select brand</option>
+          <option>Apple</option>
+          <option>Samsung</option>
+          <option>Google</option>
+          <option>Tecno</option>
+          <option>Infinix</option>
+          <option>Xiaomi</option>
+          <option>OnePlus</option>
+          <option>Other</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Condition</label>
+
+        <select
+          class="form-input"
+          id="phoneCondition"
+          onchange="toggleBattery(this.value)"
+        >
+
+          <option value="">Select condition</option>
+          <option>New</option>
+          <option>Open Box</option>
+          <option>Used</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Storage</label>
+
+        <select class="form-input" id="phoneStorage">
+
+          <option value="">Select storage</option>
+          <option>64GB</option>
+          <option>128GB</option>
+          <option>256GB</option>
+          <option>512GB</option>
+          <option>1TB</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Color</label>
+
+        <input
+          class="form-input"
+          type="text"
+          id="phoneColor"
+          placeholder="e.g. Midnight Black"
+        />
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group battery-field" id="batteryGroup">
+
+      <label class="form-label">
+        Battery Health (%)
+      </label>
+
+      <input
+        class="form-input"
+        type="number"
+        id="batteryHealth"
+        min="1"
+        max="100"
+      />
+
+    </div>
+
+  </div>
+
+
+  <!-- Laptop Specifications -->
+  <div class="form-card spec-section" id="laptopSpecs">
+
+    <div class="form-card-title">
+      💻 Laptop Specifications
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Brand</label>
+
+        <select class="form-input" id="laptopBrand">
+
+          <option value="">Select brand</option>
+          <option>Apple</option>
+          <option>HP</option>
+          <option>Dell</option>
+          <option>Lenovo</option>
+          <option>ASUS</option>
+          <option>Acer</option>
+          <option>Microsoft</option>
+          <option>Other</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Condition</label>
+
+        <select class="form-input" id="laptopCondition">
+
+          <option value="">Select condition</option>
+          <option>New</option>
+          <option>Open Box</option>
+          <option>Used</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Processor</label>
+
+        <input
+          class="form-input"
+          type="text"
+          id="processor"
+          placeholder="e.g. Intel Core i5-1135G7"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">RAM</label>
+
+        <select class="form-input" id="ram">
+
+          <option value="">Select RAM</option>
+          <option>4GB</option>
+          <option>8GB</option>
+          <option>16GB</option>
+          <option>32GB</option>
+          <option>64GB</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Storage</label>
+
+        <select class="form-input" id="laptopStorage">
+
+          <option value="">Select storage</option>
+          <option>128GB</option>
+          <option>256GB</option>
+          <option>512GB</option>
+          <option>1TB</option>
+          <option>2TB</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Screen Size</label>
+
+        <select class="form-input" id="screenSize">
+
+          <option value="">Select size</option>
+          <option>11.6"</option>
+          <option>13.3"</option>
+          <option>14"</option>
+          <option>15.6"</option>
+          <option>16"</option>
+          <option>17.3"</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Operating System</label>
+
+        <select class="form-input" id="os">
+
+          <option value="">Select OS</option>
+          <option>Windows 11</option>
+          <option>Windows 10</option>
+          <option>macOS</option>
+          <option>Linux</option>
+          <option>ChromeOS</option>
+          <option>Other</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Color</label>
+
+        <input
+          class="form-input"
+          type="text"
+          id="laptopColor"
+          placeholder="e.g. Silver"
+        />
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Accessory Specifications -->
+  <div class="form-card spec-section" id="accessorySpecs">
+
+    <div class="form-card-title">
+      🎧 Accessory Specifications
+    </div>
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Accessory Type</label>
+
+        <select class="form-input" id="accessoryType">
+
+          <option value="">Select type</option>
+          <option>AirPods</option>
+          <option>Charger</option>
+          <option>Power Bank</option>
+          <option>Case</option>
+          <option>Screen Protector</option>
+          <option>Cable</option>
+          <option>Headphones</option>
+          <option>Keyboard</option>
+          <option>Mouse</option>
+          <option>Other</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Brand</label>
+
+        <input
+          class="form-input"
+          type="text"
+          id="accessoryBrand"
+          placeholder="e.g. Apple"
+        />
+
+      </div>
+
+    </div>
+
+
+    <div class="form-row">
+
+      <div class="form-group">
+
+        <label class="form-label">Compatible With</label>
+
+        <input
+          class="form-input"
+          type="text"
+          id="compatibleWith"
+          placeholder="e.g. iPhone 15"
+        />
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">Color</label>
+
+        <input
+          class="form-input"
+          type="text"
+          id="accessoryColor"
+          placeholder="e.g. White"
+        />
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Categories -->
+  <div class="form-card">
+
+    <div class="form-card-title">
+      🗂️ Categories
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Select Categories
+      </label>
+
+      <div class="cat-box" id="categoryCheckboxes">
+        Loading...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Featured -->
+  <div class="form-card">
+
+    <div class="form-card-title">
+      ⭐ Homepage
+    </div>
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Featured on Homepage
+      </label>
+
+      <div class="toggle-row">
+
+        <span class="toggle-label">
+          Show on homepage
+        </span>
+
+        <label class="toggle">
+
+          <input
+            type="checkbox"
+            id="isFeatured"
+          >
+
+          <div class="toggle-slider"></div>
+
+        </label>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Image -->
+  <div class="form-card">
+
+    <div class="form-card-title">
+      📸 Product Image
+    </div>
+
+    <img
+      class="current-img"
+      id="currentImg"
+      alt="Current product image"
+    />
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Replace Image
+      </label>
+
+      <input
+        class="form-input"
+        type="file"
+        id="image"
+        accept=".jpg,.jpeg,.png,.webp"
+        onchange="previewImage(this)"
+      />
+
+      <div class="image-note">
+        Leave this empty if you want to keep the current image.
+      </div>
+
+      <img
+        class="img-preview"
+        id="imgPreview"
+        alt="New image preview"
+      />
+
+    </div>
+
+  </div>
+
+
+  <button
+    class="btn-submit"
+    id="submitBtn"
+    onclick="updateProduct()"
+  >
+    💾 Save Changes
+  </button>
+
+  <div id="statusMsg"></div>
+
+</div>
+
+
+<script>
+
+const token = localStorage.getItem('token');
+
+if (!token) {
+  alert('Access denied. Please log in.');
+  window.location.href = 'admin_login.html';
+}
+
+const baseUrl = "https://sman-phones-1.onrender.com/api";
+
+
+const productId =
+  new URLSearchParams(window.location.search).get('id');
+
+
+if (!productId) {
+  alert('No product selected.');
+  window.location.href = 'admin_product.html';
+}
+
+
+/* =========================
+   TYPE SWITCHING
+========================= */
+
+function switchType(type) {
+
+  document
+    .querySelectorAll('.spec-section')
+    .forEach(section => section.classList.remove('show'));
+
+  if (type === 'phone') {
+    document
+      .getElementById('phoneSpecs')
+      .classList.add('show');
+  }
+
+  if (type === 'laptop') {
+    document
+      .getElementById('laptopSpecs')
+      .classList.add('show');
+  }
+
+  if (type === 'accessory') {
+    document
+      .getElementById('accessorySpecs')
+      .classList.add('show');
+  }
+
+}
+
+
+/* =========================
+   PHONE BATTERY
+========================= */
+
+function toggleBattery(value) {
+
+  const field =
+    document.getElementById('batteryGroup');
+
+  if (value === 'Used') {
+    field.classList.add('show');
+  } else {
+    field.classList.remove('show');
+
+    document.getElementById('batteryHealth').value = '';
+  }
+
+}
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+function previewImage(input) {
+
+  const preview =
+    document.getElementById('imgPreview');
+
+  if (input.files && input.files[0]) {
+
+    const reader = new FileReader();
+
+    reader.onload = e => {
+
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
+
+}
+
+
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+function showMsg(text, type) {
+
+  const el =
+    document.getElementById('statusMsg');
+
+  el.textContent = text;
+  el.className = type;
+
+  el.scrollIntoView({
+    behavior: 'smooth',
+    block: 'nearest'
+  });
+
+}
+
+
+/* =========================
+   LOAD CATEGORIES
+========================= */
+
+async function loadCategories(selectedIds = []) {
+
+  try {
+
+    const res = await fetch(
+      `${baseUrl}/admin/categories`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-        const selectedIds = (p.categories || []).map(c => String(c.id));
-        await loadCategories(selectedIds);
-      } catch(e) { console.error(e); alert('Error loading phone.'); }
-    }
+      }
+    );
 
-    async function updateProduct() {
-      const name = document.getElementById('name').value.trim();
-      const price = document.getElementById('price').value;
-      const quantity = document.getElementById('quantity').value;
-      if (!name || !price || !quantity) { showMsg('Please fill in name, price and quantity.', 'error'); return; }
-      const checked = document.querySelectorAll('#categoryCheckboxes input[type=checkbox]:checked');
-      if (checked.length === 0) { showMsg('Please select at least one category.', 'error'); return; }
+    if (!res.ok) return;
 
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true; showMsg('Saving changes...', 'loading');
+    const cats = await res.json();
 
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('description', document.getElementById('description').value.trim());
-      formData.append('price', price);
-      formData.append('quantity', quantity);
-      formData.append('category_ids', Array.from(checked).map(c => c.value).join(','));
-      const originalPrice = document.getElementById('originalPrice').value;
-      if (originalPrice) formData.append('original_price', originalPrice);
-      const brand = document.getElementById('brand').value;
-      if (brand) formData.append('brand', brand);
-      const condition = document.getElementById('condition').value;
-      if (condition) formData.append('condition', condition);
-      const storage = document.getElementById('storage').value;
-      if (storage) formData.append('storage', storage);
-      const color = document.getElementById('color').value.trim();
-      if (color) formData.append('color', color);
-      const battery = document.getElementById('batteryHealth').value;
-      if (battery) formData.append('battery_health', battery);
-      formData.append('is_featured', document.getElementById('isFeatured').checked);
-      const file = document.getElementById('image').files[0];
-      if (file) formData.append('image', file);
+    const container =
+      document.getElementById('categoryCheckboxes');
 
-      try {
-        const res = await fetch(`${baseUrl}/admin/products/${productId}`, {
-          method: 'PUT', headers: { Authorization: `Bearer ${token}` }, body: formData
+    container.innerHTML = '';
+
+    const parents =
+      cats.filter(c => !c.parent_id);
+
+    const children =
+      cats.filter(c => c.parent_id);
+
+
+    parents.forEach(parent => {
+
+      const kids =
+        children.filter(
+          child => child.parent_id === parent.id
+        );
+
+      container.innerHTML += `
+        <div class="cat-group-label">
+          📁 ${parent.name}
+        </div>
+      `;
+
+
+      if (kids.length > 0) {
+
+        kids.forEach(child => {
+
+          const checked =
+            selectedIds.includes(String(child.id))
+              ? 'checked'
+              : '';
+
+          container.innerHTML += `
+            <label class="cat-option">
+              <input
+                type="checkbox"
+                value="${child.id}"
+                ${checked}
+              >
+              ${child.name}
+            </label>
+          `;
+
         });
-        if (res.ok) {
-          showMsg('✅ Phone updated successfully!', 'success');
-          setTimeout(() => window.location.href = 'admin_product.html', 1000);
-        } else {
-          const d = await res.json().catch(() => ({}));
-          showMsg(d.detail || 'Update failed. Try again.', 'error');
+
+      } else {
+
+        const checked =
+          selectedIds.includes(String(parent.id))
+            ? 'checked'
+            : '';
+
+        container.innerHTML += `
+          <label class="cat-option">
+            <input
+              type="checkbox"
+              value="${parent.id}"
+              ${checked}
+            >
+            ${parent.name}
+          </label>
+        `;
+
+      }
+
+    });
+
+  } catch {
+
+    document.getElementById(
+      'categoryCheckboxes'
+    ).textContent =
+      'Failed to load categories.';
+
+  }
+
+}
+
+
+/* =========================
+   LOAD PRODUCT
+========================= */
+
+async function loadProduct() {
+
+  try {
+
+    const res = await fetch(
+      `${baseUrl}/admin/products/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      } catch { showMsg('Network error. Try again.', 'error'); }
-      finally { btn.disabled = false; }
+      }
+    );
+
+
+    if (res.status === 401) {
+      window.location.href = 'admin_login.html';
+      return;
     }
 
-    loadProduct();
-  </script>
+
+    if (!res.ok) {
+
+      alert('Failed to load product.');
+
+      window.location.href =
+        'admin_product.html';
+
+      return;
+    }
+
+
+    const p = await res.json();
+
+
+    /* Basic information */
+
+    document.getElementById(
+      'productId'
+    ).value = p.id;
+
+    document.getElementById(
+      'name'
+    ).value = p.name || '';
+
+    document.getElementById(
+      'price'
+    ).value = p.price ?? '';
+
+    document.getElementById(
+      'originalPrice'
+    ).value = p.original_price ?? '';
+
+    document.getElementById(
+      'quantity'
+    ).value = p.quantity ?? '';
+
+    document.getElementById(
+      'description'
+    ).value = p.description || '';
+
+
+    /* Product type */
+
+    const type =
+      (p.product_type || 'phone').toLowerCase();
+
+
+    if (type === 'laptop') {
+
+      document.getElementById(
+        'typeLaptop'
+      ).checked = true;
+
+    } else if (type === 'accessory') {
+
+      document.getElementById(
+        'typeAccessory'
+      ).checked = true;
+
+    } else {
+
+      document.getElementById(
+        'typePhone'
+      ).checked = true;
+
+    }
+
+
+    switchType(type);
+
+
+    /* Phone */
+
+    document.getElementById(
+      'phoneBrand'
+    ).value = p.brand || '';
+
+    document.getElementById(
+      'phoneCondition'
+    ).value = p.condition || '';
+
+    document.getElementById(
+      'phoneStorage'
+    ).value = p.storage || '';
+
+    document.getElementById(
+      'phoneColor'
+    ).value = p.color || '';
+
+    document.getElementById(
+      'batteryHealth'
+    ).value = p.battery_health ?? '';
+
+
+    if (type === 'phone') {
+      toggleBattery(p.condition);
+    }
+
+
+    /* Laptop */
+
+    document.getElementById(
+      'laptopBrand'
+    ).value = p.brand || '';
+
+    document.getElementById(
+      'laptopCondition'
+    ).value = p.condition || '';
+
+    document.getElementById(
+      'processor'
+    ).value = p.processor || '';
+
+    document.getElementById(
+      'ram'
+    ).value = p.ram || '';
+
+    document.getElementById(
+      'laptopStorage'
+    ).value = p.storage || '';
+
+    document.getElementById(
+      'screenSize'
+    ).value = p.screen_size || '';
+
+    document.getElementById(
+      'os'
+    ).value = p.os || '';
+
+    document.getElementById(
+      'laptopColor'
+    ).value = p.color || '';
+
+
+    /* Accessory */
+
+    document.getElementById(
+      'accessoryType'
+    ).value = p.accessory_type || '';
+
+    document.getElementById(
+      'accessoryBrand'
+    ).value = p.brand || '';
+
+    document.getElementById(
+      'compatibleWith'
+    ).value = p.compatible_with || '';
+
+    document.getElementById(
+      'accessoryColor'
+    ).value = p.color || '';
+
+
+    /* Featured */
+
+    document.getElementById(
+      'isFeatured'
+    ).checked = Boolean(p.is_featured);
+
+
+    /* Current image */
+
+    if (p.image_url) {
+
+      const img =
+        document.getElementById('currentImg');
+
+      img.src = p.image_url;
+      img.style.display = 'block';
+
+    }
+
+
+    /* Categories */
+
+    const selectedIds =
+      (p.categories || [])
+        .map(c => String(c.id));
+
+    await loadCategories(selectedIds);
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert('Error loading product.');
+
+  }
+
+}
+
+
+/* =========================
+   UPDATE PRODUCT
+========================= */
+
+async function updateProduct() {
+
+  const name =
+    document.getElementById('name')
+      .value.trim();
+
+  const price =
+    document.getElementById('price').value;
+
+  const quantity =
+    document.getElementById('quantity').value;
+
+
+  const selectedType =
+    document.querySelector(
+      'input[name="productType"]:checked'
+    );
+
+
+  if (!selectedType) {
+
+    showMsg(
+      'Please select a product type.',
+      'error'
+    );
+
+    return;
+  }
+
+
+  const type =
+    selectedType.value;
+
+
+  if (!name || !price || !quantity) {
+
+    showMsg(
+      'Please fill in name, price and quantity.',
+      'error'
+    );
+
+    return;
+  }
+
+
+  const checked =
+    document.querySelectorAll(
+      '#categoryCheckboxes input[type=checkbox]:checked'
+    );
+
+
+  if (checked.length === 0) {
+
+    showMsg(
+      'Please select at least one category.',
+      'error'
+    );
+
+    return;
+  }
+
+
+  const btn =
+    document.getElementById('submitBtn');
+
+  btn.disabled = true;
+
+  showMsg(
+    'Saving changes...',
+    'loading'
+  );
+
+
+  const formData =
+    new FormData();
+
+
+  /* Basic */
+
+  formData.append(
+    'name',
+    name
+  );
+
+  formData.append(
+    'description',
+    document.getElementById('description').value.trim()
+  );
+
+  formData.append(
+    'price',
+    price
+  );
+
+  formData.append(
+    'quantity',
+    quantity
+  );
+
+  formData.append(
+    'category_ids',
+    Array.from(checked)
+      .map(c => c.value)
+      .join(',')
+  );
+
+  formData.append(
+    'product_type',
+    type
+  );
+
+
+  const originalPrice =
+    document.getElementById(
+      'originalPrice'
+    ).value;
+
+  if (originalPrice) {
+
+    formData.append(
+      'original_price',
+      originalPrice
+    );
+
+  }
+
+
+  formData.append(
+    'is_featured',
+    document.getElementById(
+      'isFeatured'
+    ).checked
+  );
+
+
+  /* =========================
+     PHONE
+  ========================= */
+
+  if (type === 'phone') {
+
+    const brand =
+      document.getElementById(
+        'phoneBrand'
+      ).value;
+
+    const condition =
+      document.getElementById(
+        'phoneCondition'
+      ).value;
+
+    const storage =
+      document.getElementById(
+        'phoneStorage'
+      ).value;
+
+    const color =
+      document.getElementById(
+        'phoneColor'
+      ).value.trim();
+
+    const battery =
+      document.getElementById(
+        'batteryHealth'
+      ).value;
+
+
+    if (brand)
+      formData.append(
+        'brand',
+        brand
+      );
+
+    if (condition)
+      formData.append(
+        'condition',
+        condition
+      );
+
+    if (storage)
+      formData.append(
+        'storage',
+        storage
+      );
+
+    if (color)
+      formData.append(
+        'color',
+        color
+      );
+
+    if (battery)
+      formData.append(
+        'battery_health',
+        battery
+      );
+
+  }
+
+
+  /* =========================
+     LAPTOP
+  ========================= */
+
+  else if (type === 'laptop') {
+
+    const brand =
+      document.getElementById(
+        'laptopBrand'
+      ).value;
+
+    const condition =
+      document.getElementById(
+        'laptopCondition'
+      ).value;
+
+    const processor =
+      document.getElementById(
+        'processor'
+      ).value.trim();
+
+    const ram =
+      document.getElementById(
+        'ram'
+      ).value;
+
+    const storage =
+      document.getElementById(
+        'laptopStorage'
+      ).value;
+
+    const screenSize =
+      document.getElementById(
+        'screenSize'
+      ).value;
+
+    const os =
+      document.getElementById(
+        'os'
+      ).value;
+
+    const color =
+      document.getElementById(
+        'laptopColor'
+      ).value.trim();
+
+
+    if (brand)
+      formData.append(
+        'brand',
+        brand
+      );
+
+    if (condition)
+      formData.append(
+        'condition',
+        condition
+      );
+
+    if (processor)
+      formData.append(
+        'processor',
+        processor
+      );
+
+    if (ram)
+      formData.append(
+        'ram',
+        ram
+      );
+
+    if (storage)
+      formData.append(
+        'storage',
+        storage
+      );
+
+    if (screenSize)
+      formData.append(
+        'screen_size',
+        screenSize
+      );
+
+    if (os)
+      formData.append(
+        'os',
+        os
+      );
+
+    if (color)
+      formData.append(
+        'color',
+        color
+      );
+
+  }
+
+
+  /* =========================
+     ACCESSORY
+  ========================= */
+
+  else if (type === 'accessory') {
+
+    const accessoryType =
+      document.getElementById(
+        'accessoryType'
+      ).value;
+
+    const brand =
+      document.getElementById(
+        'accessoryBrand'
+      ).value.trim();
+
+    const compatibleWith =
+      document.getElementById(
+        'compatibleWith'
+      ).value.trim();
+
+    const color =
+      document.getElementById(
+        'accessoryColor'
+      ).value.trim();
+
+
+    if (accessoryType)
+      formData.append(
+        'accessory_type',
+        accessoryType
+      );
+
+    if (brand)
+      formData.append(
+        'brand',
+        brand
+      );
+
+    if (compatibleWith)
+      formData.append(
+        'compatible_with',
+        compatibleWith
+      );
+
+    if (color)
+      formData.append(
+        'color',
+        color
+      );
+
+  }
+
+
+  /* Image */
+
+  const file =
+    document.getElementById(
+      'image'
+    ).files[0];
+
+  if (file) {
+
+    formData.append(
+      'image',
+      file
+    );
+
+  }
+
+
+  try {
+
+    const res = await fetch(
+      `${baseUrl}/admin/products/${productId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: formData
+      }
+    );
+
+
+    if (res.status === 401) {
+
+      window.location.href =
+        'admin_login.html';
+
+      return;
+    }
+
+
+    if (res.ok) {
+
+      showMsg(
+        '✅ Product updated successfully!',
+        'success'
+      );
+
+      setTimeout(() => {
+
+        window.location.href =
+          'admin_product.html';
+
+      }, 1000);
+
+    } else {
+
+      const d =
+        await res.json()
+          .catch(() => ({}));
+
+      showMsg(
+        d.detail ||
+        'Update failed. Try again.',
+        'error'
+      );
+
+    }
+
+  } catch {
+
+    showMsg(
+      'Network error. Try again.',
+      'error'
+    );
+
+  } finally {
+
+    btn.disabled = false;
+
+  }
+
+}
+
+
+/* Load existing product */
+loadProduct();
+
+</script>
+
 </body>
 </html>

@@ -31,16 +31,28 @@ class ProductOut(BaseModel):
     original_price: Optional[float] = None
     quantity: int
     image_url: Optional[str]
+    product_type: Optional[str] = None
+    # General specs
     brand: Optional[str] = None
     condition: Optional[str] = None
-    storage: Optional[str] = None
     color: Optional[str] = None
-    battery_health: Optional[int] = None
     is_featured: Optional[bool] = False
+    # Phone
+    storage: Optional[str] = None
+    battery_health: Optional[int] = None
+    # Laptop
+    ram: Optional[str] = None
+    processor: Optional[str] = None
+    screen_size: Optional[str] = None
+    os: Optional[str] = None
+    # Accessory
+    accessory_type: Optional[str] = None
+    compatible_with: Optional[str] = None
     categories: List[CategoryOut] = []
     model_config = {"from_attributes": True}
 
 class OrderItem(BaseModel):
+    product_id: int
     name: str
     price: float
     quantity: int

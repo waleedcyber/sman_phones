@@ -1,195 +1,952 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo/logo.png" />
-  <title>Manage Phones — Admin</title>
+
+  <title>Manage Products — Dr Apple Admin</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
+
     :root {
-      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
-      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
-      --white: #F5F5F0; --white-dim: #AAAAAA;
-      --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
+      --blue: #1A56DB;
+      --blue-dark: #1040B0;
+      --blue-light: #EEF2FF;
+
+      --black: #0D0D0D;
+      --gray: #4B5563;
+      --gray-light: #F3F4F6;
+
+      --white: #FFFFFF;
+      --border: #E5E7EB;
+
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Poppins', sans-serif;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
-    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
-    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
-    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .back-link:hover { color: var(--gold); }
-    .page { max-width: 800px; margin: 0 auto; padding: 20px 16px 80px; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--gray-light);
+      color: var(--black);
+      font-family: var(--font-body);
+      font-weight: 300;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .header-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      color: var(--black);
+    }
+
+    .header-title span {
+      color: var(--blue);
+    }
+
+    .back-link {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--blue);
+    }
+
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
     /* Toolbar */
-    .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-    .search-input { flex: 1; min-width: 160px; background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); color: var(--white); padding: 10px 14px; border-radius: 4px; font-size: 13px; font-family: var(--font-body); }
-    .search-input:focus { outline: none; border-color: var(--gold); }
-    .search-input::placeholder { color: var(--white-dim); }
-    .filter-select { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); color: var(--white); padding: 10px 12px; border-radius: 4px; font-size: 13px; font-family: var(--font-body); }
-    .btn-add { background: var(--gold); color: var(--black); border: none; padding: 10px 18px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); white-space: nowrap; text-decoration: none; display: flex; align-items: center; gap: 6px; }
-    .count-label { font-size: 12px; color: var(--white-dim); padding: 10px 0; margin-bottom: 8px; }
-    /* Product cards */
-    .product-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
-    .product-card:hover { border-color: rgba(201,168,76,0.2); }
-    .card-header { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; }
-    .card-img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; background: var(--black-4); flex-shrink: 0; }
-    .card-info { flex: 1; min-width: 0; }
-    .card-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-meta { font-size: 11px; color: var(--white-dim); }
-    .card-price { font-size: 15px; font-weight: 600; color: var(--gold); white-space: nowrap; }
-    .card-body { display: none; padding: 14px 16px; border-top: 1px solid rgba(255,255,255,0.04); background: var(--black-4); }
-    .card-body.open { display: block; }
-    .specs-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-    .spec-tag { background: var(--black-3); border: 1px solid rgba(201,168,76,0.12); color: var(--white-dim); font-size: 11px; padding: 4px 10px; border-radius: 3px; }
-    .spec-tag.gold { color: var(--gold); border-color: rgba(201,168,76,0.25); }
-    .card-desc { font-size: 13px; color: var(--white-dim); line-height: 1.5; margin-bottom: 14px; }
-    .action-row { display: flex; gap: 8px; }
-    .btn-edit { background: rgba(201,168,76,0.12); color: var(--gold); border: none; padding: 9px 18px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); text-decoration: none; display: inline-block; }
-    .btn-delete { background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 9px 18px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
-    .condition-badge { font-size: 10px; padding: 2px 8px; border-radius: 3px; font-weight: 500; }
-    .cond-new { background: rgba(37,211,102,0.1); color: #25D366; }
-    .cond-open { background: rgba(201,168,76,0.1); color: var(--gold); }
-    .cond-used { background: rgba(249,115,22,0.1); color: #f97316; }
-    .featured-star { color: var(--gold); font-size: 12px; }
-    .empty { text-align: center; padding: 60px 20px; color: var(--white-dim); }
-    .empty-icon { font-size: 40px; margin-bottom: 14px; display: block; }
-    /* Delete modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal-box { background: var(--black-3); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; max-width: 340px; width: 100%; padding: 28px 24px; text-align: center; }
-    .modal-box h3 { font-family: var(--font-display); font-size: 18px; color: var(--white); margin-bottom: 10px; }
-    .modal-box p { font-size: 13px; color: var(--white-dim); margin-bottom: 22px; }
-    .modal-btns { display: flex; gap: 10px; justify-content: center; }
-    .btn-confirm-delete { background: #ef4444; color: white; border: none; padding: 11px 22px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
-    .btn-cancel { background: var(--black-4); color: var(--white-dim); border: 1px solid rgba(255,255,255,0.1); padding: 11px 22px; border-radius: 4px; font-size: 14px; cursor: pointer; font-family: var(--font-body); }
-    .float-add { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: var(--gold); color: var(--black); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 20px rgba(201,168,76,0.3); text-decoration: none; font-weight: bold; transition: transform 0.2s; }
-    .float-add:hover { transform: scale(1.1); }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 160px;
+      background: white;
+      border: 1.5px solid var(--border);
+      color: var(--black);
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: white;
+    }
+
+    .search-input::placeholder {
+      color: #9CA3AF;
+    }
+
+    .filter-select {
+      background: white;
+      border: 1.5px solid var(--border);
+      color: var(--black);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      cursor: pointer;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .btn-add {
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      white-space: nowrap;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-add:hover {
+      background: var(--blue-dark);
+    }
+
+    .count-label {
+      font-size: 12px;
+      color: var(--gray);
+      padding: 6px 0 12px;
+    }
+
+    /* Product Cards */
+
+    .product-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      border-color: rgba(26,86,219,0.35);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      cursor: pointer;
+    }
+
+    .card-img {
+      width: 58px;
+      height: 58px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--gray-light);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: var(--gray);
+    }
+
+    .card-price {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--blue);
+      white-space: nowrap;
+    }
+
+    .card-body {
+      display: none;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--gray-light);
+    }
+
+    .card-body.open {
+      display: block;
+    }
+
+    /* Specification Tags */
+
+    .specs-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .spec-tag {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--gray);
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .spec-tag.gold {
+      color: var(--blue);
+      border-color: rgba(26,86,219,0.25);
+      background: var(--blue-light);
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    /* Actions */
+
+    .action-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-edit {
+      background: var(--blue-light);
+      color: var(--blue);
+      border: none;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .btn-edit:hover {
+      background: #DCE5FF;
+    }
+
+    .btn-delete {
+      background: #FEF2F2;
+      color: #DC2626;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.2s;
+    }
+
+    .btn-delete:hover {
+      background: #FEE2E2;
+    }
+
+    /* Condition Badges */
+
+    .condition-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 500;
+    }
+
+    .cond-new {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    .cond-open {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .cond-used {
+      background: #FFF7ED;
+      color: #C2410C;
+    }
+
+    .featured-star {
+      color: var(--blue);
+      font-size: 12px;
+    }
+
+    /* Empty State */
+
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    /* Delete Modal */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 340px;
+      width: 100%;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .modal-box h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--black);
+      margin-bottom: 10px;
+    }
+
+    .modal-box p {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn-confirm-delete {
+      background: #DC2626;
+      color: white;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+
+    .btn-cancel {
+      background: var(--gray-light);
+      color: var(--gray);
+      border: 1px solid var(--border);
+      padding: 11px 22px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+
+    /* Floating Add Button */
+
+    .float-add {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      background: var(--blue);
+      color: white;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 20px rgba(26,86,219,0.3);
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .float-add:hover {
+      transform: scale(1.1);
+      background: var(--blue-dark);
+    }
+
+    /* Mobile */
+
+    @media (max-width: 480px) {
+
+      .page {
+        padding: 20px 12px 80px;
+      }
+
+      .toolbar {
+        gap: 8px;
+      }
+
+      .search-input {
+        width: 100%;
+        flex-basis: 100%;
+      }
+
+      .filter-select {
+        flex: 1;
+      }
+
+      .btn-add {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .card-header {
+        padding: 12px;
+      }
+
+      .card-img {
+        width: 52px;
+        height: 52px;
+      }
+
+      .card-price {
+        font-size: 14px;
+      }
+
+      .action-row {
+        flex-wrap: wrap;
+      }
+
+      .btn-edit,
+      .btn-delete {
+        flex: 1;
+        text-align: center;
+      }
+
+    }
+
   </style>
+
 </head>
+
 <body>
+
   <header>
-    <div class="header-title">📦 Manage Phones</div>
-    <a href="admin_home.html" class="back-link">← Dashboard</a>
+
+```
+<div class="header-title">
+  Dr <span>Apple</span> — Manage Products
+</div>
+
+<a href="admin_home.html" class="back-link">
+  ← Dashboard
+</a>
+```
+
   </header>
 
   <div class="page">
-    <div class="toolbar">
-      <input class="search-input" type="text" id="searchInput" placeholder="🔍 Search phones..." oninput="filterProducts()" />
-      <select class="filter-select" id="conditionFilter" onchange="filterProducts()">
-        <option value="">All Conditions</option>
-        <option value="New">New</option>
-        <option value="Open Box">Open Box</option>
-        <option value="Used">Used</option>
-      </select>
-      <a href="admin_productUpload.html" class="btn-add">+ Add</a>
-    </div>
-    <div class="count-label" id="countLabel"></div>
-    <div id="productList"><div class="empty"><span class="empty-icon">📱</span>Loading phones...</div></div>
+
+```
+<div class="toolbar">
+
+  <input
+    class="search-input"
+    type="text"
+    id="searchInput"
+    placeholder="🔍 Search products..."
+    oninput="filterProducts()"
+  />
+
+  <select
+    class="filter-select"
+    id="conditionFilter"
+    onchange="filterProducts()"
+  >
+    <option value="">All Conditions</option>
+    <option value="New">New</option>
+    <option value="Open Box">Open Box</option>
+    <option value="Used">Used</option>
+  </select>
+
+  <a href="admin_productUpload.html" class="btn-add">
+    + Add Product
+  </a>
+
+</div>
+
+<div class="count-label" id="countLabel"></div>
+
+<div id="productList">
+  <div class="empty">
+    <span class="empty-icon">📦</span>
+    Loading products...
+  </div>
+</div>
+```
+
   </div>
 
-  <a href="admin_productUpload.html" class="float-add" title="Add Phone">+</a>
+<a
+href="admin_productUpload.html"
+class="float-add"
+title="Add Product"
 
-  <!-- Delete modal -->
+>
+
+```
++
+```
+
+  </a>
+
+  <!-- Delete Modal -->
+
   <div class="modal-overlay" id="deleteModal">
-    <div class="modal-box">
-      <h3>Delete Phone?</h3>
-      <p>This will permanently remove the listing and its image. This cannot be undone.</p>
-      <div class="modal-btns">
-        <button class="btn-confirm-delete" onclick="confirmDelete()">Yes, Delete</button>
-        <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-      </div>
-    </div>
+
+```
+<div class="modal-box">
+
+  <h3>Delete Product?</h3>
+
+  <p>
+    This will permanently remove the product listing and its image.
+    This cannot be undone.
+  </p>
+
+  <div class="modal-btns">
+
+    <button
+      class="btn-confirm-delete"
+      onclick="confirmDelete()"
+    >
+      Yes, Delete
+    </button>
+
+    <button
+      class="btn-cancel"
+      onclick="closeDeleteModal()"
+    >
+      Cancel
+    </button>
+
   </div>
 
-  <script>
-    const baseUrl = "https://sman-phones-1.onrender.com/api";
-    const token = localStorage.getItem('token');
-    if (!token) window.location.href = 'admin_login.html';
-    let allProducts = [];
-    let deleteId = null;
+</div>
+```
 
-    function condClass(c) {
-      if (c === 'New') return 'cond-new';
-      if (c === 'Open Box') return 'cond-open';
-      return 'cond-used';
-    }
+  </div>
 
-    function toggle(id) {
-      document.getElementById('body-' + id).classList.toggle('open');
-    }
+</body>
 
-    function filterProducts() {
-      const kw = document.getElementById('searchInput').value.toLowerCase();
-      const cond = document.getElementById('conditionFilter').value;
-      let filtered = allProducts.filter(p => {
-        const matchKw = !kw || p.name.toLowerCase().includes(kw) || (p.brand || '').toLowerCase().includes(kw);
-        const matchCond = !cond || p.condition === cond;
-        return matchKw && matchCond;
-      });
-      renderProducts(filtered);
-    }
+</html>
+<script>
+const baseUrl = "https://sman-phones-1.onrender.com/api";
 
-    function renderProducts(products) {
-      const list = document.getElementById('productList');
-      document.getElementById('countLabel').textContent = `${products.length} phone${products.length !== 1 ? 's' : ''}`;
-      if (products.length === 0) {
-        list.innerHTML = '<div class="empty"><span class="empty-icon">📱</span><p>No phones found.</p></div>';
-        return;
+//const token = localStorage.getItem('token');
+
+if (!token) window.location.href = 'admin_login.html';
+
+let allProducts = [];
+let deleteId = null;
+
+
+function condClass(c) {
+  if (c === 'New') return 'cond-new';
+  if (c === 'Open Box') return 'cond-open';
+  return 'cond-used';
+}
+
+
+function productIcon(type) {
+  if (type === 'laptop') return '💻';
+  if (type === 'accessory') return '🎧';
+  return '📱';
+}
+
+
+function toggle(id) {
+  document.getElementById('body-' + id).classList.toggle('open');
+}
+
+
+function filterProducts() {
+  const kw = document.getElementById('searchInput').value.toLowerCase();
+  const cond = document.getElementById('conditionFilter').value;
+
+  let filtered = allProducts.filter(p => {
+
+    const searchableText = [
+      p.name,
+      p.brand,
+      p.product_type,
+      p.color,
+      p.processor,
+      p.ram,
+      p.storage,
+      p.os,
+      p.accessory_type,
+      p.compatible_with
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    const matchKw = !kw || searchableText.includes(kw);
+    const matchCond = !cond || p.condition === cond;
+
+    return matchKw && matchCond;
+  });
+
+  renderProducts(filtered);
+}
+
+
+function renderProducts(products) {
+  const list = document.getElementById('productList');
+
+  document.getElementById('countLabel').textContent =
+    `${products.length} product${products.length !== 1 ? 's' : ''}`;
+
+  if (products.length === 0) {
+    list.innerHTML = `
+      <div class="empty">
+        <span class="empty-icon">📦</span>
+        <p>No products found.</p>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = products.map(p => {
+
+    const type = (p.product_type || 'phone').toLowerCase();
+    const icon = productIcon(type);
+
+    // Build the small information line under the product name
+    const meta = [
+      p.brand,
+      p.storage,
+      p.processor,
+      p.ram,
+      p.screen_size,
+      p.accessory_type,
+      p.color
+    ]
+      .filter(Boolean)
+      .join(' · ');
+
+    return `
+      <div class="product-card">
+
+        <div class="card-header" onclick="toggle(${p.id})">
+
+          <img
+            class="card-img"
+            src="${p.image_url || `https://via.placeholder.com/56x56/EEF2FF/1A56DB?text=${icon}`}"
+            alt="${p.name}"
+            onerror="this.src='https://via.placeholder.com/56x56/EEF2FF/1A56DB?text=${icon}'"
+          />
+
+          <div class="card-info">
+
+            <div class="card-name">
+              ${p.name}
+              ${p.is_featured ? '<span class="featured-star">★</span>' : ''}
+            </div>
+
+            <div class="card-meta">
+
+              <span class="spec-tag type-tag">
+                ${type.charAt(0).toUpperCase() + type.slice(1)}
+              </span>
+
+              ${p.condition
+                ? `<span class="condition-badge ${condClass(p.condition)}">${p.condition}</span>`
+                : ''
+              }
+
+              ${meta}
+
+            </div>
+
+          </div>
+
+          <div class="card-price">
+            ₦${Number(p.price).toLocaleString()}
+          </div>
+
+        </div>
+
+
+        <div class="card-body" id="body-${p.id}">
+
+          <div class="specs-row">
+
+            ${
+              p.quantity > 0
+                ? `<span class="spec-tag">In Stock: ${p.quantity}</span>`
+                : `<span class="spec-tag" style="color:#ef4444;border-color:rgba(239,68,68,0.2);">Out of Stock</span>`
+            }
+
+
+            ${
+              p.battery_health
+                ? `<span class="spec-tag">🔋 ${p.battery_health}%</span>`
+                : ''
+            }
+
+
+            ${
+              p.original_price
+                ? `<span class="spec-tag">Was ₦${Number(p.original_price).toLocaleString()}</span>`
+                : ''
+            }
+
+
+            ${
+              p.processor
+                ? `<span class="spec-tag">⚙️ ${p.processor}</span>`
+                : ''
+            }
+
+
+            ${
+              p.ram
+                ? `<span class="spec-tag">RAM: ${p.ram}</span>`
+                : ''
+            }
+
+
+            ${
+              p.screen_size
+                ? `<span class="spec-tag">🖥️ ${p.screen_size}</span>`
+                : ''
+            }
+
+
+            ${
+              p.os
+                ? `<span class="spec-tag">OS: ${p.os}</span>`
+                : ''
+            }
+
+
+            ${
+              p.accessory_type
+                ? `<span class="spec-tag">Type: ${p.accessory_type}</span>`
+                : ''
+            }
+
+
+            ${
+              p.compatible_with
+                ? `<span class="spec-tag">Compatible: ${p.compatible_with}</span>`
+                : ''
+            }
+
+
+            ${(p.categories || [])
+              .map(c => `<span class="spec-tag">${c.name}</span>`)
+              .join('')
+            }
+
+          </div>
+
+
+          ${
+            p.description
+              ? `<div class="card-desc">${p.description}</div>`
+              : ''
+          }
+
+
+          <div class="action-row">
+
+            <a href="edit_product.html?id=${p.id}" class="btn-edit">
+              ✏️ Edit
+            </a>
+
+            <button
+              class="btn-delete"
+              onclick="openDeleteModal(${p.id})"
+            >
+              🗑️ Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+    `;
+  }).join('');
+}
+
+
+function openDeleteModal(id) {
+  deleteId = id;
+  document.getElementById('deleteModal').classList.add('active');
+}
+
+
+function closeDeleteModal() {
+  deleteId = null;
+  document.getElementById('deleteModal').classList.remove('active');
+}
+
+
+async function confirmDelete() {
+  if (!deleteId) return;
+
+  try {
+    const res = await fetch(
+      `${baseUrl}/admin/products/${deleteId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
-      list.innerHTML = products.map(p => `
-        <div class="product-card">
-          <div class="card-header" onclick="toggle(${p.id})">
-            <img class="card-img" src="${p.image_url || 'https://via.placeholder.com/56x56/1A1A1A/C9A84C?text=📱'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/56x56/1A1A1A/C9A84C?text=📱'" />
-            <div class="card-info">
-              <div class="card-name">${p.name} ${p.is_featured ? '<span class="featured-star">★</span>' : ''}</div>
-              <div class="card-meta">
-                ${p.condition ? `<span class="condition-badge ${condClass(p.condition)}">${p.condition}</span> ` : ''}
-                ${[p.brand, p.storage, p.color].filter(Boolean).join(' · ')}
-              </div>
-            </div>
-            <div class="card-price">₦${Number(p.price).toLocaleString()}</div>
-          </div>
-          <div class="card-body" id="body-${p.id}">
-            <div class="specs-row">
-              ${p.quantity > 0 ? `<span class="spec-tag gold">In Stock: ${p.quantity}</span>` : '<span class="spec-tag" style="color:#ef4444;border-color:rgba(239,68,68,0.2);">Out of Stock</span>'}
-              ${p.battery_health ? `<span class="spec-tag">🔋 ${p.battery_health}%</span>` : ''}
-              ${p.original_price ? `<span class="spec-tag">Was ₦${Number(p.original_price).toLocaleString()}</span>` : ''}
-              ${(p.categories || []).map(c => `<span class="spec-tag">${c.name}</span>`).join('')}
-            </div>
-            ${p.description ? `<div class="card-desc">${p.description}</div>` : ''}
-            <div class="action-row">
-              <a href="edit_product.html?id=${p.id}" class="btn-edit">✏️ Edit</a>
-              <button class="btn-delete" onclick="openDeleteModal(${p.id})">🗑️ Delete</button>
-            </div>
-          </div>
-        </div>`).join('');
+    );
+
+    if (res.ok || res.status === 204) {
+
+      allProducts = allProducts.filter(
+        p => p.id !== deleteId
+      );
+
+      filterProducts();
+
+    } else {
+      alert('Failed to delete.');
     }
 
-    function openDeleteModal(id) { deleteId = id; document.getElementById('deleteModal').classList.add('active'); }
-    function closeDeleteModal() { deleteId = null; document.getElementById('deleteModal').classList.remove('active'); }
+  } catch {
+    alert('Network error.');
+  }
 
-    async function confirmDelete() {
-      if (!deleteId) return;
-      try {
-        const res = await fetch(`${baseUrl}/admin/products/${deleteId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
-        if (res.ok || res.status === 204) {
-          allProducts = allProducts.filter(p => p.id !== deleteId);
-          filterProducts();
-        } else { alert('Failed to delete.'); }
-      } catch { alert('Network error.'); }
-      closeDeleteModal();
+  closeDeleteModal();
+}
+
+
+async function loadProducts() {
+  try {
+
+    const res = await fetch(
+      `${baseUrl}/admin/products`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    if (res.status === 401) {
+      window.location.href = 'admin_login.html';
+      return;
     }
 
-    async function loadProducts() {
-      try {
-        const res = await fetch(`${baseUrl}/admin/products`, { headers: { Authorization: `Bearer ${token}` } });
-        if (res.status === 401) { window.location.href = 'admin_login.html'; return; }
-        allProducts = res.ok ? await res.json() : [];
-        filterProducts();
-      } catch { document.getElementById('productList').innerHTML = '<div class="empty"><span class="empty-icon">⚠️</span><p>Failed to load phones.</p></div>'; }
-    }
-    loadProducts();
-  </script>
+    allProducts = res.ok ? await res.json() : [];
+
+    filterProducts();
+
+  } catch {
+
+    document.getElementById('productList').innerHTML = `
+      <div class="empty">
+        <span class="empty-icon">⚠️</span>
+        <p>Failed to load products.</p>
+      </div>
+    `;
+  }
+}
+
+
+loadProducts();
+</script>
 </body>
 </html>

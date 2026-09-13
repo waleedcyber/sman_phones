@@ -1,77 +1,115 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo/logo.png" />
-  <title>Add Phone — Admin</title>
+  <title>Add Product — Dr Apple Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
-      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
-      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --blue: #1A56DB; --blue-dark: #1040B0; --blue-light: #EEF2FF;
+      --black: #0D0D0D; --gray: #4B5563; --gray-light: #F3F4F6;
+      --white: #FFFFFF; --border: #E5E7EB;
       --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
-    header { background: var(--black-2); border-bottom: 1px solid rgba(201,168,76,0.12); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
-    .back-link { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .back-link:hover { color: var(--gold); }
+    body { background: var(--gray-light); color: var(--black); font-family: var(--font-body); font-weight: 300; }
+    header { background: white; border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .header-title { font-family: var(--font-display); font-size: 16px; color: var(--black); }
+    .header-title span { color: var(--blue); }
+    .back-link { color: var(--gray); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .back-link:hover { color: var(--blue); }
     .page { max-width: 680px; margin: 0 auto; padding: 24px 16px 80px; }
-    .form-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 12px; padding: 22px 18px; margin-bottom: 14px; }
-    .form-card-title { font-family: var(--font-display); font-size: 15px; color: var(--white); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+
+    /* Product type selector */
+    .type-selector { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px 18px; margin-bottom: 14px; }
+    .type-selector h3 { font-family: var(--font-display); font-size: 15px; color: var(--black); margin-bottom: 16px; }
+    .type-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .type-option { display: none; }
+    .type-option + label { display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--gray-light); border: 2px solid var(--border); border-radius: 10px; padding: 16px 10px; cursor: pointer; transition: all 0.2s; font-size: 13px; color: var(--gray); text-align: center; }
+    .type-option + label .type-icon { font-size: 28px; }
+    .type-option:checked + label { background: var(--blue-light); border-color: var(--blue); color: var(--blue); font-weight: 500; }
+    .type-option + label:hover { border-color: var(--blue); }
+
+    /* Form cards */
+    .form-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px 18px; margin-bottom: 14px; }
+    .form-card-title { font-family: var(--font-display); font-size: 15px; color: var(--black); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
     .form-group { margin-bottom: 14px; }
-    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
-    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 12px 14px; border-radius: 4px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
-    .form-input:focus { outline: none; border-color: var(--gold); }
-    .form-input::placeholder { color: rgba(170,170,170,0.4); }
-    select.form-input option { background: var(--black-3); }
+    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 7px; font-weight: 500; }
+    .form-input { width: 100%; background: var(--gray-light); border: 1.5px solid var(--border); color: var(--black); padding: 12px 14px; border-radius: 6px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--blue); background: white; }
+    .form-input::placeholder { color: #9CA3AF; }
+    select.form-input option { background: white; }
     textarea.form-input { resize: vertical; min-height: 80px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .battery-field { display: none; }
-    .battery-field.show { display: block; }
-    /* Category checkboxes */
-    .cat-box { background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); border-radius: 4px; padding: 12px; max-height: 160px; overflow-y: auto; }
-    .cat-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; cursor: pointer; color: var(--white-dim); }
-    .cat-option input[type=checkbox] { appearance: none; width: 18px; height: 18px; border: 1px solid var(--gold-dim); border-radius: 3px; background: transparent; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
-    .cat-option input[type=checkbox]:checked { background: var(--gold); border-color: var(--gold); }
-    .cat-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); padding: 8px 0 4px; font-weight: 500; }
-    /* Image preview */
-    .img-preview { display: none; width: 100%; max-height: 200px; object-fit: cover; border-radius: 6px; margin-top: 10px; border: 1px solid rgba(201,168,76,0.2); }
+
+    /* Spec sections — hidden by default */
+    .spec-section { display: none; }
+    .spec-section.show { display: block; }
+
     /* Toggle */
     .toggle-row { display: flex; align-items: center; justify-content: space-between; }
-    .toggle-label { font-size: 13px; color: var(--white-dim); }
+    .toggle-label { font-size: 13px; color: var(--gray); }
     .toggle { position: relative; width: 44px; height: 24px; }
     .toggle input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider { position: absolute; inset: 0; background: var(--black-4); border: 1px solid rgba(201,168,76,0.2); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
-    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: var(--white-dim); border-radius: 50%; transition: transform 0.2s; }
-    .toggle input:checked + .toggle-slider { background: var(--gold); border-color: var(--gold); }
-    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: var(--black); }
+    .toggle-slider { position: absolute; inset: 0; background: var(--gray-light); border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: #9CA3AF; border-radius: 50%; transition: transform 0.2s; }
+    .toggle input:checked + .toggle-slider { background: var(--blue); border-color: var(--blue); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: white; }
+
+    /* Category checkboxes */
+    .cat-box { background: var(--gray-light); border: 1.5px solid var(--border); border-radius: 6px; padding: 12px; max-height: 160px; overflow-y: auto; }
+    .cat-option { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; cursor: pointer; color: var(--gray); }
+    .cat-option input[type=checkbox] { appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--border); border-radius: 3px; background: white; cursor: pointer; flex-shrink: 0; transition: all 0.2s; }
+    .cat-option input[type=checkbox]:checked { background: var(--blue); border-color: var(--blue); }
+    .cat-group-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); padding: 8px 0 4px; font-weight: 500; }
+
+    /* Image preview */
+    .img-preview { display: none; width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 1.5px solid var(--border); }
+
     /* Submit */
-    .btn-submit { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 16px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; }
-    .btn-submit:hover { background: var(--gold-light); }
+    .btn-submit { width: 100%; background: var(--blue); color: white; border: none; padding: 16px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; }
+    .btn-submit:hover { background: var(--blue-dark); }
     .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
     #statusMsg { text-align: center; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-top: 12px; display: none; }
-    #statusMsg.success { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.2); display: block; }
-    #statusMsg.error { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); display: block; }
-    #statusMsg.loading { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); display: block; }
+    #statusMsg.success { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; display: block; }
+    #statusMsg.error { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; display: block; }
+    #statusMsg.loading { background: var(--blue-light); color: var(--blue); border: 1px solid rgba(26,86,219,0.2); display: block; }
+
     @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-title">📱 Add New Phone</div>
+    <div class="header-title">Dr <span>Apple</span> — Add Product</div>
     <a href="admin_home.html" class="back-link">← Dashboard</a>
   </header>
+
   <div class="page">
 
-    <!-- Basic info -->
+    <!-- Step 1: Product Type -->
+    <div class="type-selector">
+      <h3>📦 What type of product is this?</h3>
+      <div class="type-options">
+        <input type="radio" name="productType" id="type-phone" value="phone" class="type-option" onchange="switchType('phone')" checked>
+        <label for="type-phone"><span class="type-icon">📱</span>Phone</label>
+
+        <input type="radio" name="productType" id="type-laptop" value="laptop" class="type-option" onchange="switchType('laptop')">
+        <label for="type-laptop"><span class="type-icon">💻</span>Laptop</label>
+
+        <input type="radio" name="productType" id="type-accessory" value="accessory" class="type-option" onchange="switchType('accessory')">
+        <label for="type-accessory"><span class="type-icon">🎧</span>Accessory</label>
+      </div>
+    </div>
+
+    <!-- Basic Info -->
     <div class="form-card">
       <div class="form-card-title">📋 Basic Information</div>
       <div class="form-group">
-        <label class="form-label">Phone Name / Title</label>
+        <label class="form-label">Product Name</label>
         <input class="form-input" type="text" id="name" placeholder="e.g. iPhone 15 Pro Max 256GB" required />
       </div>
       <div class="form-row">
@@ -81,73 +119,157 @@
         </div>
         <div class="form-group">
           <label class="form-label">Original Price (₦)</label>
-          <input class="form-input" type="number" id="originalPrice" placeholder="Optional — for strikethrough" />
+          <input class="form-input" type="number" id="originalPrice" placeholder="For strikethrough" />
         </div>
       </div>
       <div class="form-group">
         <label class="form-label">Quantity in Stock</label>
-        <input class="form-input" type="number" id="quantity" placeholder="e.g. 1" value="1" required />
+        <input class="form-input" type="number" id="quantity" value="1" required />
       </div>
       <div class="form-group">
         <label class="form-label">Description</label>
-        <textarea class="form-input" id="description" placeholder="Describe the phone — any extras, accessories, warranty info..."></textarea>
+        <textarea class="form-input" id="description" placeholder="Describe the product..."></textarea>
       </div>
     </div>
 
-    <!-- Phone specs -->
-    <div class="form-card">
-      <div class="form-card-title">⚙️ Phone Specifications</div>
+    <!-- Phone Specs -->
+    <div class="form-card spec-section show" id="phoneSpecs">
+      <div class="form-card-title">📱 Phone Specifications</div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Brand</label>
-          <select class="form-input" id="brand">
+          <select class="form-input" id="phoneBrand">
             <option value="">Select brand</option>
-            <option>Apple</option>
-            <option>Samsung</option>
-            <option>Google</option>
-            <option>Tecno</option>
-            <option>Infinix</option>
-            <option>Xiaomi</option>
-            <option>OnePlus</option>
-            <option>Other</option>
+            <option>Apple</option><option>Samsung</option><option>Google</option>
+            <option>Tecno</option><option>Infinix</option><option>Xiaomi</option>
+            <option>OnePlus</option><option>Other</option>
           </select>
         </div>
         <div class="form-group">
           <label class="form-label">Condition</label>
-          <select class="form-input" id="condition" onchange="handleCondition(this.value)">
+          <select class="form-input" id="phoneCondition" onchange="toggleBattery(this.value)">
             <option value="">Select condition</option>
-            <option>New</option>
-            <option>Open Box</option>
-            <option>Used</option>
+            <option>New</option><option>Open Box</option><option>Used</option>
           </select>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Storage</label>
-          <select class="form-input" id="storage">
+          <select class="form-input" id="phoneStorage">
             <option value="">Select storage</option>
-            <option>64GB</option>
-            <option>128GB</option>
-            <option>256GB</option>
-            <option>512GB</option>
-            <option>1TB</option>
+            <option>64GB</option><option>128GB</option><option>256GB</option>
+            <option>512GB</option><option>1TB</option>
           </select>
         </div>
         <div class="form-group">
           <label class="form-label">Color</label>
-          <input class="form-input" type="text" id="color" placeholder="e.g. Midnight Black" />
+          <input class="form-input" type="text" id="phoneColor" placeholder="e.g. Midnight Black" />
         </div>
       </div>
-      <div class="form-group battery-field" id="batteryField">
+      <div class="form-group" id="batteryGroup" style="display:none;">
         <label class="form-label">Battery Health (%)</label>
         <input class="form-input" type="number" id="batteryHealth" placeholder="e.g. 87" min="1" max="100" />
       </div>
-      <div class="form-group">
-        <label class="form-label">Featured on Homepage</label>
-        <div class="toggle-row">
-          <span class="toggle-label">Show this phone on the homepage</span>
-          <label class="toggle"><input type="checkbox" id="isFeatured"><div class="toggle-slider"></div></label>
+    </div>
+
+    <!-- Laptop Specs -->
+    <div class="form-card spec-section" id="laptopSpecs">
+      <div class="form-card-title">💻 Laptop Specifications</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Brand</label>
+          <select class="form-input" id="laptopBrand">
+            <option value="">Select brand</option>
+            <option>Apple (MacBook)</option><option>HP</option><option>Dell</option>
+            <option>Lenovo</option><option>Asus</option><option>Acer</option>
+            <option>Microsoft</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Condition</label>
+          <select class="form-input" id="laptopCondition">
+            <option value="">Select condition</option>
+            <option>New</option><option>Open Box</option><option>Used</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Processor</label>
+          <input class="form-input" type="text" id="processor" placeholder="e.g. Intel Core i7, M2" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">RAM</label>
+          <select class="form-input" id="ram">
+            <option value="">Select RAM</option>
+            <option>4GB</option><option>8GB</option><option>16GB</option>
+            <option>32GB</option><option>64GB</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Storage</label>
+          <select class="form-input" id="laptopStorage">
+            <option value="">Select storage</option>
+            <option>128GB SSD</option><option>256GB SSD</option><option>512GB SSD</option>
+            <option>1TB SSD</option><option>1TB HDD</option><option>2TB HDD</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Screen Size</label>
+          <select class="form-input" id="screenSize">
+            <option value="">Select size</option>
+            <option>11"</option><option>13"</option><option>14"</option>
+            <option>15.6"</option><option>16"</option><option>17"</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Operating System</label>
+          <select class="form-input" id="os">
+            <option value="">Select OS</option>
+            <option>Windows 11</option><option>Windows 10</option>
+            <option>macOS</option><option>Chrome OS</option><option>Linux</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <input class="form-input" type="text" id="laptopColor" placeholder="e.g. Space Grey" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessory Specs -->
+    <div class="form-card spec-section" id="accessorySpecs">
+      <div class="form-card-title">🎧 Accessory Details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Accessory Type</label>
+          <select class="form-input" id="accessoryType">
+            <option value="">Select type</option>
+            <option>Phone Case</option><option>Screen Protector</option>
+            <option>Charger</option><option>Cable</option>
+            <option>Earphones / AirPods</option><option>Power Bank</option>
+            <option>Laptop Bag</option><option>Mouse</option>
+            <option>Keyboard</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brand</label>
+          <input class="form-input" type="text" id="accessoryBrand" placeholder="e.g. Apple, Anker, Generic" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Compatible With</label>
+          <input class="form-input" type="text" id="compatibleWith" placeholder="e.g. iPhone 15, All iPhones, MacBook" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <input class="form-input" type="text" id="accessoryColor" placeholder="e.g. Black, White" />
         </div>
       </div>
     </div>
@@ -161,27 +283,46 @@
       </div>
     </div>
 
+    <!-- Featured Toggle -->
+    <div class="form-card">
+      <div class="form-card-title">⭐ Visibility</div>
+      <div class="form-group">
+        <label class="form-label">Featured on Homepage</label>
+        <div class="toggle-row">
+          <span class="toggle-label">Show this product on the homepage</span>
+          <label class="toggle"><input type="checkbox" id="isFeatured"><div class="toggle-slider"></div></label>
+        </div>
+      </div>
+    </div>
+
     <!-- Image -->
     <div class="form-card">
       <div class="form-card-title">📸 Product Image</div>
       <div class="form-group">
-        <label class="form-label">Phone Image</label>
+        <label class="form-label">Upload Image</label>
         <input class="form-input" type="file" id="image" accept=".jpg,.jpeg,.png,.webp" onchange="previewImage(this)" required />
         <img class="img-preview" id="imgPreview" />
       </div>
     </div>
 
-    <button class="btn-submit" id="submitBtn" onclick="uploadProduct()">📱 Upload Phone</button>
+    <button class="btn-submit" id="submitBtn" onclick="uploadProduct()">📦 Upload Product</button>
     <div id="statusMsg"></div>
   </div>
 
   <script>
     const baseUrl = "https://sman-phones-1.onrender.com/api";
-    const token = localStorage.getItem('token');
+    //const token = localStorage.getItem('token');
     if (!token) window.location.href = 'admin_login.html';
 
-    function handleCondition(val) {
-      document.getElementById('batteryField').classList.toggle('show', val === 'Used');
+    function switchType(type) {
+      document.querySelectorAll('.spec-section').forEach(s => s.classList.remove('show'));
+      if (type === 'phone') document.getElementById('phoneSpecs').classList.add('show');
+      if (type === 'laptop') document.getElementById('laptopSpecs').classList.add('show');
+      if (type === 'accessory') document.getElementById('accessorySpecs').classList.add('show');
+    }
+
+    function toggleBattery(val) {
+      document.getElementById('batteryGroup').style.display = val === 'Used' ? 'block' : 'none';
     }
 
     function previewImage(input) {
@@ -208,7 +349,7 @@
         container.innerHTML = '';
         const parents = cats.filter(c => !c.parent_id);
         const children = cats.filter(c => c.parent_id);
-        if (parents.length === 0) { container.textContent = 'No categories yet. Add some first.'; return; }
+        if (parents.length === 0) { container.textContent = 'No categories yet.'; return; }
         parents.forEach(p => {
           const kids = children.filter(c => c.parent_id === p.id);
           container.innerHTML += `<div class="cat-group-label">📁 ${p.name}</div>`;
@@ -218,7 +359,7 @@
             container.innerHTML += `<label class="cat-option"><input type="checkbox" value="${p.id}"> ${p.name}</label>`;
           }
         });
-      } catch { document.getElementById('categoryCheckboxes').textContent = 'Failed to load categories.'; }
+      } catch { document.getElementById('categoryCheckboxes').textContent = 'Failed to load.'; }
     }
 
     async function uploadProduct() {
@@ -226,12 +367,14 @@
       const price = document.getElementById('price').value;
       const quantity = document.getElementById('quantity').value;
       const image = document.getElementById('image').files[0];
+      const type = document.querySelector('input[name="productType"]:checked').value;
+
       if (!name || !price || !quantity || !image) { showMsg('Please fill in name, price, quantity and image.', 'error'); return; }
       const checked = document.querySelectorAll('#categoryCheckboxes input[type=checkbox]:checked');
       if (checked.length === 0) { showMsg('Please select at least one category.', 'error'); return; }
 
       const btn = document.getElementById('submitBtn');
-      btn.disabled = true; showMsg('Uploading phone...', 'loading');
+      btn.disabled = true; showMsg('Uploading product...', 'loading');
 
       const formData = new FormData();
       formData.append('name', name);
@@ -239,39 +382,68 @@
       formData.append('price', price);
       formData.append('quantity', quantity);
       formData.append('category_ids', Array.from(checked).map(c => c.value).join(','));
+      formData.append('product_type', type);
       formData.append('image', image);
-      const originalPrice = document.getElementById('originalPrice').value;
-      if (originalPrice) formData.append('original_price', originalPrice);
-      const brand = document.getElementById('brand').value;
-      if (brand) formData.append('brand', brand);
-      const condition = document.getElementById('condition').value;
-      if (condition) formData.append('condition', condition);
-      const storage = document.getElementById('storage').value;
-      if (storage) formData.append('storage', storage);
-      const color = document.getElementById('color').value.trim();
-      if (color) formData.append('color', color);
-      const battery = document.getElementById('batteryHealth').value;
-      if (battery) formData.append('battery_health', battery);
       formData.append('is_featured', document.getElementById('isFeatured').checked);
 
+      const orig = document.getElementById('originalPrice').value;
+      if (orig) formData.append('original_price', orig);
+
+      // Type specific fields
+      if (type === 'phone') {
+        const brand = document.getElementById('phoneBrand').value;
+        const condition = document.getElementById('phoneCondition').value;
+        const storage = document.getElementById('phoneStorage').value;
+        const color = document.getElementById('phoneColor').value.trim();
+        const battery = document.getElementById('batteryHealth').value;
+        if (brand) formData.append('brand', brand);
+        if (condition) formData.append('condition', condition);
+        if (storage) formData.append('storage', storage);
+        if (color) formData.append('color', color);
+        if (battery) formData.append('battery_health', battery);
+      } else if (type === 'laptop') {
+        const brand = document.getElementById('laptopBrand').value;
+        const condition = document.getElementById('laptopCondition').value;
+        const processor = document.getElementById('processor').value.trim();
+        const ram = document.getElementById('ram').value;
+        const storage = document.getElementById('laptopStorage').value;
+        const screenSize = document.getElementById('screenSize').value;
+        const os = document.getElementById('os').value;
+        const color = document.getElementById('laptopColor').value.trim();
+        if (brand) formData.append('brand', brand);
+        if (condition) formData.append('condition', condition);
+        if (processor) formData.append('processor', processor);
+        if (ram) formData.append('ram', ram);
+        if (storage) formData.append('storage', storage);
+        if (screenSize) formData.append('screen_size', screenSize);
+        if (os) formData.append('os', os);
+        if (color) formData.append('color', color);
+      } else if (type === 'accessory') {
+        const accType = document.getElementById('accessoryType').value;
+        const brand = document.getElementById('accessoryBrand').value.trim();
+        const compatible = document.getElementById('compatibleWith').value.trim();
+        const color = document.getElementById('accessoryColor').value.trim();
+        if (accType) formData.append('accessory_type', accType);
+        if (brand) formData.append('brand', brand);
+        if (compatible) formData.append('compatible_with', compatible);
+        if (color) formData.append('color', color);
+      }
+
       try {
-        const res = await fetch(`${baseUrl}/admin/upload`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: formData });
+        const res = await fetch(`${baseUrl}/admin/upload`, {
+          method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: formData
+        });
         if (res.ok) {
-          showMsg('✅ Phone uploaded successfully!', 'success');
+          showMsg('✅ Product uploaded successfully!', 'success');
           document.getElementById('name').value = '';
           document.getElementById('price').value = '';
           document.getElementById('originalPrice').value = '';
           document.getElementById('quantity').value = '1';
           document.getElementById('description').value = '';
-          document.getElementById('color').value = '';
-          document.getElementById('batteryHealth').value = '';
-          document.getElementById('brand').value = '';
-          document.getElementById('condition').value = '';
-          document.getElementById('storage').value = '';
-          document.getElementById('isFeatured').checked = false;
           document.getElementById('image').value = '';
           document.getElementById('imgPreview').style.display = 'none';
           document.querySelectorAll('#categoryCheckboxes input[type=checkbox]').forEach(cb => cb.checked = false);
+          document.getElementById('isFeatured').checked = false;
         } else {
           const d = await res.json().catch(() => ({}));
           showMsg(d.detail || 'Upload failed. Try again.', 'error');

@@ -18,24 +18,35 @@ class Category(Base):
     children = relationship("Category", backref=backref("parent", remote_side=[id]))
     products = relationship("Product", secondary=product_categories, back_populates="categories")
 
+
 class Product(Base):
     __tablename__ = "products"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     description = Column(String)
     price = Column(Float, nullable=False)
-    original_price = Column(Float, nullable=True)       # ✅ for strikethrough
-   # stock = Column(Integer, default=0)
+    original_price = Column(Float, nullable=True)
     image_url = Column(String)
     cloudinary_public_id = Column(String, nullable=True)
     quantity = Column(Integer, default=0)
-    # Phone specific fields
-    brand = Column(String, nullable=True)               # ✅ iPhone, Samsung etc
-    condition = Column(String, nullable=True)           # ✅ New, Open Box, Used
-    storage = Column(String, nullable=True)             # ✅ 128GB, 256GB etc
-    color = Column(String, nullable=True)               # ✅ Black, White etc
-    battery_health = Column(Integer, nullable=True)     # ✅ percentage for used phones
-    is_featured = Column(Boolean, default=False)        # ✅ show on homepage
+    # General
+    brand = Column(String, nullable=True)
+    condition = Column(String, nullable=True)
+    color = Column(String, nullable=True)
+    is_featured = Column(Boolean, default=False)
+    product_type = Column(String, nullable=True)  # phone, laptop, accessory
+    # Phone specific
+    storage = Column(String, nullable=True)
+    battery_health = Column(Integer, nullable=True)
+    # Laptop specific
+    ram = Column(String, nullable=True)
+    processor = Column(String, nullable=True)
+    screen_size = Column(String, nullable=True)
+    os = Column(String, nullable=True)
+    # Accessory specific
+    accessory_type = Column(String, nullable=True)
+    compatible_with = Column(String, nullable=True)
+    # Relationship
     categories = relationship("Category", secondary=product_categories, back_populates="products")
 
 class TradeIn(Base):
