@@ -1,5 +1,5 @@
 from __future__ import annotations
-from pydantic import BaseModel, fields
+from pydantic import BaseModel, field
 from typing import Optional, List
 from datetime import datetime
 
