@@ -1,5 +1,5 @@
 from __future__ import annotations
-from pydantic import BaseModel
+from pydantic import BaseModel, fields
 from typing import Optional, List
 from datetime import datetime
 
@@ -11,7 +11,7 @@ class CategoryOut(BaseModel):
     id: int
     name: str
     parent_id: Optional[int] = None
-    children: List["CategoryOut"] = []
+    children: List["CategoryOut"] = Field(default_factory=list)
     model_config = {"from_attributes": True}
 
 CategoryOut.model_rebuild()
