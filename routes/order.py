@@ -41,22 +41,7 @@ def get_paid_orders(db: Session = Depends(get_db)):
     return orders
 
 
-# ✅ Mark order as paid using integer ID
-@router.put("/orders/by-id/{order_id}/mark-paid")
-def mark_order_paid_by_id(order_id: int, db: Session = Depends(get_db)):
-    order = db.query(Order).filter(Order.id == order_id).first()
-    if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
-
-    order.payment_status = "paid"
-    order.paid_at = datetime.utcnow()
-
-    db.commit()
-    db.refresh(order)
-    return {"message": f"Order {order.id} marked as paid"}
-
-
-# ✅ Mark order as paid using custom string order_id and ref
+# ✅ Mark order as paid using custom string order_id and reference
 @router.post("/orders/by-code/{order_id}/mark-paid")
 def mark_order_paid_by_code(
     order_id: str,
@@ -85,6 +70,7 @@ def mark_order_paid_by_code(
         db=db
     )
 
+    # Mark order as paid
     order.payment_status = "paid"
     order.payment_reference = reference
     order.paid = True
@@ -109,13 +95,19 @@ def reduce_product_stock(order_id: int, db: Session):
     Uses the product_id and quantity stored in Order.items.
     """
 
-    order = db.query(Order).filter(Order.id == order_id).first()
+    order = db.query(Order).filter(
+        Order.id == order_id
+    ).first()
 
     if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Order not found"
+        )
 
     try:
         items = json.loads(order.items)
+
     except (json.JSONDecodeError, TypeError):
         raise HTTPException(
             status_code=400,
@@ -124,7 +116,8 @@ def reduce_product_stock(order_id: int, db: Session):
 
     # Check ALL products before deducting anything.
     # This prevents a multi-product order from partially
-    # reducing stock if one product doesn't have enough stock.
+    # reducing stock if one product does not have enough stock.
+
     for item in items:
         product_id = item.get("product_id")
         requested_quantity = int(item.get("quantity", 0))
@@ -154,7 +147,9 @@ def reduce_product_stock(order_id: int, db: Session):
                 )
             )
 
-    # All products have enough stock, so now deduct.
+    # All products have enough stock.
+    # Now deduct the quantities.
+
     for item in items:
         product = db.query(Product).filter(
             Product.id == item["product_id"]

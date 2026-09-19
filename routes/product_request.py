@@ -39,27 +39,72 @@ def grouped_orders(db: Session = Depends(get_db)):
         else:
             result["other"].append(out)
     return result
-
 @router.post("/orders", response_model=OrderOut)
-def create_order(order: OrderCreate, db: Session = Depends(get_db)):
+def create_order(
+    order: OrderCreate,
+    db: Session = Depends(get_db)
+):
+    # ---------------------------------------------------------
+    # Validate product stock BEFORE creating the order
+    # ---------------------------------------------------------
+
+    for item in order.items:
+        product = db.query(Product).filter(
+            Product.id == item.product_id
+        ).first()
+
+        if not product:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Product {item.product_id} not found"
+            )
+
+        if item.quantity < 1:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid quantity for {product.name}"
+            )
+
+        if product.quantity < item.quantity:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"Not enough stock for {product.name}. "
+                    f"Only {product.quantity} left in stock."
+                )
+            )
+
+    # ---------------------------------------------------------
+    # Create order
+    # ---------------------------------------------------------
+
     order_id = generate_unique_order_id(db)
+
     new_order = Order(
         order_id=order_id,
         customer_name=order.name,
         customer_phone=order.phone,
         customer_email=order.email,
         customer_address=order.address,
-        item_names=", ".join([item.name for item in order.items]),
-        items=json.dumps([item.dict() for item in order.items]),
+
+        item_names=", ".join(
+            [item.name for item in order.items]
+        ),
+
+        items=json.dumps(
+            [item.dict() for item in order.items]
+        ),
+
         total=order.total,
         status="Pending",
         payment_status="Unpaid",
         timestamp=datetime.now(timezone.utc),
     )
+
     db.add(new_order)
     db.commit()
     db.refresh(new_order)
-    # Return the order object itself to match the response_model=OrderOut
+
     return OrderOut.model_validate(new_order)
 
 @router.get("/orders", response_model=List[OrderOut])
