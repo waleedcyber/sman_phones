@@ -4,147 +4,165 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo/logo.png" />
-  <title>About — SmanAppleComms</title>
+  <title>About — Dr Apple</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
-      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
-      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --blue: #1A56DB; --blue-dark: #1040B0; --blue-light: #EEF2FF;
+      --black: #0D0D0D; --gray: #4B5563; --gray-light: #F3F4F6;
+      --white: #FFFFFF; --border: #E5E7EB;
       --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; }
-    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+    body { background: var(--white); color: var(--black); font-family: var(--font-body); font-weight: 300; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 2px; }
 
-    nav { position: sticky; top: 0; z-index: 100; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,10,0.98); border-bottom: 1px solid rgba(201,168,76,0.12); }
-    .nav-logo { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--gold); text-decoration: none; }
+    nav { position: sticky; top: 0; z-index: 100; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.98); border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .nav-logo { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--black); text-decoration: none; }
+    .nav-logo span { color: var(--blue); }
     .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
-    .nav-links a { color: var(--white-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--gold); }
-    .nav-whatsapp { background: #25D366; color: white !important; padding: 7px 14px; border-radius: 20px; font-size: 12px !important; }
+    .nav-links a { color: var(--gray); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-whatsapp { background: #25D366; color: white !important; padding: 7px 14px; border-radius: 20px; font-size: 12px !important; font-weight: 500 !important; }
 
     /* Hero */
-    .hero { padding: 80px 24px 60px; text-align: center; max-width: 700px; margin: 0 auto; }
-    .eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 500; }
-    .hero-title { font-family: var(--font-display); font-size: clamp(30px, 5vw, 48px); font-weight: 700; color: var(--white); margin-bottom: 20px; line-height: 1.2; }
-    .hero-title span { color: var(--gold); }
-    .hero-text { font-size: 15px; color: var(--white-dim); line-height: 1.8; }
-    .gold-line { width: 36px; height: 2px; background: var(--gold); margin: 20px auto; }
+    .hero { background: linear-gradient(135deg, var(--black) 0%, #1A1A2E 100%); padding: 80px 24px 60px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(26,86,219,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(26,86,219,0.06) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; }
+    .hero-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; font-weight: 500; }
+    .hero-title { font-family: var(--font-display); font-size: clamp(30px, 5vw, 52px); font-weight: 700; color: white; margin-bottom: 18px; line-height: 1.2; }
+    .hero-title span { color: #60A5FA; }
+    .hero-sub { font-size: 15px; color: rgba(255,255,255,0.65); max-width: 520px; margin: 0 auto; line-height: 1.8; }
+    .blue-line { width: 36px; height: 3px; background: var(--blue); border-radius: 2px; margin: 20px auto 0; }
 
-    /* Story */
-    .story { max-width: 800px; margin: 0 auto; padding: 0 24px 60px; }
-    .story-block { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-bottom: 60px; }
+    /* Story section */
+    .story { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+    .story-block { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 60px; }
     .story-block.reverse { direction: rtl; }
     .story-block.reverse > * { direction: ltr; }
-    .story-text h2 { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: var(--white); margin-bottom: 14px; }
-    .story-text p { font-size: 14px; color: var(--white-dim); line-height: 1.8; margin-bottom: 12px; }
-    .story-visual { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 12px; padding: 40px 24px; text-align: center; }
-    .story-icon { font-size: 48px; margin-bottom: 14px; display: block; }
-    .story-visual-title { font-family: var(--font-display); font-size: 18px; color: var(--white); margin-bottom: 8px; }
-    .story-visual-text { font-size: 12px; color: var(--white-dim); line-height: 1.6; }
+    .story-text h2 { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: var(--black); margin-bottom: 14px; }
+    .story-text p { font-size: 14px; color: var(--gray); line-height: 1.8; margin-bottom: 12px; }
+    .story-visual { background: var(--blue-light); border: 1.5px solid rgba(26,86,219,0.15); border-radius: 14px; padding: 36px 24px; text-align: center; }
+    .story-icon { font-size: 44px; margin-bottom: 14px; display: block; }
+    .story-visual-title { font-family: var(--font-display); font-size: 17px; color: var(--black); margin-bottom: 8px; }
+    .story-visual-text { font-size: 13px; color: var(--gray); line-height: 1.6; }
 
     /* Values */
-    .values-section { background: var(--black-2); border-top: 1px solid rgba(201,168,76,0.08); border-bottom: 1px solid rgba(201,168,76,0.08); padding: 60px 24px; }
+    .values-section { background: var(--gray-light); padding: 60px 24px; }
     .values-inner { max-width: 900px; margin: 0 auto; }
-    .section-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 500; }
-    .section-title { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); color: var(--white); margin-bottom: 36px; }
+    .section-eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; font-weight: 500; }
+    .section-title { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); color: var(--black); margin-bottom: 8px; }
+    .section-sub { font-size: 14px; color: var(--gray); margin-bottom: 32px; }
     .values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
-    .value-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.08); border-radius: 10px; padding: 24px 18px; }
+    .value-card { background: white; border: 1.5px solid var(--border); border-radius: 10px; padding: 24px 18px; transition: border-color 0.2s, box-shadow 0.2s; }
+    .value-card:hover { border-color: var(--blue); box-shadow: 0 4px 12px rgba(26,86,219,0.08); }
     .value-icon { font-size: 26px; margin-bottom: 12px; display: block; }
-    .value-title { font-family: var(--font-display); font-size: 14px; color: var(--white); margin-bottom: 6px; }
-    .value-desc { font-size: 12px; color: var(--white-dim); line-height: 1.6; }
+    .value-title { font-family: var(--font-display); font-size: 14px; color: var(--black); margin-bottom: 6px; }
+    .value-desc { font-size: 12px; color: var(--gray); line-height: 1.6; }
 
     /* Stats */
     .stats-section { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-    .stat-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.1); border-radius: 10px; padding: 28px 20px; text-align: center; }
-    .stat-number { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 6px; }
-    .stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white-dim); }
+    .stat-card { background: var(--blue); border-radius: 12px; padding: 28px 20px; text-align: center; }
+    .stat-number { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: white; line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+
+    /* What we sell */
+    .products-section { background: var(--gray-light); padding: 60px 24px; }
+    .products-inner { max-width: 900px; margin: 0 auto; }
+    .product-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .product-type-card { background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 24px 20px; text-align: center; text-decoration: none; transition: border-color 0.2s, transform 0.2s; }
+    .product-type-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+    .product-type-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+    .product-type-name { font-family: var(--font-display); font-size: 16px; color: var(--black); margin-bottom: 6px; }
+    .product-type-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+    .product-type-link { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--blue); font-weight: 500; }
 
     /* CTA */
-    .cta { max-width: 680px; margin: 0 auto; padding: 0 24px 80px; text-align: center; }
-    .cta-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; padding: 48px 28px; }
-    .cta-card h2 { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: var(--white); margin-bottom: 12px; }
-    .cta-card p { font-size: 14px; color: var(--white-dim); margin-bottom: 28px; }
-    .btn-wa { display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white; padding: 14px 28px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
-    .btn-wa:hover { opacity: 0.9; }
-    .btn-browse { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--black); padding: 14px 28px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; margin-left: 12px; transition: background 0.2s; }
-    .btn-browse:hover { background: var(--gold-light); }
+    .cta { max-width: 700px; margin: 0 auto; padding: 60px 24px 80px; text-align: center; }
+    .cta-card { background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%); border-radius: 16px; padding: 48px 28px; }
+    .cta-card h2 { font-family: var(--font-display); font-size: clamp(20px, 3vw, 28px); color: white; margin-bottom: 12px; }
+    .cta-card p { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 28px; }
     .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-white { display: inline-flex; align-items: center; gap: 8px; background: white; color: var(--blue); padding: 13px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+    .btn-white:hover { opacity: 0.9; }
+    .btn-wa { display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: white; padding: 13px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+    .btn-wa:hover { opacity: 0.9; }
 
-    footer { background: var(--black-2); border-top: 1px solid rgba(201,168,76,0.1); padding: 32px 24px; text-align: center; }
-    .footer-logo { font-family: var(--font-display); font-size: 18px; color: var(--gold); margin-bottom: 12px; }
-    .footer-copy { font-size: 12px; color: rgba(170,170,170,0.4); }
+    footer { background: var(--black); padding: 32px 24px; text-align: center; }
+    .footer-logo { font-family: var(--font-display); font-size: 18px; color: white; margin-bottom: 8px; }
+    .footer-logo span { color: #60A5FA; }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
 
     .float-wa { position: fixed; bottom: 24px; right: 24px; z-index: 999; background: #25D366; color: white; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 20px rgba(37,211,102,0.35); text-decoration: none; transition: transform 0.2s; }
     .float-wa:hover { transform: scale(1.1); }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .story-block { grid-template-columns: 1fr; }
       .story-block.reverse { direction: ltr; }
+      .product-types { grid-template-columns: 1fr; }
       .nav-links { display: none; }
-      .btn-browse { margin-left: 0; }
     }
   </style>
 </head>
 <body>
 
   <nav>
-    <a href="index.html" class="nav-logo">SmanAppleComms</a>
+    <a href="index.html" class="nav-logo">Dr <span>Apple</span></a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="products.html">Phones</a></li>
-      <li><a href="trade_in.html">Trade-In</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="repair.html">Repairs</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="https://wa.me/2348065739757" target="_blank" class="nav-whatsapp">💬 WhatsApp</a></li>
+      <li><a href="https://wa.me/2348137843328" target="_blank" class="nav-whatsapp">💬 WhatsApp</a></li>
     </ul>
   </nav>
 
+  <!-- Hero -->
   <div class="hero">
-    <p class="eyebrow">Our Story</p>
-    <h1 class="hero-title">Phones You Can <span>Trust.</span></h1>
-    <div class="gold-line"></div>
-    <p class="hero-text">SmanAppleComms was built on one simple idea — everyone deserves a great phone at a fair price, with zero stress. We started on WhatsApp and grew into a trusted name for verified phones across Nigeria.</p>
+    <p class="hero-eyebrow">Our Story</p>
+    <h1 class="hero-title">Kano's Most Trusted<span> Tech Store.</span></h1>
+    <p class="hero-sub">Dr Apple has been serving Kano with quality phones, laptops and accessories from our shop on Zoo Road — open 24 hours, every single day.</p>
+    <div class="blue-line"></div>
   </div>
 
+  <!-- Story -->
   <div class="story">
     <div class="story-block">
       <div class="story-text">
-        <h2>Where We Started</h2>
-        <p>It began with a few phones, a WhatsApp number, and a commitment to honesty. No inflated prices, no hidden faults, no runaround — just straightforward deals between real people.</p>
-        <p>Word spread fast. Customers came back, and they brought their friends. That trust became the foundation everything else is built on.</p>
+        <h2>How Dr Apple Started</h2>
+        <p>It started with a passion for technology and a desire to bring quality devices to the people of Kano at fair prices. From a small shop on Zoo Road, we built something the community could trust.</p>
+        <p>Today, customers come from across Kano — not just for our products, but because they know we'll be honest with them. No fakes, no inflated prices, no runaround.</p>
       </div>
       <div class="story-visual">
-        <span class="story-icon">📱</span>
-        <div class="story-visual-title">Started on WhatsApp</div>
-        <div class="story-visual-text">Every great business starts somewhere. Ours started with a single conversation.</div>
+        <span class="story-icon">🏪</span>
+        <div class="story-visual-title">Shop 62, MYCA 7 Plaza</div>
+        <div class="story-visual-text">Zoo Road, opposite MTN Office, Albasa, Kano — our home since day one.</div>
       </div>
     </div>
 
     <div class="story-block reverse">
       <div class="story-text">
-        <h2>What Makes Us Different</h2>
-        <p>We inspect every phone before it's listed. Used phones come with honest condition reports — battery health, known issues, everything. No surprises when you open the box.</p>
-        <p>If we wouldn't buy it ourselves, we don't sell it.</p>
+        <h2>Open 24 Hours — Always</h2>
+        <p>We know tech emergencies don't follow business hours. That's why Dr Apple never closes. Cracked screen at midnight? Need a charger before a morning flight? We're here.</p>
+        <p>Walk in any time of day or night — or reach us instantly on WhatsApp.</p>
       </div>
       <div class="story-visual">
-        <span class="story-icon">✅</span>
-        <div class="story-visual-title">Every Phone Verified</div>
-        <div class="story-visual-text">Condition, battery, screen, charging — we check it all before listing.</div>
+        <span class="story-icon">🕐</span>
+        <div class="story-visual-title">24 Hours, 7 Days</div>
+        <div class="story-visual-text">We've never closed our doors. Day or night, Dr Apple is always open for you.</div>
       </div>
     </div>
 
     <div class="story-block">
       <div class="story-text">
-        <h2>Trade-Ins & Upgrades</h2>
-        <p>We know upgrading can feel expensive. That's why we built our trade-in program — bring your old phone, get a fair value, and only pay the difference on your new one.</p>
-        <p>We've helped hundreds of customers upgrade without breaking the bank.</p>
+        <h2>Repairs You Can Count On</h2>
+        <p>Beyond selling devices, we fix them too. Cracked screens, dead batteries, water damage, charging ports — our in-house technicians handle it all fast and at honest prices.</p>
+        <p>We treat your device like it's our own.</p>
       </div>
       <div class="story-visual">
-        <span class="story-icon">🔄</span>
-        <div class="story-visual-title">Fair Trade-In Values</div>
-        <div class="story-visual-text">We give you what your phone is actually worth — not the lowest possible offer.</div>
+        <span class="story-icon">🔧</span>
+        <div class="story-visual-title">In-House Repair Centre</div>
+        <div class="story-visual-text">Qualified technicians, genuine parts, honest pricing — right here in the shop.</div>
       </div>
     </div>
   </div>
@@ -154,11 +172,12 @@
     <div class="values-inner">
       <p class="section-eyebrow">What We Stand For</p>
       <h2 class="section-title">Our Values</h2>
+      <p class="section-sub">Everything we do is built on these principles.</p>
       <div class="values-grid">
-        <div class="value-card"><span class="value-icon">🤝</span><div class="value-title">Honesty First</div><div class="value-desc">We tell you exactly what you're getting. No surprises, no hidden problems.</div></div>
-        <div class="value-card"><span class="value-icon">💰</span><div class="value-title">Fair Pricing</div><div class="value-desc">Prices that make sense — not inflated, not suspiciously cheap.</div></div>
-        <div class="value-card"><span class="value-icon">⚡</span><div class="value-title">Fast Response</div><div class="value-desc">We reply on WhatsApp quickly. Real people, real answers, no bots.</div></div>
-        <div class="value-card"><span class="value-icon">🔒</span><div class="value-title">Safe Transactions</div><div class="value-desc">Your money is safe with us. We've never had a customer regret a purchase.</div></div>
+        <div class="value-card"><span class="value-icon">🤝</span><div class="value-title">Honesty First</div><div class="value-desc">We tell you exactly what you're getting — condition, specs, price. No surprises.</div></div>
+        <div class="value-card"><span class="value-icon">✅</span><div class="value-title">Verified Stock</div><div class="value-desc">Every device is inspected before sale. No fakes, no refurbished sold as new.</div></div>
+        <div class="value-card"><span class="value-icon">💰</span><div class="value-title">Fair Pricing</div><div class="value-desc">Competitive prices with no hidden charges. What you see is what you pay.</div></div>
+        <div class="value-card"><span class="value-icon">⚡</span><div class="value-title">Fast Service</div><div class="value-desc">Quick replies on WhatsApp and fast repair turnaround times.</div></div>
       </div>
     </div>
   </div>
@@ -166,33 +185,62 @@
   <!-- Stats -->
   <div class="stats-section">
     <p class="section-eyebrow">By the Numbers</p>
-    <h2 class="section-title">Trusted by Nigerians</h2>
+    <h2 class="section-title">Trusted Across Kano</h2>
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-number">500+</div><div class="stat-label">Phones Sold</div></div>
+      <div class="stat-card"><div class="stat-number">500+</div><div class="stat-label">Devices Sold</div></div>
+      <div class="stat-card"><div class="stat-number">24h</div><div class="stat-label">Always Open</div></div>
       <div class="stat-card"><div class="stat-number">100%</div><div class="stat-label">Verified Stock</div></div>
-      <div class="stat-card"><div class="stat-number">24h</div><div class="stat-label">Response Time</div></div>
       <div class="stat-card"><div class="stat-number">⭐ 5</div><div class="stat-label">Customer Rating</div></div>
+    </div>
+  </div>
+
+  <!-- What We Sell -->
+  <div class="products-section">
+    <div class="products-inner">
+      <p class="section-eyebrow">What We Offer</p>
+      <h2 class="section-title">Our Products & Services</h2>
+      <p class="section-sub">Everything tech — under one roof.</p>
+      <div class="product-types">
+        <a href="products.html?category=phones" class="product-type-card">
+          <span class="product-type-icon">📱</span>
+          <div class="product-type-name">Phones</div>
+          <div class="product-type-desc">New, open box and certified used iPhones, Samsung, Tecno, Infinix and more.</div>
+          <span class="product-type-link">Browse Phones →</span>
+        </a>
+        <a href="products.html?category=laptops" class="product-type-card">
+          <span class="product-type-icon">💻</span>
+          <div class="product-type-name">Laptops</div>
+          <div class="product-type-desc">MacBooks, HP, Dell, Lenovo — for work, school and gaming at fair prices.</div>
+          <span class="product-type-link">Browse Laptops →</span>
+        </a>
+        <a href="products.html?category=accessories" class="product-type-card">
+          <span class="product-type-icon">🎧</span>
+          <div class="product-type-name">Accessories</div>
+          <div class="product-type-desc">Cases, chargers, cables, earphones, power banks and more for all devices.</div>
+          <span class="product-type-link">Browse Accessories →</span>
+        </a>
+      </div>
     </div>
   </div>
 
   <!-- CTA -->
   <div class="cta">
     <div class="cta-card">
-      <h2>Ready to find your next phone?</h2>
-      <p>Browse our verified collection or chat with us directly on WhatsApp.</p>
+      <h2>Come Visit Us in Kano</h2>
+      <p>Shop 62, MYCA 7 Plaza, Zoo Road — open 24 hours. Or reach us instantly on WhatsApp.</p>
       <div class="cta-btns">
-        <a href="https://wa.me/2348065739757" target="_blank" class="btn-wa">💬 Chat with Us</a>
-        <a href="products.html" class="btn-browse">Browse Phones</a>
+        <a href="products.html" class="btn-white">Browse Products</a>
+        <a href="https://wa.me/2348137843328" target="_blank" class="btn-wa">💬 WhatsApp Us</a>
       </div>
     </div>
   </div>
 
   <footer>
-    <div class="footer-logo">SmanAppleComms</div>
-    <p class="footer-copy">© 2026 SmanAppleComms. All rights reserved.</p>
+    <div class="footer-logo">Dr <span>Apple</span></div>
+    <p class="footer-copy">© 2026 Dr Apple — Zoo Road, MYCA 7 Plaza, Kano. All rights reserved.</p>
   </footer>
 
-  <a href="https://wa.me/2348065739757" target="_blank" class="float-wa">💬</a>
+  <a href="https://wa.me/2348137843328" target="_blank" class="float-wa">💬</a>
 
 </body>
 </html>
