@@ -140,10 +140,10 @@
 
   <script>
     const baseUrl = "https://sman-phones-1.onrender.com/api";
-    //const token = localStorage.getItem('token');
-    //if (!token) window.location.href = 'admin_login.html';
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'admin_login.html';
 
-    //function logout() { localStorage.removeItem('token'); window.location.href = 'admin_login.html'; }
+    function logout() { localStorage.removeItem('token'); window.location.href = 'admin_login.html'; }
 
     // Live clock
     function updateTime() {
