@@ -4,59 +4,132 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo/logo.png" />
-  <title>Order Confirmed — SmanAppleComms</title>
+  <title>Order Confirmed — Dr Apple</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
-      --black: #0A0A0A; --black-2: #111111; --black-3: #1A1A1A; --black-4: #222222;
-      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --blue: #1A56DB; --blue-dark: #1040B0; --blue-light: #EEF2FF;
+      --black: #0D0D0D; --gray: #4B5563; --gray-light: #F3F4F6;
+      --white: #FFFFFF; --border: #E5E7EB;
       --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-weight: 300; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
-    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, #EEF2FF 0%, #F0F4FF 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
-    .card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 16px; max-width: 480px; width: 100%; padding: 40px 28px; text-align: center; animation: popIn 0.5s ease; position: relative; overflow: hidden; }
-    .card::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%); pointer-events: none; }
+    .card {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      padding: 40px 28px;
+      text-align: center;
+      animation: popIn 0.5s ease;
+      box-shadow: 0 8px 32px rgba(26,86,219,0.08);
+      position: relative;
+      overflow: hidden;
+    }
 
-    @keyframes popIn { from { opacity: 0; transform: scale(0.92) translateY(16px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), #60A5FA);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92) translateY(16px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
 
     /* Checkmark */
-    .check-ring { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 36px; box-shadow: 0 8px 24px rgba(201,168,76,0.3); animation: bounce 0.6s 0.3s ease both; }
-    @keyframes bounce { 0% { transform: scale(0); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+    .check-ring {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), #60A5FA);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 36px;
+      box-shadow: 0 8px 24px rgba(26,86,219,0.25);
+      animation: bounce 0.6s 0.3s ease both;
+    }
 
-    .eyebrow { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-weight: 500; }
-    .title { font-family: var(--font-display); font-size: clamp(22px, 4vw, 30px); color: var(--white); margin-bottom: 12px; }
-    .subtitle { font-size: 14px; color: var(--white-dim); line-height: 1.7; margin-bottom: 24px; }
+    @keyframes bounce {
+      0% { transform: scale(0); }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 4vw, 28px);
+      color: var(--black);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
 
     /* Order ref */
-    .ref-box { background: var(--black-4); border: 1px dashed rgba(201,168,76,0.25); border-radius: 8px; padding: 14px 18px; margin-bottom: 24px; }
-    .ref-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--white-dim); margin-bottom: 6px; }
-    .ref-value { font-family: var(--font-display); font-size: 18px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
+    .ref-box {
+      background: var(--blue-light);
+      border: 1px dashed rgba(26,86,219,0.25);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+    }
+    .ref-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; font-weight: 500; }
+    .ref-value { font-family: var(--font-display); font-size: 18px; color: var(--blue); letter-spacing: 2px; font-weight: 600; }
 
     /* Method badge */
-    .method-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
-    .method-wa { background: rgba(37,211,102,0.12); color: #25D366; border: 1px solid rgba(37,211,102,0.2); }
-    .method-pay { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.2); }
+    .method-badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-bottom: 22px; }
+    .method-wa { background: #D1FAE5; color: #065F46; }
+    .method-pay { background: var(--blue-light); color: var(--blue); }
 
     /* Next steps */
-    .next-steps { background: var(--black-4); border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: left; }
-    .next-steps-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-weight: 500; }
-    .step { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; color: var(--white-dim); line-height: 1.5; }
+    .next-steps { background: var(--gray-light); border-radius: 10px; padding: 16px; margin-bottom: 24px; text-align: left; }
+    .next-steps-title { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; font-weight: 500; }
+    .step { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; color: var(--gray); line-height: 1.5; }
     .step:last-child { margin-bottom: 0; }
-    .step-dot { width: 20px; height: 20px; border-radius: 50%; background: rgba(201,168,76,0.15); color: var(--gold); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--blue-light); color: var(--blue); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    /* Store info */
+    .store-info { background: var(--blue-light); border-radius: 8px; padding: 12px 16px; margin-bottom: 22px; font-size: 12px; color: var(--blue); display: flex; align-items: center; gap: 8px; }
 
     /* Buttons */
     .btn-group { display: flex; flex-direction: column; gap: 10px; }
-    .btn-primary { display: block; background: var(--gold); color: var(--black); padding: 14px; border-radius: 4px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
-    .btn-primary:hover { background: var(--gold-light); }
-    .btn-secondary { display: block; background: transparent; color: var(--white-dim); border: 1px solid rgba(255,255,255,0.1); padding: 13px; border-radius: 4px; font-size: 14px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
-    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-primary { display: block; background: var(--blue); color: white; padding: 14px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
+    .btn-primary:hover { background: var(--blue-dark); }
+    .btn-wa { display: block; background: #25D366; color: white; padding: 13px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+    .btn-wa:hover { opacity: 0.9; }
+    .btn-secondary { display: block; background: white; color: var(--gray); border: 1.5px solid var(--border); padding: 12px; border-radius: 6px; font-size: 13px; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+    .btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
 
-    .footer-note { margin-top: 20px; font-size: 11px; color: rgba(170,170,170,0.4); line-height: 1.6; }
-    .footer-note a { color: rgba(201,168,76,0.5); text-decoration: none; }
-    .footer-note a:hover { color: var(--gold); }
+    .footer-note { margin-top: 20px; font-size: 11px; color: #9CA3AF; line-height: 1.6; }
+    .footer-note a { color: var(--blue); text-decoration: none; }
   </style>
 </head>
 <body>
@@ -66,7 +139,7 @@
 
     <p class="eyebrow" id="eyebrow">Order Confirmed</p>
     <h1 class="title">Thank You! 🎉</h1>
-    <p class="subtitle" id="subtitle">Your order has been received. The seller will be in touch with you shortly to confirm delivery details.</p>
+    <p class="subtitle" id="subtitle">Your order has been received. Dr Apple will be in touch with you shortly to confirm availability and arrange delivery or pickup.</p>
 
     <div class="ref-box" id="refBox" style="display:none;">
       <div class="ref-label">Order Reference</div>
@@ -77,60 +150,48 @@
 
     <div class="next-steps">
       <div class="next-steps-title">What Happens Next</div>
-      <div class="step" id="step1"><div class="step-dot">1</div><span>The seller will confirm your order and check availability.</span></div>
-      <div class="step" id="step2"><div class="step-dot">2</div><span>You'll agree on payment method and delivery or pickup.</span></div>
-      <div class="step" id="step3"><div class="step-dot">3</div><span>Your phone gets delivered or you collect it at the agreed location.</span></div>
+      <div class="step" id="step1"><div class="step-dot">1</div><span>Dr Apple will confirm your order and check availability.</span></div>
+      <div class="step" id="step2"><div class="step-dot">2</div><span>You'll agree on payment method — bank transfer, cash or other.</span></div>
+      <div class="step" id="step3"><div class="step-dot">3</div><span>Collect from Zoo Road, MYCA 7 Plaza or arrange delivery.</span></div>
+    </div>
+
+    <div class="store-info">
+      📍 Shop 62, MYCA 7 Plaza, Zoo Road, Kano &nbsp;·&nbsp; <strong>Open 24hrs</strong>
     </div>
 
     <div class="btn-group">
-      <a href="products.html" class="btn-primary">🛍️ Continue Shopping</a>
-      <a href="https://wa.me/2348065739757" target="_blank" class="btn-secondary">💬 Message the Seller</a>
+      <a href="products.html" class="btn-primary">📱 Continue Shopping</a>
+      <a href="https://wa.me/2348137843328" target="_blank" class="btn-wa">💬 Message Dr Apple</a>
       <a href="index.html" class="btn-secondary">🏠 Back to Home</a>
     </div>
 
     <p class="footer-note">
       Questions? <a href="contact.html">Contact us</a> anytime.<br>
-      Thank you for choosing SmanAppleComms. 💛
+      Thank you for choosing Dr Apple, Kano. 💙
     </p>
   </div>
 
   <script>
-window.addEventListener('DOMContentLoaded', () => {
-    // 1. Read URL params
     const params = new URLSearchParams(window.location.search);
-    
-    // 2. Look for Paystack's exact keys: 'reference' or 'trxref'
-    const ref = params.get('reference') || params.get('trxref') || params.get('ref');
-    // Show order reference
-    const orderRefEl = document.getElementById('orderRef');
-    
+    const ref = params.get('reference') || params.get('ref') || params.get('trxref');
+    const method = params.get('method');
+
     if (ref && ref !== 'N/A') {
-        if (orderRefEl) orderRefEl.textContent = ref;
-    } else {
-        if (orderRefEl) orderRefEl.textContent = 'Processing...';
+      document.getElementById('refBox').style.display = 'block';
+      document.getElementById('refValue').textContent = ref;
     }
 
-    // Customize for payment method
     if (method === 'paystack') {
-        const eyebrow = document.getElementById('eyebrow');
-        const subtitle = document.getElementById('subtitle');
-        const methodBadge = document.getElementById('methodBadge');
-        const step1 = document.getElementById('step1');
-        const step2 = document.getElementById('step2');
-
-        if (eyebrow) eyebrow.textContent = 'Payment Confirmed';
-        if (subtitle) subtitle.textContent = 'Your payment was successful and your order is confirmed. The seller will contact you to arrange delivery.';
-        
-        if (methodBadge) {
-            methodBadge.className = 'method-badge method-pay';
-            methodBadge.textContent = '💳 Payment confirmed via Paystack';
-        }
-
-        if (step1) step1.querySelector('span').textContent = 'Your payment has been received and confirmed.';
-        if (step2) step2.querySelector('span').textContent = 'The seller will contact you to arrange delivery or pickup.';
+      document.getElementById('eyebrow').textContent = 'Payment Confirmed';
+      document.getElementById('subtitle').textContent = 'Your payment was successful and your order is confirmed. Dr Apple will contact you to arrange delivery or pickup.';
+      document.getElementById('methodBadge').className = 'method-badge method-pay';
+      document.getElementById('methodBadge').textContent = '💳 Payment confirmed via Paystack';
+      document.getElementById('step1').querySelector('span').textContent = 'Your payment has been received and confirmed.';
+      document.getElementById('step2').querySelector('span').textContent = 'Dr Apple will contact you to arrange delivery or pickup.';
+      document.getElementById('step3').querySelector('span').textContent = 'Collect from Zoo Road or receive delivery at your address.';
     }
-});   
 
+    localStorage.removeItem('cart');
   </script>
 
 </body>

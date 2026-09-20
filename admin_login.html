@@ -4,39 +4,161 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="/logo/logo.png" />
-  <title>Admin Login — SmanAppleComms</title>
+  <title>Admin Login — Dr Apple</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
-      --black: #0A0A0A; --black-3: #1A1A1A; --black-4: #222222;
-      --white: #F5F5F0; --white-dim: #AAAAAA;
+      --blue: #1A56DB; --blue-dark: #1040B0; --blue-light: #EEF2FF;
+      --black: #0D0D0D; --gray: #4B5563; --gray-light: #F3F4F6;
+      --white: #FFFFFF; --border: #E5E7EB;
       --font-display: 'Playfair Display', serif; --font-body: 'Poppins', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--black); color: var(--white); font-family: var(--font-body); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
-    .card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 14px; max-width: 380px; width: 100%; padding: 40px 28px; animation: popIn 0.4s ease; }
-    @keyframes popIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-    .logo { font-family: var(--font-display); font-size: 20px; color: var(--gold); text-align: center; margin-bottom: 6px; }
-    .subtitle { font-size: 12px; color: var(--white-dim); text-align: center; margin-bottom: 32px; letter-spacing: 0.5px; }
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, #EEF2FF 0%, #F0F4FF 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      max-width: 380px;
+      width: 100%;
+      padding: 40px 28px;
+      box-shadow: 0 8px 32px rgba(26,86,219,0.08);
+      animation: popIn 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), #60A5FA);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--black);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .logo span { color: var(--blue); }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--gray);
+      text-align: center;
+      margin-bottom: 32px;
+      letter-spacing: 0.5px;
+    }
+
     .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; font-weight: 500; }
-    .form-input { width: 100%; background: var(--black-4); border: 1px solid rgba(201,168,76,0.12); color: var(--white); padding: 13px 14px; border-radius: 4px; font-size: 15px; font-family: var(--font-body); transition: border-color 0.2s; }
-    .form-input:focus { outline: none; border-color: var(--gold); }
-    .form-input::placeholder { color: rgba(170,170,170,0.4); }
-    .btn-login { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 15px; border-radius: 4px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body); margin-top: 8px; transition: background 0.2s; }
-    .btn-login:hover { background: var(--gold-light); }
+
+    .form-label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 7px;
+      font-weight: 500;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--gray-light);
+      border: 1.5px solid var(--border);
+      color: var(--black);
+      padding: 13px 14px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-family: var(--font-body);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--blue);
+      background: white;
+    }
+
+    .form-input::placeholder { color: #9CA3AF; }
+
+    .btn-login {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-login:hover { background: var(--blue-dark); }
     .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
-    #errMsg { text-align: center; font-size: 13px; color: #ef4444; margin-top: 12px; display: none; }
+
+    #errMsg {
+      text-align: center;
+      font-size: 13px;
+      color: #DC2626;
+      background: #FEE2E2;
+      border: 1px solid #FECACA;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 12px;
+      display: none;
+    }
+
     #errMsg.show { display: block; }
-    .back-link { display: block; text-align: center; margin-top: 20px; font-size: 12px; color: var(--white-dim); text-decoration: none; transition: color 0.2s; }
-    .back-link:hover { color: var(--gold); }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--blue); }
+
+    .store-tag {
+      text-align: center;
+      font-size: 11px;
+      color: #9CA3AF;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="logo">SmanAppleComms</div>
-    <div class="subtitle">Admin Dashboard</div>
+    <div class="logo">Dr <span>Apple</span></div>
+    <div class="subtitle">Admin Dashboard — Authorized Access Only</div>
+
     <div class="form-group">
       <label class="form-label">Username</label>
       <input class="form-input" type="text" id="username" placeholder="Enter username" />
@@ -45,29 +167,48 @@
       <label class="form-label">Password</label>
       <input class="form-input" type="password" id="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()" />
     </div>
-    <button class="btn-login" id="loginBtn" onclick="login()">Sign In</button>
-    <div id="errMsg">Invalid username or password.</div>
+
+    <button class="btn-login" id="loginBtn" onclick="login()">Sign In →</button>
+    <div id="errMsg">Invalid username or password. Please try again.</div>
+
     <a href="index.html" class="back-link">← Back to Store</a>
+
+    <div class="store-tag">
+      📍 Zoo Road, MYCA 7 Plaza, Kano &nbsp;·&nbsp; Open 24hrs
+    </div>
   </div>
+
   <script>
     const baseUrl = "https://sman-phones-1.onrender.com/api";
     if (localStorage.getItem('token')) window.location.href = 'admin_home.html';
+
     async function login() {
       const btn = document.getElementById('loginBtn');
       const err = document.getElementById('errMsg');
-      btn.disabled = true; btn.textContent = 'Signing in...'; err.classList.remove('show');
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      err.classList.remove('show');
+
       const form = new FormData();
       form.append('username', document.getElementById('username').value.trim());
       form.append('password', document.getElementById('password').value);
+
       try {
         const res = await fetch(`${baseUrl}/admin/login`, { method: 'POST', body: form });
         if (res.ok) {
           const data = await res.json();
           localStorage.setItem('token', data.access_token);
           window.location.href = 'admin_home.html';
-        } else { err.classList.add('show'); }
-      } catch { err.textContent = 'Network error. Try again.'; err.classList.add('show'); }
-      finally { btn.disabled = false; btn.textContent = 'Sign In'; }
+        } else {
+          err.classList.add('show');
+        }
+      } catch {
+        err.textContent = 'Network error. Please try again.';
+        err.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign In →';
+      }
     }
   </script>
 </body>
